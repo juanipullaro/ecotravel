@@ -1,0 +1,91 @@
+{% extends "base_search_travels.html" %}
+{%block title%}
+Buscar Viajes
+{%endblock%}
+{% block content %}
+<div class="search-travel-page">
+    <aside class="search-travel-aside">
+        <section id=tab-container class="tabs">
+            <div id="tablist" role="tablist">
+                <button type="button" class="tablink" disabled="true">Buscar Viajes</button>
+                <button type="button" class="tablink"> <a href="{{url_for('create_travel')}}">Crear Viajes</a></button>
+            </div>
+            
+        </section>
+           
+        <section id="search-travel-panel">
+           
+            {%if error %}
+            <p class=error><strong>Error:</strong> {{ error }}
+                {% endif %}
+            <form method="POST" class="search-travel-form">
+                {{ form.csrf_token }}
+                {{ form.origin.label }} {{ form.origin() }}
+                {{ form.destination.label }} {{ form.destination() }}
+                {{ form.travel_date.label }} {{ form.travel_date(type="date") }}
+                {{ form.travel_time.label }} {{ form.travel_time(type="time") }}
+                {{ form.submit(class="btn") }}
+            </form>
+        </section>
+    </aside>
+    <div id="map"></div>
+</div>
+<script type="text/javascript">
+
+</script>
+
+<script type="text/javascript">
+
+    // The first parameter are the coordinates of the center of the map
+    // The second parameter is the zoom level
+    var map = L.map('map').setView([-32.9478683, -60.7210182], 12);
+    // {s}, {z}, {x} and {y} are placeholders for map tiles
+    // {x} and {y} are the x/y of where you are on the map
+    // {z} is the zoom level
+    // {s} is the subdomain of cartodb
+    var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    });
+
+    // Now add the layer onto the map
+    map.addLayer(layer);
+
+    const jointravel = (id)=>{
+        fetch('/unirme/'+id)
+        .then(()=>{
+            console.log("se ha unido satisfactoriamente")
+        })
+    };
+    //travels
+    {%if travels:%}
+        const {travels} = {{ travels| safe}}
+
+        console.log(travels)
+        travels.map(travel => {
+            const origin = L.marker([travel.origen.lat, travel.origen.lon]).addTo(map);
+            const dest = L.marker([travel.destino.lat, travel.destino.lon]).addTo(map);
+            
+            const popup = '<div class="popup-map"><h3>'+travel.conductor+'</h3>' +
+                '<p class="stars">'+"★".repeat(travel.rating)+"☆".repeat(5-travel.rating)+'</p>' +
+                '<b>Origen:</b>'+ travel.origen.nombre +
+                '<br /><b>Destino:</b>'+ travel.destino.nombre +
+                '<br /><b>Fecha:</b>'+travel.fecha+
+                '<br /><b>Hora:</b>'+travel.hora+
+                '<br /><b>Asientos disponibles:</b>'+travel.asientos_disp+
+                `<button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button></div>`
+            origin.bindPopup(popup).openPopup();
+        })
+
+        
+    {% endif %}
+
+    
+
+
+
+
+
+
+</script>
+
+{% endblock%}

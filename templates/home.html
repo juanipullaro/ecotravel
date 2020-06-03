@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}>
+<section id="main-slider">
+    <div class="owl-carousel">
+        <div class="item" style="background-image: url(static/slider/bg3.jpg);">
+            <div class="slider-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="container text-center">
+                                <div class="column is-auto">
+                                    <p class="title is-2">Bienvenidos a EcoTravel</p>
+                                    <p class="subtitle is-4"><i>La gente no hace viajes, son los viajes los que hacen a la gente</i></p>
+                                    <div class="but-slider">
+                                        <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('login') }}">Iniciar sesión</a>
+                                        <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('register') }}">Registrarse</a>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title text-center wow fadeInDown">¿Que es Ecotravel?</h2>
+            <p class="text-center wow fadeInDown">Es una plataforma personalizada que te permite compartir viajes de corta y larga distancia, en ella establecemos una red de personas que comparten viajes en auto entre ciudades, dividiendo costos de manera equitativa entre todos los viajeros </p>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 wow fadeInRight">
+                <h3 class="column-title">¿Porque elegir Ecotravel?</h3>
+                <p> Porque ahorramos mas $, vas a conocer nuevos amigos, viajas de forma cómoda y segura reduciendo tus tiempos por sobre todo vas a cuidar el medio ambiente*.</p>
+                <font color="#318b9b"> <p>No te olvides!</p></font>
+                <p> Si va a elegir EcoTravel para compartir tu viaje,
+                    recorda que somos una plataforma sin fines de lucro.</p>
+            </div>
+            <div class="col-sm-6 wow fadeInLeft">
+                <img class="img-responsive" src="static/slider/10.png" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="hero">
+  <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>EcoTravel</strong> by Damian Lacomba / Juan Ignacio Pullaro
+          <span class="icon is-small">
+            <i class="fa fa-copyright"></i>
+          </span>2020</<span>
+        </p>
+      </div>
+  </footer>
+</section>
+{% endblock body %}
+

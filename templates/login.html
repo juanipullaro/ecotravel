@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}
+<title>EcoTravel</title>
+<section class="hero is-primary is-bold is-medium">
+    <div class="hero-body">
+        <div class="column is-auto">
+            <div id="signin-box" class="signin-box">
+                <div class="signin-area">
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        <fieldset class="form-group">
+                            <legend class="border-bottom mb-4">Inicio de Sesión</legend>
+                            <div class="form-group">
+                                {{ form.username.label(class="form-control-label") }}
+                                <span class="req">*</span>
+                                {% if form.username.errors %}
+                                    {{ form.username(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.username.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.username(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.password.label(class="form-control-label") }}
+                                <span class="req">*</span>
+                                {% if form.password.errors %}
+                                    {{ form.password(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.password.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.password(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="form-check">
+                                {{ form.remember(class="form-check-input") }}
+                                {{ form.remember.label(class="form-check-label") }}
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            {{ form.submit(class="btn1 btn-outline-info") }}
+                        </div>
+                        <small class="text-muted ml-2">
+                            <a href="#">Olvidaste tu contraseña?</a>
+                        </small>
+                    </form>
+                </div>
+                <div class="border-top pt-3">
+                    <small class="text-muted">
+                    ¿Queres ser parte de Ecotravel? <a class="ml-2" href="{{ url_for('register') }}">Registrate ahora</a>
+                    </small>
+                </div>
+            </div>
+        </div>  
+    </div>      
+</section>
+
+<section class="hero">
+  <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>EcoTravel</strong> by Damian Lacomba / Juan Ignacio Pullaro
+          <span class="icon is-small">
+            <i class="fa fa-copyright"></i>
+          </span>2020</<span>
+        </p>
+      </div>
+  </footer>
+</section>
+
+{% endblock %}
+{% block scripts %}
+<script src="../static/js/scripts.js"></script>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}>
+<section id="main-slider">
+    <div class="owl-carousel">
+        <div class="item" style="background-image: url(static/slider/bg3.jpg);">
+            <div class="slider-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="container text-center">
+                                <div class="column is-auto">
+                                    <p class="title is-2">Hola {{ current_user.name|capitalize }}</p>
+                                    <p class="subtitle is-4"><i>¿Que te gustaria hacer?</i></p>
+                                    <div class="but-slider">
+                                        <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('search_travels') }}">Buscar Viaje</a>
+                                        <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('create_travel') }}">Crear Viaje</a>
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title text-center wow fadeInDown">¿Que es Ecotravel?</h2>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 wow fadeInRight">
+                <h3 class="column-title">Mis viajes</h3>
+                
+            </div>
+            <div class="col-sm-6 wow fadeInLeft">
+                <h3 class="column-title">Solicitudes</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="hero">
+  <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>EcoTravel</strong> by Damian Lacomba / Juan Ignacio Pullaro
+          <span class="icon is-small">
+            <i class="fa fa-copyright"></i>
+          </span>2020</<span>
+        </p>
+      </div>
+  </footer>
+</section>
+{% endblock body %}
+

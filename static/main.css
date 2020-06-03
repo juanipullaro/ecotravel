@@ -1,0 +1,411 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,300i,400,500,700,900&display=swap");
+
+body, button, input, select, textarea,p,title{
+    font-family: 'Roboto Slab' ;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+
+}
+
+.bg-steel {
+  background-color: #204051;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  margin-top: 100px;
+}
+
+.article-title {
+  color: #444444;
+}
+
+a.article-title:hover {
+  color: #428bca;
+  text-decoration: none;
+}
+
+.article-content {
+  white-space: pre-line;
+}
+
+.article-img {
+  height: 65px;
+  width: 65px;
+  margin-right: 16px;
+}
+
+.article-metadata {
+  padding-bottom: 1px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e3e3e3
+}
+
+.article-metadata a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+.article-svg {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+}
+
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+}
+
+.account-heading {
+  font-size: 2.5rem;
+
+}
+
+/* ////////////////////////////////////////////  HOME ////////////////////////////////////////////////////*/
+
+/*imagen principal login*/
+.hero.is-primary.is-bold {
+background-image: url(slider/bg2.jpg);
+background-size: cover;
+background-attachment: fixed;
+background-position: center center;
+overflow: hidden;
+height: 100vh 100vw;
+-webkit-background-size: cover ;
+-moz-background-size:cover ;
+-moz-background-size:cover ;
+
+}
+
+.hero.is-medium .hero-body {
+padding-bottom: 19.5%;
+
+}
+
+/*letra de la pantalla principal*/
+.hero .title {
+  text-shadow: .1rem .1rem .1rem #333;
+  -webkit-text-stroke: 0.4px black;
+  color: #fff; 
+  font-size: 60px;
+   }
+.hero .subtitle {
+  -webkit-text-stroke: 0.1px black;
+  text-shadow: .1rem .1rem .1rem #333;
+  color: #fff; 
+  font-size: 19.5px;
+}
+/*barra de abajo*/
+.footer {
+background-color: #f5f5f5;
+padding: 1rem 1.5rem 0.5rem;
+}
+
+.footer .content{
+  text-align: center;
+}
+
+.column {
+    display: auto;
+    -ms-flex-preferred-size: 14;
+    flex-basis: 11;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+    padding: .75rem;
+    margin-top: 10%;}
+
+.container {
+    max-width: 100%;
+}
+
+.title{
+  font-family: 'Roboto Slab';
+  font-size: 60px;
+  margin-top: 5%;
+}
+.subtitle{
+  font-size: 15px;
+}
+
+#main-slider {
+  overflow: hidden;
+}
+#main-slider .item {
+  height: 605px;
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
+}
+#main-slider .slider-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+}
+
+img {
+    vertical-align: middle;
+    border-style: none;
+    width: 100%;
+}
+
+.section-header{
+  margin-top: 12px;
+}
+
+#about{
+  margin-bottom: 40px;
+}
+
+.btn.btn-filled, .btn-filled:visited {
+    border-color:#d1dde4;
+}
+
+.boton-usa-plataforma {
+    font-size: 1.3em;
+    text-transform: none;
+    font-weight: 400;
+    margin-bottom: 2em;
+    width: 50%;
+}
+.boton-usa-plataforma:hover {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+.btn-filled {
+    background: #204051;
+    color: #fff;
+}
+
+.but-slider {
+    display: inline;
+}
+
+.btn2{
+  width: 40%;
+}
+
+.row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: 60px;
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    width: 180px;
+    margin: 10px;}
+
+/* //////////////////////////////////////////  FIN HOME ////////////////////////////////////////////////////*
+
+/* //////////////////////////////////////  INICIO DE SESIÓN - REGISTRO  /////////////////////////////////////*/
+
+.signin-box {
+  margin: auto;
+  width: 400px;
+  background: #fff;
+  border: 2px transparent rgba(156, 154, 154, 0.582);
+  border-radius: 10px;
+  font-family:'Roboto Slab';
+  margin-top: -45px;
+
+}
+
+.signin-area {
+  padding: 30px;
+}
+
+@media (max-width: 850px){
+  .signin-box{
+    margin-top: 50px;
+  }}
+
+  .signup-box {
+  margin: auto;
+  width: 500px;
+  background: #fff;
+  border: 2px transparent rgba(156, 154, 154, 0.582);
+  border-radius: 10px;
+  font-family:'Roboto Slab';
+  margin-top: -45px;
+
+}
+
+.signup-area {
+  padding: 30px;
+}
+
+@media (max-width: 850px){
+  .signup-box{
+    margin-top: 50px;
+    width: 400px;
+  }}
+
+ 
+
+
+
+legend {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin-bottom: .5rem;
+    font-size: 30px;
+    line-height: inherit;
+    color: inherit;
+    white-space: normal;
+    text-align: center;
+}
+
+.text-muted {
+    color: #6c757d !important;
+    margin-left: 12px;
+}
+
+input {
+    font-size: 22px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 5px 10px;
+    background: none;
+    background-image: none;
+    border: 1px solid #a0b3b0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    color:  black;
+    border-radius: 0;
+    transition: all 0.5s ease;
+    border-radius: 5px;}
+input:focus {
+        outline: none;
+        border-color: #1ab188;
+    }
+
+
+span.req{
+	color:#185d72;
+}
+
+.form-check-input {
+    position: absolute;
+    margin-top: .1rem;
+    margin-left: -5.25rem;
+}
+
+.btn1{
+  background-color:#204051 ;
+  color: #fff;
+  border-color: transparent;
+  text-align: center;
+  padding: 5px 10px;
+}
+.pt-3{
+    padding-bottom: 0.75rem;
+}
+
+
+
+/****** LABEL NOMBRE*****/
+.form-control-lg1 {
+    font-size: 1.3em;
+    text-transform: none;
+    font-weight: 400;
+    margin-bottom: 2em;
+    width:96%;
+    height: 50px;
+}
+
+
+/****** LABEL APELLIDO *****/
+.form-control-lg2 {
+    font-size: 1.3em;
+    text-transform: none;
+    font-weight: 400;
+    margin-bottom: 2em;
+    width:100%;
+    height: 48px;
+}
+
+.union{
+  display: flex;
+  margin-bottom: -50px;
+}
+/* ////////////////////////////////////// FIN INICIO DE SESIÓN - REGISTRO  ///////////////////////////////////*/
+
+/* /////////////////////////////////////// ACCOUNT /////////////////////////////////////////*/
+
+
+.account-area {
+  padding: 30px;
+  width: 600px;
+  background: #fff;
+  border-radius: 10px;
+  font-family:'Roboto Slab';
+  margin-top: 5%;
+}
+
+@media (max-width: 850px){
+  .account-box{
+    margin-top: 50px;
+  }}
+
+.content-section {
+    
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    width: 50%;
+    margin-left:40%;
+    position: relative;
+    top: -700px;}
+
+
+
