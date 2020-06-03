@@ -103,6 +103,7 @@ def account():
 
 @app.route('/buscar_viajes', methods=['GET', 'POST'])
 def search_travels():
+    #you can search for travels here
     form = TravelSearchForm()
     if form.validate_on_submit() and request.method == 'POST':
         origin = geocoder.arcgis(form.origin.data + ', argentina')
