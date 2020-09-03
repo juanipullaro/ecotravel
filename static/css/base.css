@@ -8,14 +8,17 @@ body{
     justify-content: space-between;
     background-color:#204051;;
     align-items: center;
+    height: 40px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    padding-right: 16px;
+    padding-left: 16px;
+
 
     
 }
-.nav-bar h2{
-    
-    margin-bottom: px;
-    color: #ffffff;
-    margin: 5px;
+.home-link{
+    font-size: 1.25rem;
 
 }
 .nav-bar ul{
@@ -30,7 +33,7 @@ body{
 
 .nav-bar a{
     text-decoration: none;
-    color: antiquewhite;
+    color: white;
 }
 
 h1{
@@ -106,6 +109,17 @@ footer{
 .popup-map{
     display: flex;
     flex-direction: column;
+}
+
+.driver{
+    display: flex;
+}
+
+.driver img{
+    height: 60px;
+    width: 60;
+    margin-right: 10px;
+    border-radius: 50px;
 }
 
 .popup-map > .btn-join-travel{
