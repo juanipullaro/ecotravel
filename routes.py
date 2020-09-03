@@ -13,13 +13,17 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 ################################### INICIO_PANTALLA PRINCIPAL #####################################
 @app.route("/")
-@app.route("/home")
+@app.route("/home1")
 def home():
-    return render_template('home.html')
+    return render_template('home1.html')
 ################################### PANTALLA DE USUARIO##########################################
 @app.route("/profile")
 def profile():
     return render_template('profile.html')
+
+@app.route("/generic")
+def generic():
+    return render_template('generic.html')
 ################################### REGISTRO #######################################################
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -46,11 +50,11 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
+            login_user(user)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('profile'))
         else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
+            flash('Contraseña incorrecta.', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 

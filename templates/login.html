@@ -11,6 +11,7 @@
                         {{ form.hidden_tag() }}
                         <fieldset class="form-group">
                             <legend class="border-bottom mb-4">Inicio de Sesión</legend>
+                            
                             <div class="form-group">
                                 {{ form.username.label(class="form-control-label") }}
                                 <span class="req">*</span>
@@ -39,10 +40,15 @@
                                     {{ form.password(class="form-control form-control-lg") }}
                                 {% endif %}
                             </div>
-                            <div class="form-check">
-                                {{ form.remember(class="form-check-input") }}
-                                {{ form.remember.label(class="form-check-label") }}
-                            </div>
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul class=danger>
+                                {% for message in messages %}
+                                <li>{{ message }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endwith %}
                         </fieldset>
                         <div class="form-group">
                             {{ form.submit(class="btn1 btn-outline-info") }}

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField,IntegerField,DateField,TextAreaField,TimeField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError,NumberRange
 from ecotravel.models import User
 
 
@@ -12,15 +12,15 @@ class RegistrationForm(FlaskForm):
     surname = StringField('Apellido',
                            validators=[DataRequired(), Length(min=2, max=20)])   
     email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    dni = IntegerField('DNI',validators=[DataRequired()])
+                        validators=[DataRequired(), Email(message='Email Invalido')])
+    dni = IntegerField('DNI',validators=[DataRequired(message='Ingrese solo numeros'),NumberRange(min=1000000, max=100000000,message='Ingrese un DNI válido')])
    
     username = StringField('Usuario',
                            validators=[DataRequired(), Length(min=2, max=20)])
     
     password = PasswordField('Contraseña', validators=[DataRequired()])
     confirm_password = PasswordField('Confirmar Contraseña',
-                                     validators=[DataRequired(), EqualTo('password')])
+                                     validators=[DataRequired(), EqualTo('password',message='Las contraseñas no coinciden')])
     submit = SubmitField('Registrarse')
 
     def validate_username(self, username):
@@ -38,9 +38,12 @@ class LoginForm(FlaskForm):
     username = StringField('Usuario',
                         validators=[DataRequired()])
     password = PasswordField('Contraseña', validators=[DataRequired()])
-    remember = BooleanField('Recordar')
     submit = SubmitField('Iniciar Sesión')
-
+    
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user == None:
+            raise ValidationError('El usuario no existe.')    
 
 class UpdateAccountForm(FlaskForm):
     username = StringField('Usuario',
