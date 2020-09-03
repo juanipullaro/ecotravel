@@ -65,7 +65,8 @@ Buscar Viajes
             const origin = L.marker([travel.origen.lat, travel.origen.lon]).addTo(map);
             const dest = L.marker([travel.destino.lat, travel.destino.lon]).addTo(map);
             
-            const popup = '<div class="popup-map"><h3>'+travel.conductor+'</h3>' +
+            const popup = '<div class="popup-map">'+
+                '<div class="driver"><img src="'+travel.foto_conductor+'"></img><h3>'+travel.conductor+'</h3></div>' +
                 '<p class="stars">'+"★".repeat(travel.rating)+"☆".repeat(5-travel.rating)+'</p>' +
                 '<b>Origen:</b>'+ travel.origen.nombre +
                 '<br /><b>Destino:</b>'+ travel.destino.nombre +

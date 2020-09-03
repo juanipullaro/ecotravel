@@ -151,6 +151,7 @@ def search_travels():
 @app.route('/crear_viaje', methods=['GET', 'POST'])
 def create_travel():
     error=None
+    travels_json = None
     form = CreateTravelForm()
     
     if request.method == 'POST' and form.validate_on_submit():
@@ -171,7 +172,7 @@ def create_travel():
             new_dest = Location.get_location(location=dest.address,
                                 latitude=dest.lat, longitude=dest.lng)
 
-        driver = User.query.filter_by(name="damian").first()
+        driver = User.query.filter_by(username=current_user.username).first()
 
         try:
             new_travel = Travel(travel_date=form.travel_date.data, travel_hour=form.travel_time.data, driver=driver,
@@ -182,6 +183,7 @@ def create_travel():
             db.session.commit()
             travels = [new_travel.to_json()]
             flash('Se ha registrado un nuevo viaje')
+            return redirect(url_for('create_travel'))
 
         except sqlalchemy.exc.IntegrityError:
             error  = "Ya se tienes un viaje creado para esa fecha y es hora"
@@ -193,17 +195,25 @@ def create_travel():
             travels = {}
             print(error)
             print(e)
+        finally:
+            travels_json = {"travels":travels}
     
-        return render_template('create_travel.html', form=form, error=error, travels={"travels":travels})
+        
     else:
         print("fail")
-    return render_template('create_travel.html', form=form)
+    return render_template('create_travel.html', form=form,travels=travels_json,error=error)
 
 ################################### UNIRSE AL VIAJE #######################################################
 
 @app.route('/unirme/<id_viaje>',methods=['GET', 'POST'])
 def join_travel(id_viaje):
-    date_time_travel = datetime.strptime(id_viaje[0:12], "%Y%m%d%H%M")
-    driver_id = id_viaje[12:]
-    print(date_time_travel, driver_id)
-    return "Fecha viaje: {}, Hora viaje: {}, Conductor: {}".format(date_time_travel.date(),date_time_travel.time(), driver_id)
+    try:
+        travel = Travel.query.filter_by(id=id_viaje).first()
+        passanger = User.query.filter_by(username=current_user.username).first()
+        travel_request = Travel_request(travel,passanger)
+        db.session.add(travel_request)
+        db.session.commit()
+        print("se ha agregado el viaje")
+    except Exception as e:
+        print(e)
+    return "Viaje {}".format(travel)

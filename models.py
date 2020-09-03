@@ -56,6 +56,10 @@ class Travel_request(db.Model):
     state = db.Column(db.String(60),default="Pendiente")
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow,primary_key=True)
     travel = db.relationship("Travel", foreign_keys=[travel_id],backref='travel_requests')
+
+    def __init__(self,travel,passenger):
+        self.dni_user = passenger.dni
+        self.travel_id = travel.id
     
     
 
@@ -83,14 +87,14 @@ class Travel(db.Model):
     #pasajeros
 
     def to_json(self):
-        id = self.travel_date.strftime("%Y%m%d") + self.travel_hour.strftime("%H%M") + str(self.travel_driver_id)
-        print(id)
-        travel = {"id":id,
+        travel = {"id":self.id,
+                    
                     "origen": {"nombre": self.origin.location, "lat": self.origin.latitude, "lon": self.origin.longitude},
                     "destino": {"nombre": self.dest.location, "lat": self.dest.latitude, "lon": self.dest.longitude},
                     "fecha": str(self.travel_date),
                     "hora": str(self.travel_hour),
                     "conductor": self.driver.name+' '+self.driver.surname,
+                    "foto_conductor":'/static/profile_pics/'+self.driver.image_file,
                     "rating": self.driver.rating,
                     "asientos_disp": self.seats}
         return travel
