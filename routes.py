@@ -15,12 +15,14 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/")
 @app.route("/home1")
 def home():
-    return render_template('home1.html')
+   travels = Travel.query.all()
+   return render_template('home1.html', travels=travels)
 ################################### PANTALLA DE USUARIO##########################################
 @app.route("/profile")
 def profile():
-    return render_template('profile.html')
-
+    travels = Travel.query.all()
+    return render_template('profile.html', travels=travels)
+   
 @app.route("/generic")
 def generic():
     return render_template('generic.html')

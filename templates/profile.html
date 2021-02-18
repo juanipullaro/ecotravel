@@ -1,59 +1,33 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar.html" %}>
-<section id="main-slider">
-    <div class="owl-carousel">
-        <div class="item" style="background-image: url(static/slider/bg3.jpg);">
-            <div class="slider-inner">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="container text-center">
+
                                 <div class="column is-auto">
-                                    <p class="title is-2">Hola {{ current_user.name|capitalize }}</p>
-                                    <p class="subtitle is-4"><i>¿Que te gustaria hacer?</i></p>
+                                    <p class="subtitle is-4"><i>Encontrá quien sera tu próximo compañero de viaje!</i></p>
+                                    <p class="subtitle1"><i>¿Cual sera tu siguente paso?</i></p>
                                     <div class="but-slider">
-                                        <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('search_travels') }}">Buscar Viaje</a>
-                                        <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('create_travel') }}">Crear Viaje</a>
+                                    <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('search_travels') }}">Buscar Viaje</a>
+                                    <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('create_travel') }}">Crear Viaje</a>
+                                        
                                     </div>    
                                 </div>
-                            </div>
-                        </div>
-                    </div>  
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+                          
+{% for travel in travels %}
 
-<section id="about">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title text-center wow fadeInDown">¿Que es Ecotravel?</h2>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 wow fadeInRight">
-                <h3 class="column-title">Mis viajes</h3>
-                
-            </div>
-            <div class="col-sm-6 wow fadeInLeft">
-                <h3 class="column-title">Solicitudes dgit e viaje</h3>
-            </div>
-        </div>
-    </div>
-</section>
+<div data-v-375120dc="" class="panel panel-default panel-card card card-trip card-trip-theme-default">
+  <div class="driver"><img src="{{'/static/profile_pics/' + travel.driver.image_file}}"></img><h3>{{ travel.driver.name}} {{ travel.driver.surname}}</h3></div> 
+  <p class="stars"> {% for i in range (travel.driver.rating) %}★{%endfor%}</p> 
+  <b>Origen:</b> {{travel.origin.location}}
+  <br /><b>Destino:</b>  {{travel.dest.location}}
+  <br /><b>Fecha:</b>  {{ travel.travel_date.strftime('%Y-%m-%d') }}
+  <br /><b>Hora:</b>{{ travel.travel_hour }}
+  <br /><b>Asientos disponibles:</b>{{ travel.seats }}
+  <button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button></div>
 
-<section class="hero">
-  <footer class="footer">
-      <div class="content has-text-centered">
-        <p>
-          <strong>EcoTravel</strong> by Damian Lacomba / Juan Ignacio Pullaro
-          <span class="icon is-small">
-            <i class="fa fa-copyright"></i>
-          </span>2020</<span>
-        </p>
-      </div>
-  </footer>
-</section>
+</div>
+ 
+{% endfor %} 
+    
+
 {% endblock body %}
 

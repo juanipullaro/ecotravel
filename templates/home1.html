@@ -29,7 +29,10 @@
 					
                                     <div class="but-slider">
                                         <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('login') }}">Iniciar sesión</a>
-                                        <a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('register') }}">Registrarse</a>
+										<a class="btn btn-lg btn-filled boton-usa-plataforma" href="{{ url_for('register') }}">Registrarse</a>
+										{% for travel in travels %}
+										<h2 class="account-heading">{{ travel.travel_driver_id }}</h2>
+										{% endfor %}  
                                     </div>    
        
 				</div>

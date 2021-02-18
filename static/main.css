@@ -143,13 +143,22 @@ padding: 1rem 1.5rem 0.5rem;
 }
 
 .title{
-  font-family: 'Roboto Slab';
+  font-family: 'Roboto';
   font-size: 60px;
   margin-top: 5%;
 }
 .subtitle{
-  font-size: 15px;
+  font-size: 42px;
+  color: #016587;
+  font-weight: 300;
+   margin-top: -7%;
 }
+.subtitle1{
+  font-size: 18px;
+  color: #204051;
+   margin-top: 0%;
+}
+
 
 #main-slider {
   overflow: hidden;
@@ -240,6 +249,7 @@ img {
     width: 180px;
     margin: 10px;}
 
+
 /* //////////////////////////////////////////  FIN HOME ////////////////////////////////////////////////////*
 
 /* //////////////////////////////////////////  PROFILE ////////////////////////////////////////////////////*/
@@ -252,6 +262,104 @@ img {
     text-align: center;
 }
 
+.btn-info:hover {
+  
+    margin: 0 3px;
+    padding: 6px 6px;
+    background-color: #17a2b8;
+    border: none;
+}
+.btn-info{
+width: 67px;
+margin: 1px;
+color: #fff;
+background-color: transparent; }
+
+.btn-group, .btn-group-vertical {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.btn-group.open .dropdown-toggle {
+  box-shadow: inset 0 3px 5px rgba(0,0,0,0.125);}
+
+  .header_profile_image {
+    vertical-align: middle;
+    display: inline-block;
+    width: 32px;
+    width: 2rem;
+    height: 32px;
+    height: 2rem;
+    border-radius: 100%;
+    border: 2px solid #F6F6F6;
+    border: 2px solid var(--secondary-font-color);
+    margin-bottom: 0;
+    background-image: url("https://carpoolear.com.ar/image/profile/092320190949070733665001569242947.jpeg");
+
+
+  
+}
+
+.header .header_panel-right {
+  line-height: 74px;
+}
+
+
+
+
+
+
+/* //////////////////////////////////////////  viajes  ////////////////////////////////////////////////////*/
+.card-trip {
+  height: 432px;
+  -webkit-box-shadow: 0 0 4px 1px #CCC;
+  box-shadow: 0 0 4px 1px #CCC;
+  border-radius: .4em;
+}
+
+.card {
+  position: relative;
+  display: inline-flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  margin-left: 15px;
+  width: 23%;
+
+
+}
+
+.trip_driver_details{
+  margin-left: 54%;
+
+}
+
+.row {
+
+  display: initial;
+
+  flex-wrap: wrap;
+  margin-right: -22px;
+  margin-left: 22px;
+  margin-top: 53px;
+}
+
+.panel-body  .card_body{
+  margin-left: 16px;
+}
+
+.panel-heading.card_heading{
+  background: #FE9900;
+  border-radius: 0.4em 0.4em 5.5em 0.5em;
+}
+
+/* //////////////////////////////////////////  FIN viajes  ////////////////////////////////////////////////////*/
 /* //////////////////////////////////////////  FIN PROFILE ////////////////////////////////////////////////////*/
 
 /* //////////////////////////////////////  INICIO DE SESIÓN - REGISTRO  /////////////////////////////////////*/
