@@ -539,3 +539,177 @@ span.req{
 
 
 /* /////////////////////////////////////// Home1 /////////////////////////////////////////*/
+.popup-map{
+  display: inline-table;
+  width: 22%;
+background: white;
+box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+padding: 1px;
+text-align: left;
+border-radius: 12px;
+margin-top: 31px;
+margin-left: 26px;
+margin-right: -4px;
+font-family:'Roboto Slab';
+}
+
+
+@media (max-width: 850px){
+  .popup-map{
+    margin-top: 50px;
+    display: inline-table;
+    width: 81%;
+  }}
+
+.driver{
+  display: flex;
+  margin-bottom: 6%;
+}
+
+.driver img{
+  height: 60px;
+  width: 60;
+  margin-right: 10px;
+  border-radius: 15px;
+}
+
+img {
+  vertical-align: middle;
+  border-style: none;
+  width: 20%;
+}
+.popup-map > .btn-join-travel{
+  border-radius: 10px;
+border: none;
+height: 37px;
+background-color: cadetblue;
+color: w;
+font-size: large;
+margin-top: 5px;
+color: white;
+width: 100%;
+}
+
+.stars{
+  font-size: x-large;
+  color:#ffcb00;
+  margin-top: -14%;
+
+}
+.dis{   
+  margin-left: 28%;
+display: table-caption;
+margin-top: -42%;
+}
+
+.ori{
+  color:#204051;
+  display: inline-flex;
+}
+.des{
+  color: #204051;
+  display: inline-flex;
+  margin-top: 8%;
+}
+
+
+
+
+.data{
+  height: 374px;
+
+}
+h3{font-size: 24px;}
+
+.fa {
+  display: flex;
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  font-size: 36px;
+  margin-left: 25px;
+  margin-inline: 7%;
+  color:#e17b3a;
+}
+
+.fa.fa-map-marker.des{
+  display: flex;
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  font-size: 36px;
+  margin-left: 25px;
+  margin-inline: 7%;
+  color:#6e9360;
+  margin-top: 0%;
+
+}
+
+.trip_location-dot-line {
+  position: absolute;
+  top: 28px;
+}
+
+.trip_location-dot-line > div {
+  float: right;
+  width: 1px;
+  margin-right: 13px;
+  height: 50px;
+  content: '\A0';
+  border: 0;
+  border-style: dashed;
+}
+
+.col-xs-4 {
+  width: 16.66666667%;
+}
+
+.cantDisp{
+  font-size: 37px;
+color: darkseagreen;
+display: ruby;
+margin-left: 16%;
+margin-inline: 15px;
+}
+
+.glob{
+  margin-top: 6%;
+}
+.fec{margin-top: 9%;
+  margin-left: 20%;}
+
+ 
+  .fa.fa-calendar {
+    display: ruby-base-container;
+font-family: FontAwesome;
+font-style: normal;
+font-weight: normal;
+line-height: 1;
+font-size: 23px;
+margin-left: -6px;
+margin-inline: -16%;
+color: #204051;
+  }
+   
+.hor{margin-top: 6%;
+  margin-left: 21%;
+  color: #e17b3a;
+}
+
+  .fa.fa-clock-o {
+    display: ruby;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    font-size: 24px;
+    margin-left: -12px;
+    margin-inline: -44%;
+    color: #204051;
+}
+  
+/* /////////////////////////////////////// FIN Home1 /////////////////////////////////////////*/
+
+
