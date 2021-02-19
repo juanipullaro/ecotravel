@@ -5,10 +5,10 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"       aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+      
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="navbar-nav mr-auto">
           <div class="navbar-nav">
-
             
           </div>
           
@@ -17,9 +17,9 @@
         <div class="navbar-nav">
           {% if current_user.is_authenticated %}
             <a class="nav-item nav-link" >{{ current_user.name|capitalize }} {{ current_user.surname|capitalize }}</p></a> 
-            <div data-v-fb71b4dc="" class="open btn-group"> <button type="button" class="btn btn-info dropdown-toggle"><div data-v-fb71b4dc="" class="circle-box header_profile_image" style="background-image: url(&quot;https://carpoolear.com.ar/image/profile/092320190949070733665001569242947.jpeg&quot;);"></div> <span class="caret"></span></button> <ul class="dropdown-menu"> <li data-v-fb71b4dc=""><a data-v-fb71b4dc="" href="/app/my-trips" class="">Mis viajes</a></li> <li data-v-fb71b4dc=""><a data-v-fb71b4dc="" href="/app/conversations" class="">Mensajes</a></li> <li data-v-fb71b4dc=""><a data-v-fb71b4dc="" href="/app/profile/me" class="">Perfil</a></li> <!----> <li data-v-fb71b4dc="" role="separator" class="divider"></li> <li data-v-fb71b4dc=""><a data-v-fb71b4dc="">Cerrar sesión</a></li></ul></div>
             <a class="nav-item nav-link" href="{{ url_for('account') }}">Cuenta</a>
             <a class="nav-item nav-link" href="{{ url_for('logout') }}">Salir</a>
+            
            {% else %}
           {% endif %}
         </div>
