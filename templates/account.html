@@ -1,13 +1,43 @@
 {% extends "base.html" %}
 {% block body %}
-{% include "navbar.html" %}
+{% include "navbar.html" %}>
 
-<ul role="tablist" class="nav nav-tabs active-1">
-    <li class="nav-item"><a href="#0" role="tab" data-toggle="tab" class="nav-link">Mis viajes</a></li>
-    <li class="nav-item"><a href="#1" role="tab" data-toggle="tab" class="nav-link active">Perfil</a></li>
-    <li class="nav-item"><a href="#2" role="tab" data-toggle="tab" class="nav-link">Calificaciones</a></li>
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#basics" aria-controls="basics" role="tab" data-toggle="tab">Basics</a></li>
+    <li role="presentation"><a href="#wdev" aria-controls="wdev" role="tab" data-toggle="tab">Web Dev</a></li>
+    <li role="presentation"><a href="#dan" aria-controls="dan" role="tab" data-toggle="tab">Data Analysis</a></li>
+
+  </ul>
+
+  <!-- Tab panes -->
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active" id="basics">
+	<ul>
+	   <li>dfadsfasf</li>
+	   <li>jjh</li>
+	   <li>assggg</li>
+	</ul>
+  </div>
+  
+  <div role="tabpanel" class="tab-pane fade" id="wdev">web dev</div>
+
+  <div role="tabpanel" class="tab-pane fade" id="dan">Data analysis!#Q$@!#</div>
+
+</div>
+
+</div>
+
+{% endblock body %}
+<!--<ul role="tablist" class="nav nav-tabs active-1">
+    <li class="nav-item"><a href="#mytravels" role="tab">Mis Viajes</a></li>
+    <li class="nav-item"><a href="#account" role="tab">Perfil</a></li>
+    <li class="nav-item"><a href="#2" role="tab" data-toggle="tab" >Calificaciones</a></li>
 </ul>
 
+<section id="account">
 <div role="tabpanel" id="1" class="tab-pane container active">
     <div    class="profile-info-component">
         <div    class="list-group">
@@ -28,15 +58,20 @@
                         <div class="list-group-item"><i    aria-hidden="true" class="fa fa-envelope"></i> 
                         <div  class="list-group-item--content">{{ current_user.email }}</div></div> 
                         <div    class="list-group-item"><i    aria-hidden="true" class="fa fa-mobile bigger"></i> 
-                        <div    class="list-group-item--content">0336154599077</div></div> <!----></div> <!----> 
+                        <div    class="list-group-item--content">0336154599077</div></div> </div> 
                         <div    class="edit-action"><button class="btn btn-primary"> Editar perfil</button> </div>
                     </div>
                 </div>
         </div>
     </div>
 </div>
+</section>
 
-{% endblock body %}
+<section id="mytravels">
+
+    <h1> Mis viajes</h1>
+    </section>
+    {% endblock body %}-->
 
 
 <!--<form method="POST" action="" enctype="multipart/form-data">

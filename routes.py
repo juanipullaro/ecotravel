@@ -105,6 +105,7 @@ def account():
                            image_file=image_file, form=form)
 
 
+
 ################################### BUSCAR VIAJE #######################################################
 
 @app.route('/buscar_viajes', methods=['GET', 'POST'])
