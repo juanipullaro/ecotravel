@@ -895,7 +895,10 @@ span.req{
 
 /* /////////////////////////////////////// ACCOUNT /////////////////////////////////////////*/
 
-
+.nav-tabs > li {
+  width: 25%;
+  text-align: center;
+}
 .account-area {
   padding: 30px;
   width: 600px;

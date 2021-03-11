@@ -5,9 +5,6 @@ from flask_login import UserMixin
 from sqlalchemy.orm import relationship
 from geoalchemy2 import Geometry
 
-"""@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))"""
 @login_manager.user_loader
 def load_user(dni):
     return User.query.get(int(dni))

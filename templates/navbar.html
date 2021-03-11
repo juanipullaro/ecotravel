@@ -19,7 +19,6 @@
             <a class="nav-item nav-link" >{{ current_user.name|capitalize }} {{ current_user.surname|capitalize }}</p></a> 
             <a class="nav-item nav-link" href="{{ url_for('account') }}">Cuenta</a>
             <a class="nav-item nav-link" href="{{ url_for('logout') }}">Salir</a>
-            
            {% else %}
           {% endif %}
         </div>

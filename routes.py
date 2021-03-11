@@ -13,14 +13,19 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 ################################### INICIO_PANTALLA PRINCIPAL #####################################
 @app.route("/")
-@app.route("/home1")
+@app.route("/home")
 def home():
    travels = Travel.query.all()
    return render_template('home1.html', travels=travels)
+
+
+
 ################################### PANTALLA DE USUARIO##########################################
 @app.route("/profile")
+@login_required
 def profile():
     travels = Travel.query.all()
+    travels=[travel for travel in travels if travel.travel_driver_id != current_user.dni]
     return render_template('profile.html', travels=travels)
    
 @app.route("/generic")
@@ -100,15 +105,17 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    posts = Travel_request.query.all()
+    travels = Travel.query.all()
+    travels=[travel for travel in travels if travel.travel_driver_id == current_user.dni]
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form)
+                           image_file=image_file, form=form,travels=travels)
 
 
 
 ################################### BUSCAR VIAJE #######################################################
 
 @app.route('/buscar_viajes', methods=['GET', 'POST'])
+@login_required
 def search_travels():
     #you can search for travels here
     form = TravelSearchForm()
@@ -130,7 +137,7 @@ def search_travels():
                                 latitude=dest.lat, longitude=dest.lng)
 
         travels = Travel.query.filter_by(
-                travel_date=form.travel_date.data, travel_hour=form.travel_time.data)
+                travel_date=form.travel_date.data)
         travels_matched = []
         
         for travel in travels:
@@ -152,6 +159,7 @@ def search_travels():
 ################################### CREAR VIAJE #######################################################
 
 @app.route('/crear_viaje', methods=['GET', 'POST'])
+@login_required
 def create_travel():
     error=None
     travels_json = None
@@ -209,6 +217,7 @@ def create_travel():
 ################################### UNIRSE AL VIAJE #######################################################
 
 @app.route('/unirme/<id_viaje>',methods=['GET', 'POST'])
+@login_required
 def join_travel(id_viaje):
     try:
         travel = Travel.query.filter_by(id=id_viaje).first()

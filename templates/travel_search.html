@@ -59,12 +59,17 @@ Buscar Viajes
     //travels
     {%if travels:%}
         const {travels} = {{ travels| safe}}
-
         console.log(travels)
+        var myIcon = L.icon({
+                     iconUrl: "static/slider/coche.png" ,
+                     iconSize: [20, 60],
+                     iconAnchor: [22, 94],
+                     popupAnchor: [-3, -76],
+                     shadowSize: [68, 95],
+                     shadowAnchor: [22, 94]});
         travels.map(travel => {
-            const origin = L.marker([travel.origen.lat, travel.origen.lon]).addTo(map);
-            const dest = L.marker([travel.destino.lat, travel.destino.lon]).addTo(map);
-            
+            const origin = L.marker([travel.origen.lat, travel.origen.lon],{icon: myIcon}).addTo(map);
+            origin.on('mouseover',function(ev) {ev.target.openPopup();});
             const popup = '<div class="popup-map">'+
                 '<div class="driver"><img src="'+travel.foto_conductor+'"></img><h3>'+travel.conductor+'</h3></div>' +
                 '<p class="stars">'+"★".repeat(travel.rating)+"☆".repeat(5-travel.rating)+'</p>' +
