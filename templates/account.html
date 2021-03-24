@@ -1,144 +1,185 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar.html" %}>
-
-<div role="tabpanel">
-
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#basics" aria-controls="basics" role="tab" data-toggle="tab">Perfil</a></li>
-    <li role="presentation"><a href="#wdev" aria-controls="wdev" role="tab" data-toggle="tab">Mis Viajes</a></li>
-    <li role="presentation"><a href="#dan" aria-controls="dan" role="tab" data-toggle="tab">Calificaciones</a></li>
-    <li role="presentation"><a href="#dan" aria-controls="dan" role="tab" data-toggle="tab">Mis Alertas</a></li>
-
-  </ul>
-
-  <!-- Tab panes -->
-<div class="tab-content">
-  <div role="tabpanel" class="tab-pane fade in active" id="basics">
-	<ul>
-        <div    class="profile-info-component">
-            <div    class="list-group">
-                <img class="rounded-circle account-img" src="{{ image_file }}">
-                <div class="media-body">
-                    
-                </div> 
-                
-                <div    class="row">
-                    <div    class="col-xs-24">
-                        <h2 class="account-heading">{{ current_user.name|capitalize}} {{ current_user.surname|capitalize}} </h2>
-                        <p class="text-secondary">{{ current_user.email }}</p>
-                        </div>
-                            <div class="list-container"><div    class="list-group-item"><i    aria-hidden="true" class="fa fa-quote-left"></i> 
-                            <div class="list-group-item--content italic"> Busco viajes en donde compartir un momento agradable y además abaratar costos y tiempo</div></div>            
-                            <div    class="list-group-item"><i class="fa fa-user" aria-hidden="true"></i>
-                                <div    class="list-group-item--content">{{ current_user.username }}</div></div> 
-                            <div class="list-group-item"><i    aria-hidden="true" class="fa fa-envelope"></i> 
-                            <div  class="list-group-item--content">{{ current_user.email }}</div></div> 
-                            <div    class="list-group-item"><i    aria-hidden="true" class="fa fa-mobile bigger"></i> 
-                            <div    class="list-group-item--content">0336154599077</div></div> </div> 
-                            <div    class="edit-action"><button class="btn btn-primary"> Editar perfil</button> </div>
-                        </div>
-                    </div>
-            </div>
-	</ul>
+<link rel="stylesheet" href="./static/css/account.css">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    
+  
+  <div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'Perfil')" id="defaultOpen">Perfil</button>
+    <button class="tablinks" onclick="openCity(event, 'Mis viajes')">Mis viajes</button>
+    <button class="tablinks" onclick="openCity(event, 'Calificaciones')">Mis calificaciones</button>
+    <button class="tablinks" onclick="openCity(event, 'Alertas')">Mis alertas</button>
   </div>
   
-  <div role="tabpanel" class="tab-pane fade" id="wdev">
-    <section id="travels">                    
-        {% for travel in travels %}
-        <div class="popup-map">
-          <div class="driver"><img src="{{'/static/profile_pics/' + travel.driver.image_file}}"></img>
-             <h3>{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} 
-                <div class="stars"><br />{% for i in range (travel.driver.rating) %}★{%endfor%} </div> </h3>
+  <div id="Perfil" class="tabcontent">
+      <article class="media content-section1">
+          <img class="rounded-circle article-img1" src="{{ image_file }}">
+          <div class="media-body1">
+              <div class="article-metadata1">
+                  <a class="mr1-2" href="#">{{ current_user.name|capitalize}} {{ current_user.surname|capitalize}} </a>
+                  <button type="button" class="btn btn-danger btn-sm m-1v" onclick="openCity(event, 'Editar')">Editar perfil</button>
+              </div>
+              <div class="data">
+                  <i class="fa fa-quote-left" aria-hidden="true"></i><div class="comentaccount">Busco viajes en donde compartir un momento agradable y además abaratar costos y tiempo</div>
+                  <i class="fa fa-user" aria-hidden="true"></i><div class="usernameaccount">{{ current_user.username }} </div>
+                  <i class="fa fa-envelope" aria-hidden="true"></i> <div class="emailaccount">{{ current_user.email }} </div>
+                  <i class="fa fa-mobile bigger" aria-hidden="true"></i> <div class="phoneaccount">0336154599077</div>           
+              </div>
           </div>
-          <div class="data"> <div class="ori">
-               <i class="fa fa-map-marker" aria-hidden="true"></i> {{travel.origin.location}} 
+      </article>
+  </div>
+       
+
+  <div id="Editar" class="tabcontent">
+    <div id="signin-box-account" class="signin-box-account">
+      <div class="signin-area-account">
+        <form method="POST" action="" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Actualizá tus datos</legend>
+              <div class="form-group">
+                  {{ form.username.label(class="form-control-label") }}
+                  {% if form.username.errors %}
+                      {{ form.username(class="form-control form-control-lg is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.username.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.username(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+              <div class="form-group">
+                  {{ form.email.label(class="form-control-label") }}
+                  {% if form.email.errors %}
+                      {{ form.email(class="form-control form-control-lg is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.email.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.email(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+              <div class="form-group">
+                  {{ form.picture.label() }}
+                  {{ form.picture(class="form-control-file") }}
+                  {% if form.picture.errors %}
+                      {% for error in form.picture.errors %}
+                          <span class="text-danger">{{ error }}</span></br>
+                      {% endfor %}
+                  {% endif %}
+              </div>
+          </fieldset>
+          <div class="form-group">
+              {{ form.submit(class="btn btn-outline-info") }}
+          </div>
+      </form>
+   </div>
+    </div>
+  </div>
+  <div id="Mis viajes" class="tabcontent">
+  {% for travel in travels %}
+  
+      <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} </a>
+                  <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Eliminar viaje</button> 
+                  <a class="btn btn-danger btn-sm m-1v2"href="{{ url_for('update_travels', travel_id=travel.id) }}">Editar viaje</a>
+                  <button type="button" class="btn btn-danger btn-sm m-1v3" onclick="openCity(event, 'Solicitudes-')">Solicitudes</button> 
+            
             </div>
-            <div class="des"><br />
-              <i class="fa fa-map-marker des" aria-hidden="true"></i>  {{travel.dest.location}} </div>
-            <div class="fec"> 
-              <i class="fa fa-calendar" aria-hidden="true"></i>
-                  <script>
-                      var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-                      var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
-                      var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
-                      document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-                  </script> 
+            <div class="data">
+              {% for request in travel.travel_requests %}
+                <i class="fa fa-arrow-up" aria-hidden="true"></i><div class="passagers">{{request.passenger.name|capitalize}} {{request.passenger.surname|capitalize}}</div> 
+              {% endfor %}
+                <i class="fa fa-map-marker ori" aria-hidden="true"></i><div class="oriaccount"> {{travel.origin.location}} </div>
+                <i class="fa fa-flag-checkered des" aria-hidden="true"></i> <div class="desaccount">{{travel.dest.location}} </div>
+                <i class="fa fa-calendar" aria-hidden="true"></i>  <div class="fecaccount">
+                    <script>
+                        var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                        var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
+                        var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                        document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                    </script>  </div>
+              <i class="fa fa-clock-o" aria-hidden="true"></i> <div class="horaccount"> {{ travel.travel_hour }}</div>
             </div>
-            <div class="hor"> {{ travel.travel_hour }}
-              <i class="fa fa-clock-o" aria-hidden="true"></i>
-            </div>
-          
-        <div class="glob">
-            <div class="cantDisp">{{ travel.seats }}</div> <div  class="dis"><br />Asientos disponibles </div>
-        </div> </div>
-          <button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button></div> 
-        </div>
-        {% endfor %}
-        </section> 
+          </div>
+      </article>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Seguro quiere eliminar el viaje?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <form action="{{ url_for('delete_post', id_viaje=travel.id) }}" method="POST">
+          <input class="btn btn-danger" type="submit" value="Eliminar">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="Solicitudes" class="tabcontent">
+  {% for request in travel.travel_requests %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + request.passenger.image_file}}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{request.passenger.name|capitalize}} {{request.passenger.surname|capitalize}} </a>
+        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Aceptar</button> 
+            <a class="btn btn-danger btn-sm m-1v2"href="{{ url_for('update_travels', travel_id=travel.id) }}">Rechazar</a>
+      </div>
+    </div>
+  </article>
+  {% endfor %}   
+</div>
+{% endfor %} 
+</div>
+
+
+  
+  <div id="Mis calificaciones" class="tabcontent">
+    <h3>Tokyo</h3>
+    <p>Tokyo is the capital of Japan.</p>
   </div>
 
-  <div role="tabpanel" class="tab-pane fade" id="dan">Data analysis!#Q$@!#</div>
+  <div id="Mis alertas" class="tabcontent">
+    <h3>Tokyo</h3>
+    <p>Tokyo is the capital of Japan.</p>
+  </div>
+  
+  <script>
+  function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+  
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+  </script>
 
-</div>
-
-</div>
-{% endblock %}
-
-{#<section id="account">
-<div role="tabpanel" id="1" class="tab-pane container active">
-    
-    </div>
-</div>
-</section>
-
-<section id="mytravels">
-
-    <h1> Mis viajes</h1>
-    </section>
     {% endblock body %}-->
 
-
-<!--<form method="POST" action="" enctype="multipart/form-data">
-                        {{ form.hidden_tag() }}
-                        <fieldset class="form-group">
-                            <div class="form-group">
-                                {{ form.username.label(class="form-control-label") }}
-                                {% if form.username.errors %}
-                                    {{ form.username(class="form-control form-control-lg is-invalid") }}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.username.errors %}
-                                                <span>{{ error }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                    {{ form.username(class="form-control form-control-lg") }}
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                {{ form.email.label(class="form-control-label") }}
-                                {% if form.email.errors %}
-                                    {{ form.email(class="form-control form-control-lg is-invalid") }}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.email.errors %}
-                                                <span>{{ error }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                    {{ form.email(class="form-control form-control-lg") }}
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                {{ form.picture(class="form-control-file") }}
-                                {% if form.picture.errors %}
-                                    {% for error in form.picture.errors %}
-                                        <span class="text-danger">{{ error }}</span></br>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                        </fieldset>
-                            <div class="form-group">
-                                {{ form.submit(class="btn btn-outline-info") }}
-                            </div>
-                    </form>-->#}
+    

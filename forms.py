@@ -51,7 +51,7 @@ class UpdateAccountForm(FlaskForm):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
     picture = FileField('Actualice foto de perfil', validators=[FileAllowed(['jpg', 'png'])])
-    submit = SubmitField('Actualizar')
+    submit = SubmitField('Actualizar Perfil')
 
     def validate_username(self, username):
         if username.data != current_user.username:
@@ -64,6 +64,7 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('Este email ya existe. Por favor ingrese uno distinto.')
+
 
 
 class TravelSearchForm(FlaskForm):
@@ -80,7 +81,6 @@ class CreateTravelForm(FlaskForm):
     travel_time = TimeField('Hora',validators=[DataRequired()])
     seats = IntegerField('Asientos',validators=[DataRequired()])
     submit = SubmitField('Crear Viaje')
+    submit1= SubmitField('Actualizar Viaje')
 
 
-
-    

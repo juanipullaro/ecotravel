@@ -1,0 +1,57 @@
+
+
+.btn.btn-outline-info{
+        left: 30%;
+position: relative;
+width: 36%;
+margin-top: 6%;
+background-color: #dc3545;
+color: white;
+text-align: center;
+right: -30%;
+
+      }
+
+      label {
+        display: table;
+        margin-bottom: 1%;
+        margin-top: 1%;
+    }
+
+      .form-control-file {
+        display: block;
+        width: 63%;
+        font-size: 91%;
+        margin-left: -2%;
+        margin-top: 1%;
+    }
+
+      .form-group {
+        margin-bottom: 0rem;
+    }
+
+      .mr1-2{
+        margin-right: .4rem !important;
+        font-size: 22px;}
+
+        
+.signin-box-form {
+  margin: auto;
+  margin-top: auto;
+width: 50%;
+background: #204051a8;
+border: 2px transparent rgba(156, 154, 154, 0.582);
+border-radius: 10px;
+font-family: 'Roboto Slab';
+margin-top: 4%;
+}
+
+
+.signin-area-form {
+  padding: 30px;
+}
+
+@media (max-width: 850px){
+  .signin-box-form{
+    margin-top: 50px;
+  }}

@@ -57,7 +57,7 @@
 <div class="glob">
     <div class="cantDisp">{{ travel.seats }}</div> <div  class="dis"><br />Asientos disponibles </div>
 </div> </div>
-  <button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button></div> 
+<a class="btn-join-travel" href="{{ url_for('join_travel', id_viaje=travel.id) }}">Unirme al viaje</a> 
 </div>
 {% endfor %}
 </section> 

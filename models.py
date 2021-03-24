@@ -53,6 +53,8 @@ class Travel_request(db.Model):
     state = db.Column(db.String(60),default="Pendiente")
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow,primary_key=True)
     travel = db.relationship("Travel", foreign_keys=[travel_id],backref='travel_requests')
+   
+
 
     def __init__(self,travel,passenger):
         self.dni_user = passenger.dni

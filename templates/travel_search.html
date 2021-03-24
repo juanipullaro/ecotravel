@@ -3,6 +3,10 @@
 Buscar Viajes
 {%endblock%}
 {% block content %}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"
+/>
 <div class="search-travel-page">
     <aside class="search-travel-aside">
         <section id=tab-container class="tabs">
@@ -30,11 +34,12 @@ Buscar Viajes
     </aside>
     <div id="map"></div>
 </div>
+<script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.umd.js"></script>
 <script type="text/javascript">
 
 </script>
 
-<script type="text/javascript">
+<script type="module">
 
     // The first parameter are the coordinates of the center of the map
     // The second parameter is the zoom level
@@ -83,8 +88,23 @@ Buscar Viajes
         })
 
         
-    {% endif %}
 
+        
+    {% endif %}
+        
+
+    import { HereProvider, GeoSearchControl } from './leaflet-geosearch';
+const provider = new HereProvider({
+  params: {
+    apiKey: 'PS5-FSXGhatCFEq1bhLbK4rctqlTRmSO1DI0LncfC-k',
+  },
+});
+// add to leaflet
+map.addControl(
+  new GeoSearchControl({
+    provider,
+  }),
+);
     
 
 
@@ -92,6 +112,8 @@ Buscar Viajes
 
 
 
+
 </script>
+
 
 {% endblock%}

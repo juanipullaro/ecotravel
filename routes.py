@@ -78,13 +78,16 @@ def save_picture(form_picture):
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-
     output_size = (125, 125)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
 
     return picture_fn
+################################### SOLICITUD DE VIAJE #######################################################
+
+
+
 
 ################################### CUENTA DE USUARIO ###############################################
 
@@ -109,6 +112,47 @@ def account():
     travels=[travel for travel in travels if travel.travel_driver_id == current_user.dni]
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form,travels=travels)
+
+
+@app.route("/account/<int:travel_id>")
+def travel(travel_id):
+    travel = Travel.query.get_or_404(travel_id)
+    return render_template('account.html', id=travel.id, travel=travel)
+
+
+@app.route("/account/<int:travel_id>/update", methods=['GET', 'POST'])
+def update_travels(travel_id):
+    travel = Travel.query.get_or_404(travel_id)
+    form = CreateTravelForm()
+    if form.validate_on_submit():
+       travel.origin.location=form.origin.data
+       travel.dest.location=form.destination.data
+       travel.travel_date=form.travel_date.data
+       travel.travel_hour=form.travel_time.data
+       travel.seats = form.seats.data
+       db.session.commit()
+       flash('Your post has been updated!', 'success')
+       return redirect(url_for('account', travel_id=travel_id))
+    elif request.method == 'GET':
+        form.origin.data=travel.origin
+        form.destination.data=travel.dest
+        form.travel_date.data=travel.travel_date
+        form.travel_date.time=travel.travel_hour
+        form.seats = travel.seats
+    return render_template('formulario.html', title='Update Travel',
+                           form=form, legend='Update Travel',travel=travel)
+
+@app.route("/account/<id_viaje>/delete", methods=['POST'])
+@login_required
+def delete_post(id_viaje):
+    travel= Travel.query.get_or_404(id_viaje)
+    travel_request=Travel_request.query.filter_by(travel_id=id_viaje)
+    db.session.delete(travel_request)
+    db.session.delete(travel)
+    db.session.commit()
+    flash('Su viaje se elimino correctamente!', 'success')
+    return redirect(url_for('profile'))
+
 
 
 
@@ -229,3 +273,5 @@ def join_travel(id_viaje):
     except Exception as e:
         print(e)
     return "Viaje {}".format(travel)
+
+
