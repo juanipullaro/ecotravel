@@ -81,9 +81,9 @@
    </div>
     </div>
   </div>
+ 
   <div id="Mis viajes" class="tabcontent">
-  {% for travel in travels %}
-  
+    {% for travel in travels %}
       <article class="media content-section">
           <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
           <div class="media-body">
@@ -91,13 +91,23 @@
               <a class="mr-2" href="#">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} </a>
                   <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Eliminar viaje</button> 
                   <a class="btn btn-danger btn-sm m-1v2"href="{{ url_for('update_travels', travel_id=travel.id) }}">Editar viaje</a>
-                  <button type="button" class="btn btn-danger btn-sm m-1v3" onclick="openCity(event, 'Solicitudes-')">Solicitudes</button> 
-            
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger btn-sm m-1v3"
+                            data-toggle="dropdown">
+                            {{ travel.travel_requests|length}} Solicitudes de viaje <span class="caret"></span>
+                    </button>
+                  
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="{{ url_for('account')}}">  {% for request in travel.travel_requests %}
+                        <div class="passagers">{{request.passenger.name|capitalize}} {{request.passenger.surname|capitalize}}</div>
+                        <button type="button" class="btn-danger btn-sm m-1request">Aceptar</button><button type="button" class="btn-danger btn-sm m-1request2">Rechazar</button>
+                        {% endfor %}</a></li>
+
+                    </ul>
+                  </div>
+                  
             </div>
             <div class="data">
-              {% for request in travel.travel_requests %}
-                <i class="fa fa-arrow-up" aria-hidden="true"></i><div class="passagers">{{request.passenger.name|capitalize}} {{request.passenger.surname|capitalize}}</div> 
-              {% endfor %}
                 <i class="fa fa-map-marker ori" aria-hidden="true"></i><div class="oriaccount"> {{travel.origin.location}} </div>
                 <i class="fa fa-flag-checkered des" aria-hidden="true"></i> <div class="desaccount">{{travel.dest.location}} </div>
                 <i class="fa fa-calendar" aria-hidden="true"></i>  <div class="fecaccount">
@@ -130,24 +140,11 @@
     </div>
   </div>
 </div>
-
-
-<div id="Solicitudes" class="tabcontent">
-  {% for request in travel.travel_requests %}
-  <article class="media content-section">
-    <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + request.passenger.image_file}}">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="#">{{request.passenger.name|capitalize}} {{request.passenger.surname|capitalize}} </a>
-        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Aceptar</button> 
-            <a class="btn btn-danger btn-sm m-1v2"href="{{ url_for('update_travels', travel_id=travel.id) }}">Rechazar</a>
-      </div>
-    </div>
-  </article>
-  {% endfor %}   
-</div>
 {% endfor %} 
 </div>
+
+
+
 
 
   

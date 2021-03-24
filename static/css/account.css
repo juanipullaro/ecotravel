@@ -145,25 +145,14 @@ font-size: 12px;}
 }
 
 
-.fa.fa-arrow-up
-{
-  font-family: FontAwesome;
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  font-size: 22px;
-  margin-left: 61%;
+
+
+.passagers{
   color: #204051;
-  position: absolute;
-  margin-top: 0%;
-}
-
-
-.passagers{margin-top: 2.2%;
-  margin-left: 72%;
-  color:#204051;
-  font-size: 13px;
-  margin-bottom: -3%;}
+font-size: 14px;
+display: table;
+margin-bottom: 22px;
+margin-top: 4%;}
 
 
 
@@ -171,23 +160,25 @@ font-size: 12px;}
     height: 158px;}
 
     .btn.btn-danger.btn-sm.m-1v2 {
-      left: 56%;
+      left: -8%;
       position: relative;
-      width: 15%;
+      width: 10%;
       background-color: #204051;
-    }
+  }
+    
     .btn.btn-danger.btn-sm.m-1v3 {
-      left: 9%;
-      position: relative;
-      width: 13%;
-      background-color: #204051;
+      left: 334%;
+position: relative;
+width: 100%;
+background-color: #204051;
+border-radius: 17px;
   }
     
 
     .btn.btn-danger.btn-sm.m-1 {
-      left: 57%;
-      position: relative;
-      width: 15%;
+      left: 15%;
+position: relative;
+width: 10%;
     }
 /* ////////////////////////////////////////////  PERFIL////////////////////////////////////////////////////*/
 .comentaccount{
@@ -288,6 +279,21 @@ display: flex;
     top: -200px;
     height: 295px;
       }
+
+    .content-section_request{
+      background: #ffffff;
+padding: 10px 20px;
+border: 1px solid #dddddd;
+border-radius: 3px;
+margin-top: 20%;
+margin-bottom: -251px;
+width: 39%;
+margin-left: 30%;
+position: relative;
+top: -178px;
+
+
+    }
       
       .article-title1 {
         color: #444444;
@@ -350,6 +356,42 @@ display: flex;
     width: 15%;
       }
 
+    .btn-danger.btn-sm.m-1request{
+      left: 30%;
+      position: absolute;
+      width: 30%;
+      margin-top: -12%;
+      background-color: #48a652;
+      border-color: #48a652;
+    }
+    .btn-danger.btn-sm.m-1request2{
+      left: 62%;
+      position: absolute;
+      width: 30%;
+      margin-top: -12%;
+    }
+    .btn.btn-danger.btn-sm.m-1v3 {
+      left: 334%;
+position: relative;
+width: 100%;
+background-color: #204051;
+border-radius: 17px;}
+
+    .mr-2request{
+      margin-top: 3%;
+    }
+    .btn-group {
+      position: relative;
+      display: -webkit-inline-box;
+      vertical-align: middle;
+      width: 52%;}
+
+    .modal-title {
+      margin-bottom: 1px;
+      line-height: 0.5; 
+      margin-left: 35%;}
+
+
       .btn.btn-outline-info{
         left: 30%;
 position: relative;
@@ -384,6 +426,13 @@ right: -30%;
         margin-right: .4rem !important;
         font-size: 22px;}
 
+        .dropdown-menu {
+          font-size: 1rem;
+          color: #212529;
+          text-align: left;
+          list-style: none;
+          width: 66%;}
+
         
 .signin-box-account {
   margin: auto;
@@ -406,6 +455,7 @@ margin-top: 4%;
     margin-top: 50px;
   }}
 
+   
 /* ////////////////////////////////////////////  TABS ////////////////////////////////////////////////////*/
 
       /* Style the tab */
