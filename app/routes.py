@@ -6,18 +6,19 @@ import json
 from datetime import datetime
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, jsonify
-from ecotravel import app, db, bcrypt
-from ecotravel.forms import RegistrationForm, LoginForm, UpdateAccountForm,TravelSearchForm,CreateTravelForm
-from ecotravel.models import User,Travel_request, Location, Travel
+from . import app, db, bcrypt
+from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm
+from .models import User, Travel_request, Location, Travel, Alert
 from flask_login import login_user, current_user, logout_user, login_required
 
 ################################### INICIO_PANTALLA PRINCIPAL #####################################
+
+
 @app.route("/")
 @app.route("/home")
 def home():
-   travels = Travel.query.all()
-   return render_template('home1.html', travels=travels)
-
+    travels = Travel.query.all()
+    return render_template('home1.html', travels=travels)
 
 
 ################################### PANTALLA DE USUARIO##########################################
@@ -25,13 +26,16 @@ def home():
 @login_required
 def profile():
     travels = Travel.query.all()
-    travels=[travel for travel in travels if travel.travel_driver_id != current_user.dni]
+    travels = [
+        travel for travel in travels if travel.travel_driver_id != current_user.dni]
     return render_template('profile.html', travels=travels)
-   
+
+
 @app.route("/generic")
 def generic():
     return render_template('generic.html')
 ################################### REGISTRO #######################################################
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -39,8 +43,10 @@ def register():
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(name=form.name.data, surname=form.surname.data, email=form.email.data,dni=form.dni.data, username=form.username.data, password=hashed_password)
+        hashed_password = bcrypt.generate_password_hash(
+            form.password.data).decode('utf-8')
+        user = User(name=form.name.data, surname=form.surname.data, email=form.email.data,
+                    dni=form.dni.data, username=form.username.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         #flash('Your account has been created! You are now able to log in', 'success')
@@ -48,6 +54,7 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 ################################### INICIO SESIÓN #######################################################
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -65,7 +72,7 @@ def login():
     return render_template('login.html', title='Login', form=form)
 
 
-################################### SALIR #######################################################3
+# SALIR #######################################################3
 @app.route("/logout")
 def logout():
     logout_user()
@@ -73,11 +80,13 @@ def logout():
 
 ################################### GUARDAR IMAGEN DE USUARIO #####################################
 
+
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    picture_path = os.path.join(
+        app.root_path, 'static/profile_pics', picture_fn)
 
     output_size = (125, 125)
     i = Image.open(form_picture)
@@ -87,6 +96,7 @@ def save_picture(form_picture):
     return picture_fn
 
 ################################### CUENTA DE USUARIO ###############################################
+
 
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
@@ -104,12 +114,13 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    image_file = url_for(
+        'static', filename='profile_pics/' + current_user.image_file)
     travels = Travel.query.all()
-    travels=[travel for travel in travels if travel.travel_driver_id == current_user.dni]
+    travels = [
+        travel for travel in travels if travel.travel_driver_id == current_user.dni]
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form,travels=travels)
-
+                           image_file=image_file, form=form, travels=travels)
 
 
 ################################### BUSCAR VIAJE #######################################################
@@ -117,78 +128,81 @@ def account():
 @app.route('/buscar_viajes', methods=['GET', 'POST'])
 @login_required
 def search_travels():
-    #you can search for travels here
+    # you can search for travels here
     form = TravelSearchForm()
     if form.validate_on_submit() and request.method == 'POST':
         origin = geocoder.arcgis(form.origin.data + ', argentina')
         dest = geocoder.arcgis(form.destination.data + ', argentina')
-        print(origin.address,origin.lat, origin.lng)
-        print(dest.address,dest.lat,dest.lng)
+        radius = form.radius.data * 1000
+        print(origin.address, origin.lat, origin.lng)
+        print(dest.address, dest.lat, dest.lng, radius)
         if origin.address == None:
             error = "No se ha encontrado origen"
         else:
-            new_origin = Location(location=origin.address,
-                                  latitude=origin.lat, longitude=origin.lng)
-
+            new_origin = Location.get_location(origin.address,
+                                               origin.lat, origin.lng)
+            form.origin.data = new_origin.location
         if dest.address == None:
             error = "No se ha encontrado destino"
         else:
-            new_dest = Location(location=dest.address,
-                                latitude=dest.lat, longitude=dest.lng)
-
+            new_dest = Location.get_location(location=dest.address,
+                                             latitude=dest.lat, longitude=dest.lng)
+            form.destination.data = new_dest.location
         travels = Travel.query.filter_by(
-                travel_date=form.travel_date.data)
+            travel_date=form.travel_date.data)
         travels_matched = []
-        
+
         for travel in travels:
             if (travel.origin.is_in_radius(new_origin, 5000) and travel.dest.is_in_radius(new_dest, 5000)):
                 print(travel)
                 travels_matched.append(travel.to_json())
-        
-        if len(travels_matched) ==0:
+
+        if len(travels_matched) == 0:
             error = "No se han encontrado viajes"
         else:
             error = None
 
         travels_json = json.dumps({'travels': travels_matched})
         print(travels_json)
-    
-        return render_template('travel_search.html', form=form, error=error, travels=travels_json)
+
+        return render_template('travel_search.html', form=form, error=error, travels=travels_json,
+                               origin=new_origin, dest=new_dest)
     return render_template('travel_search.html', form=form)
 
 ################################### CREAR VIAJE #######################################################
 
+
 @app.route('/crear_viaje', methods=['GET', 'POST'])
 @login_required
 def create_travel():
-    error=None
+    error = None
     travels_json = None
     form = CreateTravelForm()
-    
+
     if request.method == 'POST' and form.validate_on_submit():
         origin = geocoder.arcgis(form.origin.data + ', argentina')
         dest = geocoder.arcgis(form.destination.data + ', argentina')
-        print(origin.address,origin.lat, origin.lng)
-        print(dest.address,dest.lat,dest.lng)
-        
+        print(origin.address, origin.lat, origin.lng)
+        print(dest.address, dest.lat, dest.lng)
+
         if origin.address == None:
             error = "No se ha encontrado origen"
         else:
-            new_origin = Location.get_location(location=origin.address,
-                                  latitude=origin.lat, longitude=origin.lng)
+            new_origin = Location.get_location(origin.address,
+                                               origin.lat, origin.lng)
 
         if dest.address == None:
             error = "No se ha encontrado destino"
         else:
-            new_dest = Location.get_location(location=dest.address,
-                                latitude=dest.lat, longitude=dest.lng)
+            new_dest = Location.get_location(dest.address,
+                                             dest.lat, dest.lng)
 
         driver = User.query.filter_by(username=current_user.username).first()
 
         try:
             new_travel = Travel(travel_date=form.travel_date.data, travel_hour=form.travel_time.data, driver=driver,
-                            origin=new_origin, dest=new_dest, seats=form.seats.data)
-        
+                                origin=new_origin, dest=new_dest, seats=form.seats.data)
+
             print(new_travel)
             db.session.add(new_travel)
             db.session.commit()
@@ -197,35 +211,61 @@ def create_travel():
             return redirect(url_for('create_travel'))
 
         except sqlalchemy.exc.IntegrityError:
-            error  = "Ya se tienes un viaje creado para esa fecha y es hora"
+            error = "Ya se tienes un viaje creado para esa fecha y es hora"
             travels = {}
             print(error)
             db.session.rollback()
         except Exception as e:
-            error = "Se ha producido un error al agregar viaje" 
+            error = "Se ha producido un error al agregar viaje"
             travels = {}
             print(error)
             print(e)
         finally:
-            travels_json = {"travels":travels}
-    
-        
+            travels_json = {"travels": travels}
+
     else:
         print("fail")
-    return render_template('create_travel.html', form=form,travels=travels_json,error=error)
+    return render_template('create_travel.html', form=form, travels=travels_json, error=error)
 
 ################################### UNIRSE AL VIAJE #######################################################
 
-@app.route('/unirme/<id_viaje>',methods=['GET', 'POST'])
+
+@app.route('/unirme/<id_viaje>', methods=['GET', 'POST'])
 @login_required
 def join_travel(id_viaje):
     try:
         travel = Travel.query.filter_by(id=id_viaje).first()
-        passanger = User.query.filter_by(username=current_user.username).first()
-        travel_request = Travel_request(travel,passanger)
+        passanger = User.query.filter_by(
+            username=current_user.username).first()
+        travel_request = Travel_request(travel, passanger)
         db.session.add(travel_request)
         db.session.commit()
         print("se ha agregado el viaje")
     except Exception as e:
         print(e)
     return "Viaje {}".format(travel)
+
+
+@app.route('/account/alert/create', methods=['GET', 'POST'])
+@login_required
+def create_alert():
+    print(request.get_data())
+    try:
+        data = json.loads(request.get_data())
+        print(data)
+        origin = Location.get_location_by_name(data['origin'])
+        dest = Location.get_location_by_name(data['dest'])
+        travel_date = data["travel_date"]
+        travel_time = data["travel_time"]
+        print(current_user)
+        alert = Alert(origin, dest, travel_date, travel_time, current_user)
+        print(origin, dest, travel_date, travel_time, current_user.username)
+        try:
+            alert.save()
+        except Exception as e:
+            print(e)
+            return {"error savig": str(e)}, 500
+    except Exception as e:
+        print(e)
+        return str(e), 500
+    return "Se ha generado una nueva alerta", 200
