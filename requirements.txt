@@ -9,3 +9,4 @@ geocoder==1.38.1
 Pillow==8.1.1
 WTForms==2.3.3
 autopep8==1.5.5
+pylint

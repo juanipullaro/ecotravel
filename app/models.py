@@ -1,9 +1,10 @@
+from geoalchemy2 import Geometry
+from sqlalchemy.orm import relationship
+from flask_login import UserMixin
 from datetime import datetime
 from . import db, login_manager
-from sqlalchemy import Column, BigInteger, Text, Sequence, Boolean, String, Date, Integer, ForeignKey, DateTime
-from flask_login import UserMixin
-from sqlalchemy.orm import relationship
-from geoalchemy2 import Geometry
+from sqlalchemy import Column, BigInteger, Text, Sequence, Boolean, Float
+from sqlalchemy import String, Date, Integer, ForeignKey, DateTime, Time, UniqueConstraint
 
 
 @login_manager.user_loader
@@ -16,18 +17,18 @@ def load_user(dni):
 class User(db.Model, UserMixin):
     __tablename__ = "users"
     __table_args__ = {'extend_existing': True}
-    dni = db.Column(db.BigInteger,  unique=True,
-                    primary_key=True, nullable=False)
-    name = db.Column(db.String(20),  nullable=False)
-    surname = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(120),  nullable=False)
-    username = db.Column(db.String(20), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-    image_file = db.Column(db.String(20), nullable=False,
-                           default='default.jpg')
-    travel_requests = db.relationship('Travel_request', backref='passenger')
-    travels = db.relationship('Travel', backref='driver')
-    rating = db.Column(db.Integer)
+    dni = Column(BigInteger,  unique=True,
+                 primary_key=True, nullable=False)
+    name = Column(String(20),  nullable=False)
+    surname = Column(String(20), nullable=False)
+    email = Column(String(120),  nullable=False)
+    username = Column(String(20), unique=True, nullable=False)
+    password = Column(String(60), nullable=False)
+    image_file = Column(String(20), nullable=False,
+                        default='default.jpg')
+    travel_requests = relationship('Travel_request', backref='passenger')
+    travels = relationship('Travel', backref='driver')
+    rating = Column(Integer)
 
     def __init__(self, name, surname, email, dni, username, password):
         self.name = name
@@ -49,15 +50,15 @@ class User(db.Model, UserMixin):
 class Travel_request(db.Model):
     __tablename__ = "travel_request"
     __table_args__ = {'extend_existing': True}
-    dni_user = db.Column(db.Integer, db.ForeignKey(
+    dni_user = Column(Integer, ForeignKey(
         'users.dni'), primary_key=True)
-    travel_id = db.Column(db.Integer, db.ForeignKey(
+    travel_id = Column(Integer, ForeignKey(
         'travels.id'), primary_key=True)
-    state = db.Column(db.String(60), default="Pendiente")
-    date_posted = db.Column(db.DateTime, nullable=False,
-                            default=datetime.utcnow, primary_key=True)
-    travel = db.relationship("Travel", foreign_keys=[
-                             travel_id], backref='travel_requests')
+    state = Column(String(60), default="Pendiente")
+    date_posted = Column(DateTime, nullable=False,
+                         default=datetime.utcnow, primary_key=True)
+    travel = relationship("Travel", foreign_keys=[
+        travel_id], backref='travel_requests')
 
     def __init__(self, travel, passenger):
         self.dni_user = passenger.dni
@@ -72,21 +73,21 @@ class Travel_request(db.Model):
 class Travel(db.Model):
     __tablename__ = "travels"
     __table_args__ = {'extend_existing': True}
-    __table_args__ = (db.UniqueConstraint(
+    __table_args__ = (UniqueConstraint(
         'travel_date', 'travel_hour', 'travel_driver_id', name='travelS'), )
-    id = db.Column(db.Integer, primary_key=True)
-    travel_date = db.Column(db.Date)
-    travel_hour = db.Column(db.Time)
-    travel_driver_id = db.Column(db.Integer, db.ForeignKey('users.dni'))
-    origin_id = db.Column(db.Integer, db.ForeignKey('locations.id'))
-    dest_id = db.Column(db.Integer, db.ForeignKey('locations.id'))
-    origin = db.relationship(
+    id = Column(Integer, primary_key=True)
+    travel_date = Column(Date)
+    travel_hour = Column(Time)
+    travel_driver_id = Column(Integer, ForeignKey('users.dni'))
+    origin_id = Column(Integer, ForeignKey('locations.id'))
+    dest_id = Column(Integer, ForeignKey('locations.id'))
+    origin = relationship(
         "Location", backref="travel_origins", foreign_keys=[origin_id])
-    dest = db.relationship(
+    dest = relationship(
         "Location", backref="travel_destinations", foreign_keys=[dest_id])
-    #driver = db.relationship("TravelDriver",backref="travels",foreign_keys=[travel_driver_id])
-    seats = db.Column(db.Integer)
-    created_at = db.Column(db.DateTime, default=datetime.now())
+    #driver = relationship("TravelDriver",backref="travels",foreign_keys=[travel_driver_id])
+    seats = Column(Integer)
+    created_at = Column(DateTime, default=datetime.now())
     # pasajeros
 
     def to_json(self):
@@ -107,13 +108,13 @@ class Travel(db.Model):
 
 class Location(db.Model):
     __tablename__ = "locations"
-    __table_args__ = (db.UniqueConstraint(
+    __table_args__ = (UniqueConstraint(
         'latitude', 'longitude', name='lat_long'), )
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    latitude = db.Column(db.Float)
-    longitude = db.Column(db.Float)
-    location = db.Column(db.String(200))
-    geo = db.Column(Geometry(geometry_type='POINT', srid=4326))
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    location = Column(String(200))
+    geo = Column(Geometry(geometry_type='POINT', srid=4326))
 
     def __init__(self, location, latitude, longitude):
         self.location = location
@@ -186,7 +187,6 @@ class Alert(db.Model):
         self.travel_date = travel_date
         self.travel_time = travel_time
         self.passenger_id = user.dni
-        
 
     def save(self):
         db.session.add(self)
