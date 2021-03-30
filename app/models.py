@@ -173,7 +173,7 @@ class Alert(db.Model):
     travel_origin_id = Column(Integer, ForeignKey('locations.id'))
     travel_dest_id = Column(Integer, ForeignKey('locations.id'))
     travel_date = Column(Date)
-    travel_time = Column(Date)
+    travel_time = Column(Time)
     passenger_id = Column(Integer, ForeignKey('users.dni'))
     passenger = origin = db.relationship(
         "User", backref="alerts", foreign_keys=[passenger_id])
