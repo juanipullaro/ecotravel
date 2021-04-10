@@ -39,7 +39,7 @@
   
   .article-metadata {
     padding-bottom: 1px;
-    margin-bottom: 4px;
+    margin-bottom: 15px;
     border-bottom: 1px solid #e3e3e3
   }
   
@@ -96,7 +96,7 @@
     font-weight: normal;
     font-size: 27px;
     margin-left: 4px;
-    color: #48a652;
+    color:#204051;
   }
 
   
@@ -107,7 +107,7 @@
     font-weight: normal;
     font-size: 23px;
     margin-left: 0%;
-    color:#000000;
+    color:#204051;
     margin-top: 0%;
   
   }
@@ -345,13 +345,13 @@ top: -178px;
         width: 15%;
       }
 
-   .fa.fa-edit{
-     margin-left: -6%;
-     color:#204051;
+   .octicon.octicon-pencil{
+     margin-left: -5%;
+     fill:#586069;
    }
-   .fa.fa-trash{
-     margin-left: 1%;
-     color: #dc3545;
+   .octicon.octicon-trash{
+     margin-left: 4%;
+     fill: #cb2431;
    }
 
     .btn-requestacept{
@@ -518,17 +518,29 @@ right: -30%;
           text-align: center;
         }
         .statusdisponible{
-          width: 12%;
-          margin-left: 182%;
-          margin-top: -35%;
+          width: 17%;
+          margin-left: 185%;
+          margin-top: -26%;
           position: absolute;
+          font-size: 20px;
+          color: #009310ba;
                   }
-      .statuscompleto{
-          width: 12%;
-          margin-left: 182%;
-          margin-top: -35%;
+        .statuscompleto{
+          width: 17%;
+          margin-left: 185%;
+          margin-top: -20%;
           position: absolute;
-      }
+          font-size: 20px;
+          color:#626a727a;
+        }
+        .statusen_transito{
+          width: 17%;
+          margin-left: 185%;
+          margin-top: -14%;
+          position: absolute;
+          font-size: 20px;
+          color: #626a727a;
+        }
 
        .statusfin{
                 width: 6%;

@@ -29,6 +29,8 @@ class User(db.Model, UserMixin):
     travel_requests = relationship('Travel_request', backref='passenger')
     travels = relationship('Travel', backref='driver')
     rating = Column(Integer)
+    content = db.Column(db.String(200))
+    phone= db.Column(db.BigInteger)
 
     def __init__(self, name, surname, email, dni, username, password):
         self.name = name
