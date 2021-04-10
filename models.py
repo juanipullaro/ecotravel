@@ -24,6 +24,9 @@ class User(db.Model, UserMixin):
     travel_requests = db.relationship('Travel_request', backref='passenger')
     travels = db.relationship('Travel',backref='driver')
     rating = db.Column(db.Integer)
+    content = db.Column(db.String(200))
+    phone= db.Column(db.BigInteger)
+
   
    
 
@@ -50,8 +53,8 @@ class Travel_request(db.Model):
     __table_args__ = {'extend_existing':True}
     dni_user = db.Column(db.Integer, db.ForeignKey('users.dni'), primary_key=True)
     travel_id = db.Column(db.Integer,db.ForeignKey('travels.id'),primary_key=True)
-    state = db.Column(db.String(60),default="Pendiente")
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow,primary_key=True)
+    state = db.Column(db.String(60),default="activa")
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     travel = db.relationship("Travel", foreign_keys=[travel_id],backref='travel_requests')
    
 
@@ -64,6 +67,34 @@ class Travel_request(db.Model):
 
     def __repr__(self):
       return f"Travel_request('{self.dni_user}', '{self.travel_id}')"
+
+    def acept(self):
+        if self.travel.status=='disponible':
+            self.state='aceptada'
+            self.travel.addpassenger()
+            db.session.commit()
+ 
+    def reject(self):
+        if self.travel.status!='finalizado':
+            self.state='rechazada'
+            db.session.commit()
+     
+    def down(self):
+        if self.travel.status!='finalizado':
+            if self.state=='activa':
+                self.state='cancelada'
+                db.session.commit()
+            elif self.state=='aceptada':
+                self.travel.downpassenger()
+                self.state='cancelada'
+                db.session.commit()
+
+    def changestatus(self):
+        if self.travel.status =='finalizado':
+            self.state='finalizada'
+            db.session.commit()
+
+               
 
 
 ################################### VIAJE #######################################################
@@ -83,6 +114,7 @@ class Travel(db.Model):
     #driver = db.relationship("TravelDriver",backref="travels",foreign_keys=[travel_driver_id])
     seats = db.Column(db.Integer)
     created_at = db.Column(db.DateTime,default = datetime.now())
+    status =db.Column(db.String(60),default="disponible")
     #pasajeros
 
     def to_json(self):
@@ -97,6 +129,26 @@ class Travel(db.Model):
                     "rating": self.driver.rating,
                     "asientos_disp": self.seats}
         return travel
+
+    def addpassenger(self):
+        self.seats -= 1
+        if self.seats==0:
+            self.status='completo'
+    
+
+    def downpassenger(self):
+        self.seats += 1
+        if self.seats!=0:
+            self.status='disponible'
+
+    def getpending_request(self):
+        return[request for request in self.travel_requests if request.state =="activa"]
+    def getaccept_request(self):
+        return[request for request in self.travel_requests if request.state =="aceptada"]
+
+            
+       
+
 
 
 ################################### LOCALIZACION #######################################################

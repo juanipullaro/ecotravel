@@ -1,3 +1,6 @@
+@charset "UTF-8";
+@import url(font-awesome.min.css);
+@import url("https://fonts.googleapis.com/css?family=Lobster|Open+Sans:300,400,600,700,800");
 
   
   .content-section {
@@ -7,10 +10,10 @@
     border-radius: 3px;
     margin-top: 20%;
     margin-bottom: -251px;
-width: 93%;
-margin-left: 2%;
-position: relative;
-top: -200px;
+    width: 93%;
+    margin-left: 2%;
+    position: relative;
+    top: -200px;
   }
   
   .article-title {
@@ -62,11 +65,13 @@ top: -200px;
     font-size: 2.5rem;
   }
 
-  .btn-danger.btn-sm.m-1{
-    left: 58%;
-position: relative;
-width: 15%;
-  }
+
+
+  @media (max-width: 400px){
+    .signin-box-account{}
+    }
+  
+
 
 
 /* //////////////////////////////////////////// MIS VIAJES////////////////////////////////////////////////////*/
@@ -86,13 +91,12 @@ width: 15%;
   }
 
   .fa.fa-map-marker.ori{
-font-family: FontAwesome;
-font-style: normal;
-font-weight: normal;
-font-size: 27px;
-margin-left: 4px;
-
-color: #48a652;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 27px;
+    margin-left: 4px;
+    color: #48a652;
   }
 
   
@@ -110,21 +114,23 @@ color: #48a652;
 
   .fecaccount{
     margin-top: -2%;
-margin-left: 4%;
-font-size: 12px;}
+    margin-left: 4%;
+    font-size: 12px;
+  }
   
    
     .fa.fa-calendar {
-  font-family: FontAwesome;
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  font-size: 19px;
-  margin-left: 0%;
-  color: #204051;
-    }
-     
-  .horaccount{margin-top: 2.2%;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    font-size: 19px;
+    margin-left: 0%;
+    color: #204051;
+  }
+      
+  .horaccount{
+    margin-top: 2.2%;
     margin-left: 4%;
     color: #e17b3a;
     font-size: 13px;
@@ -149,45 +155,28 @@ font-size: 12px;}
 
 .passagers{
   color: #204051;
-font-size: 14px;
-display: table;
-margin-bottom: 22px;
-margin-top: 4%;}
+  font-size: 14px;
+  display: table;
+  margin-bottom: 22px;
+  margin-top: 4%;
+}
 
 
 
 .data{
-    height: 158px;}
+    height: 158px;
+}
 
-    .btn.btn-danger.btn-sm.m-1v2 {
-      left: -8%;
-      position: relative;
-      width: 10%;
-      background-color: #204051;
-  }
-    
-    .btn.btn-danger.btn-sm.m-1v3 {
-      left: 334%;
-position: relative;
-width: 100%;
-background-color: #204051;
-border-radius: 17px;
-  }
-    
-
-    .btn.btn-danger.btn-sm.m-1 {
-      left: 15%;
-position: relative;
-width: 10%;
-    }
+ 
+  
 /* ////////////////////////////////////////////  PERFIL////////////////////////////////////////////////////*/
 .comentaccount{
     color: #204051;
-font-size: 14px;
-margin-top: -4%;
-margin-left: 23%;
-margin-bottom: 2%;
-  }
+    font-size: 14px;
+    margin-top: -4%;
+    margin-left: 23%;
+    margin-bottom: 2%;
+      }
   .usernameaccount{
     color: #204051;
 margin-top: -4%;
@@ -350,32 +339,88 @@ top: -178px;
         font-size: 2.5rem;
       }
     
-      .btn-danger.btn-sm.m-1v{
+      .btn-editprofile{
         left: 67%;
-    position: relative;
-    width: 15%;
+        position: relative;
+        width: 15%;
       }
 
-    .btn-danger.btn-sm.m-1request{
-      left: 30%;
-      position: absolute;
-      width: 30%;
-      margin-top: -12%;
-      background-color: #48a652;
-      border-color: #48a652;
+   .fa.fa-edit{
+     margin-left: -6%;
+     color:#204051;
+   }
+   .fa.fa-trash{
+     margin-left: 1%;
+     color: #dc3545;
+   }
+
+    .btn-requestacept{
+      margin-left: 73%;
+        margin-top: -14%;
+        position: absolute;
+        background-color: #388017;
+        color: white;
+        border-radius: 7px;
+        width: 26%;
     }
-    .btn-danger.btn-sm.m-1request2{
-      left: 62%;
+    .btn-requestreject{
+      margin-left: 37%;
+      margin-top: -13.5%;
       position: absolute;
-      width: 30%;
-      margin-top: -12%;
-    }
-    .btn.btn-danger.btn-sm.m-1v3 {
-      left: 334%;
-position: relative;
-width: 100%;
-background-color: #204051;
-border-radius: 17px;}
+      background-color: #dc3545;
+      color: white;
+      border-radius: 7px;
+      width: 42%;
+      display: flex;
+      padding: 3px 6%;
+  }
+                
+    .btn-cantrequests {
+      display: flex;
+      width: 22%;
+      margin-left: 34%;
+      background-color:#204051;
+      color: rgb(255, 255, 255);
+      border-radius: 12px;
+      padding: 4px;
+      width: 32%;
+      margin-top: -0.5%;
+      margin-bottom: 8px;}
+
+            
+
+
+      .btn-passenger {
+        margin-left: 158%;
+        width: 30%;
+        border-radius: 12px;
+        background-color: sienna;
+        color: white;
+        border-color: slategray;
+        position: absolute;
+        margin-top: -18%;}
+
+      .btn-requestdown{ 
+        margin-left: 37%;
+        margin-top: -13.5%;
+        position: absolute;
+        background-color: #dc3545;
+        color: white;
+        border-radius: 7px;
+        width: 42%;
+        display: flex;
+        padding: 3px 6%;}
+              
+
+      .btn-downtravel{
+        padding: 6px;
+        transition: 0.3s;
+        font-size: 14px;
+        border-radius: 10px;
+        background-color: #204051;
+        color: white;
+        }
+     
 
     .mr-2request{
       margin-top: 3%;
@@ -426,13 +471,100 @@ right: -30%;
         margin-right: .4rem !important;
         font-size: 22px;}
 
+        .statusRequestRech{
+          margin-left: 91%;
+          background-color: #dc3545;
+          color: rgb(255, 255, 255);
+          border-radius: 12px;
+          padding: 4px;
+          width: 8%;
+          margin-top: -2%;
+          margin-bottom: 5px;
+          text-align: center;
+      
+        }
+        .statusRequestCanc{
+          margin-left: 81%;
+          background-color: #dc3545;
+          color: rgb(255, 255, 255);
+          border-radius: 12px;
+          padding: 4px;
+          width: 18%;
+          margin-top: -2%;
+          margin-bottom: 5px;
+          text-align: center;
+
+                  }
+        .statusRequestAcep{
+          margin-left: 91%;
+          background-color: #4a7112c2;
+          color: rgb(255, 255, 255);
+          border-radius: 12px;
+          padding: 4px;
+          width: 8%;
+          margin-top: -2%;
+          margin-bottom: 5px;
+          text-align: center;
+        }
+        .statusRequestPend{
+          margin-left: 91%;
+          background-color: #ee8a59;
+          color: rgb(255, 255, 255);
+          border-radius: 12px;
+          padding: 4px;
+          width: 8%;
+          margin-top: -2%;
+          margin-bottom: 5px;
+          text-align: center;
+        }
+        .statusdisponible{
+          width: 12%;
+          margin-left: 182%;
+          margin-top: -35%;
+          position: absolute;
+                  }
+      .statuscompleto{
+          width: 12%;
+          margin-left: 182%;
+          margin-top: -35%;
+          position: absolute;
+      }
+
+       .statusfin{
+                width: 6%;
+                margin-left: 85%;
+                margin-top: -15.9%;
+                position: absolute;
+                       }   
+        .statuscancel{
+        width: 6%;
+        margin-left: 85%;
+        margin-top: -15.9%;
+        position: absolute;
+                }  
+        .fas.fa-users{
+          margin-left: 22%;
+          background-color:#4a7112c2;
+          color: rgb(255, 255, 255);
+          border-radius: 12px;
+          padding: 4px;
+          width: 18%;
+          margin-top: 0%;
+          margin-bottom: 8px;
+          text-align: center;
+        }
+
         .dropdown-menu {
           font-size: 1rem;
           color: #212529;
           text-align: left;
           list-style: none;
-          width: 66%;}
+          width: 63%;}
 
+   
+        
+
+      
         
 .signin-box-account {
   margin: auto;
@@ -450,11 +582,111 @@ margin-top: 4%;
   padding: 30px;
 }
 
-@media (max-width: 850px){
-  .signin-box-account{
-    margin-top: 50px;
-  }}
 
+@media (max-width: 1250px){
+  .content-section1 {
+      margin-top: 25%;}
+  .mr1-2 {margin-left: 4%;}
+  .article-img1 {
+    height: 125px;
+width: 16%;
+margin-right: -73px;
+margin-top: 11%;}
+    .data {
+      height: 158px;
+      margin-left: 10%;}
+      .comentaccount {
+        font-size: 13px;
+        margin-top: -5%;
+        margin-left: 23%;}
+        .usernameaccount {
+          margin-top: -4%;
+          font-size: 13px;
+          margin-left: 23%;
+          margin-bottom: 5%;
+      }
+      .emailaccount{
+        margin-top: -4%;
+        font-size: 13px;
+        margin-left: 23%;
+        margin-bottom: 5%;
+    } 
+
+      .phoneaccount{
+        margin-top: -4%;
+        font-size: 13px;
+        margin-left: 23%;
+        margin-bottom: 5%;
+    }
+     
+  
+    .article-metadata1 {
+    
+      margin-left: -13%;
+      margin-right: -39%;
+  }
+  
+    .tab.tab button {
+      padding: 7px 0.5%;
+      font-size: 14px;
+      margin-left: 0%;
+      width: 24%;
+      margin-top: 5%;
+}}
+
+
+
+@media (max-width: 375px){
+  .content-section1 {
+      margin-top: 51%;
+  }
+  .mr1-2 {margin-left: 8%;
+  }
+  .article-img1{
+      height: 84px;
+      width: 29%;
+      margin-right: -70px;
+      margin-top: 26%;
+  }
+  .data{
+      height: 158px;
+      margin-left: 10%;
+  }
+  .comentaccount {
+        font-size: 12px;
+        margin-top: -7%;
+        margin-left: 24%;
+  }
+  .usernameaccount {
+          margin-top: -6%;
+          font-size: 12px;
+          margin-left: 24%;
+          margin-bottom: 9%;
+  }    
+  .emailaccount{
+        margin-top: -6%;
+        font-size: 12px;
+        margin-left: 27%;
+        margin-bottom: 9%;
+    } 
+    .phoneaccount{
+        margin-top: -6%;
+        font-size: 12px;
+        margin-left: 24%;
+        margin-bottom: 9%;
+    }
+   
+    .article-metadata1 {
+      margin-left: 2%;
+      margin-right: -1%;
+   }
+    .tab.tab button {
+      padding: 7px 0.5%;
+      font-size: 14px;
+      margin-left: 0%;
+      width: 24%;
+      margin-top: 5%;
+    }}
    
 /* ////////////////////////////////////////////  TABS ////////////////////////////////////////////////////*/
 
