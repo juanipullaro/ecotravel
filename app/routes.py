@@ -33,7 +33,7 @@ def profile():
 
 @app.route("/generic")
 def generic():
-    return render_template('generic.html')
+    return render_template('test.html')
 ################################### REGISTRO #######################################################
 
 
@@ -87,7 +87,6 @@ def save_picture(form_picture):
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(
         app.root_path, 'static/profile_pics', picture_fn)
-
     output_size = (125, 125)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
@@ -119,11 +118,80 @@ def account():
     travels = Travel.query.all()
     travels = [
         travel for travel in travels if travel.travel_driver_id == current_user.dni]
+    travel_reqs = Travel_request.query.all()
+    travel_reqs = [
+        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
+    print(travel_reqs)
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, travels=travels)
+                           image_file=image_file, form=form, travels=travels, travel_reqs=travel_reqs)
 
+
+@app.route("/account/<int:travel_id>")
+def travel(travel_id):
+    travel = Travel.query.get_or_404(travel_id)
+    return render_template('account.html', id=travel.id, travel=travel)
+
+
+@app.route("/account/<int:travel_id>/update", methods=['GET', 'POST'])
+def update_travels(travel_id):
+    travel = Travel.query.get_or_404(travel_id)
+    form = CreateTravelForm()
+    if form.validate_on_submit():
+        travel.origin.location = form.origin.data
+        travel.dest.location = form.destination.data
+        travel.travel_date = form.travel_date.data
+        travel.travel_hour = form.travel_time.data
+        travel.seats = form.seats.data
+        db.session.commit()
+        flash('Se actualizó su viaje!', 'success')
+        return redirect(url_for('account', travel_id=travel_id))
+    elif request.method == 'GET':
+        form.origin.data = travel.origin
+        form.destination.data = travel.dest
+        form.travel_date.data = travel.travel_date
+        form.travel_date.time = travel.travel_hour
+        form.seats = travel.seats
+    return render_template('formulario.html', title='Update Travel',
+                           form=form, legend='Update Travel', travel=travel)
+
+
+@app.route("/account/<id_viaje>/delete", methods=['GET', 'POST'])
+@login_required
+def delete_post(id_viaje):
+    travel = Travel.query.get_or_404(id_viaje)
+    travel.status = "cancelado"
+    db.session.commit()
+    flash('Su viaje se elimino correctamente!', 'success')
+    return redirect(url_for('profile'))
+
+################################### SOLICITUD DE VIAJE #################################################
+
+
+@app.route("/account/<id_passenger>/<id_travel>/add", methods=['GET', 'POST'])
+def add_request(id_passenger, id_travel):
+    travel_request = Travel_request.query.filter_by(
+        dni_user=id_passenger, travel_id=id_travel).first()
+    travel_request.acept()
+    return redirect(url_for('account'))
+
+
+@app.route("/account/<id_passenger>/<id_travel>/reject", methods=['GET', 'POST'])
+def reject_request(id_passenger, id_travel):
+    travel_request = Travel_request.query.filter_by(
+        dni_user=id_passenger, travel_id=id_travel).first()
+    travel_request.reject()
+    return redirect(url_for('account'))
+
+
+@app.route("/account/<id_passenger>/<id_travel>/down", methods=['GET', 'POST'])
+def down_request(id_passenger, id_travel):
+    travel_request = Travel_request.query.filter_by(
+        dni_user=id_passenger, travel_id=id_travel).first()
+    travel_request.down()
+    return redirect(url_for('account'))
 
 ################################### BUSCAR VIAJE #######################################################
+
 
 @app.route('/buscar_viajes', methods=['GET', 'POST'])
 @login_required

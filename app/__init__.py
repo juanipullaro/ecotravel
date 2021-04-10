@@ -7,7 +7,7 @@ from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost:5432/ecotravel'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://rhyrskgomkidbu:13045206abc03d99ce516cb0120f1e124f1a2919ccd641b8ae142c34aacbe3f7@ec2-54-204-96-190.compute-1.amazonaws.com:5432/d3a74mcg9rq95d'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.debug = True
 db = SQLAlchemy(app)

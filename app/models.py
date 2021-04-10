@@ -54,9 +54,9 @@ class Travel_request(db.Model):
         'users.dni'), primary_key=True)
     travel_id = Column(Integer, ForeignKey(
         'travels.id'), primary_key=True)
-    state = Column(String(60), default="Pendiente")
+    state = db.Column(db.String(60), default="activa")
     date_posted = Column(DateTime, nullable=False,
-                         default=datetime.utcnow, primary_key=True)
+                         default=datetime.utcnow)
     travel = relationship("Travel", foreign_keys=[
         travel_id], backref='travel_requests')
 
@@ -66,6 +66,32 @@ class Travel_request(db.Model):
 
     def __repr__(self):
         return f"Travel_request('{self.dni_user}', '{self.travel_id}')"
+
+    def acept(self):
+        if self.travel.status == 'disponible':
+            self.state = 'aceptada'
+            self.travel.addpassenger()
+            db.session.commit()
+
+    def reject(self):
+        if self.travel.status != 'finalizado':
+            self.state = 'rechazada'
+            db.session.commit()
+
+    def down(self):
+        if self.travel.status != 'finalizado':
+            if self.state == 'activa':
+                self.state = 'cancelada'
+                db.session.commit()
+            elif self.state == 'aceptada':
+                self.travel.downpassenger()
+                self.state = 'cancelada'
+                db.session.commit()
+
+    def changestatus(self):
+        if self.travel.status == 'finalizado':
+            self.state = 'finalizada'
+            db.session.commit()
 
 
 ################################### VIAJE #######################################################
@@ -88,6 +114,7 @@ class Travel(db.Model):
     #driver = relationship("TravelDriver",backref="travels",foreign_keys=[travel_driver_id])
     seats = Column(Integer)
     created_at = Column(DateTime, default=datetime.now())
+    status = db.Column(db.String(60), default="disponible")
     # pasajeros
 
     def to_json(self):
@@ -102,6 +129,22 @@ class Travel(db.Model):
                   "rating": self.driver.rating,
                   "asientos_disp": self.seats}
         return travel
+
+    def addpassenger(self):
+        self.seats -= 1
+        if self.seats == 0:
+            self.status = 'completo'
+
+    def downpassenger(self):
+        self.seats += 1
+        if self.seats != 0:
+            self.status = 'disponible'
+
+    def getpending_request(self):
+        return[request for request in self.travel_requests if request.state == "activa"]
+
+    def getaccept_request(self):
+        return[request for request in self.travel_requests if request.state == "aceptada"]
 
 
 ################################### LOCALIZACION #######################################################

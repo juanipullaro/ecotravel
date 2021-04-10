@@ -56,7 +56,7 @@ class UpdateAccountForm(FlaskForm):
                         validators=[DataRequired(), Email()])
     picture = FileField('Actualice foto de perfil', validators=[
                         FileAllowed(['jpg', 'png'])])
-    submit = SubmitField('Actualizar')
+    submit = SubmitField('Actualizar Perfil')
 
     def validate_username(self, username):
         if username.data != current_user.username:
@@ -89,3 +89,4 @@ class CreateTravelForm(FlaskForm):
     travel_time = TimeField('Hora', validators=[DataRequired()])
     seats = IntegerField('Asientos', validators=[DataRequired()])
     submit = SubmitField('Crear Viaje')
+    submit1 = SubmitField('Actualizar Viaje')

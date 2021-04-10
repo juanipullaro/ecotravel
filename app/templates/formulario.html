@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}>
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/form.css') }}">
+
+
+<div id="signin-box-form" class="signin-box-form">
+    <div class="signin-area-form">
+            <form method="POST" action="" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Actualizá tus datos</legend>
+                    <div class="form-group">
+                        {{ form.origin.label(class="form-control-label") }} 
+                        {% if form.origin.errors %}
+                            {{ form.origin(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.origin.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.origin(class="form-control form-control-lg", value=travel.origin) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.destination.label(class="form-control-label") }}
+                        {% if form.destination.errors %}
+                            {{ form.destination(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.destination.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.destination(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.travel_date.label(class="form-control-label",type="date") }}
+                        {% if form.travel_date.errors %}
+                            {{ form.travel_date(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.travel_date.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.travel_date(class="form-control form-control-lg",type="date") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.travel_time.label(class="form-control-label") }}
+                        {% if form.travel_time.errors %}
+                            {{ form.travel_time(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.travel_time.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.travel_time(class="form-control form-control-lg",type="time") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.seats.label }} {{ form.seats }}
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    {{ form.submit1(class="btn btn-outline-info") }}
+                </div>   
+            </form>
+    </div>
+</div>
+{% endblock body %}
+

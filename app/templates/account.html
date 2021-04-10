@@ -1,102 +1,326 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar.html" %}>
+<link rel="stylesheet" href="./static/css/account.css">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 
-<div role="tabpanel">
 
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#basics" aria-controls="basics" role="tab"
-                data-toggle="tab">Perfil</a></li>
-        <li role="presentation"><a href="#wdev" aria-controls="wdev" role="tab" data-toggle="tab">Mis Viajes</a></li>
-        <li role="presentation"><a href="#dan" aria-controls="dan" role="tab" data-toggle="tab">Calificaciones</a></li>
-        <li role="presentation"><a href="#alerts" aria-controls="dan" role="tab" data-toggle="tab">Mis Alertas</a></li>
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'Perfil')" id="defaultOpen">Perfil</button>
+  <button class="tablinks" onclick="openCity(event, 'Mis viajes')">Viajes</button>
+  <button class="tablinks" onclick="openCity(event, 'Calificaciones')">Calificaciones</button>
+  <button class="tablinks" onclick="openCity(event, 'Alertas')">Mis alertas</button>
+</div>
 
-    </ul>
+<div id="Perfil" class="tabcontent">
+  <article class="media content-section1">
+    <img class="rounded-circle article-img1" src="{{ image_file }}">
+    <div class="media-body1">
+      <div class="article-metadata1">
+        <a class="mr1-2" href="#">{{ current_user.name|capitalize}} {{ current_user.surname|capitalize}} </a>
+        <button type="button" class="btn-editprofile" onclick="openCity(event, 'Editar')">Editar perfil</button>
+      </div>
+      <div class="data">
+        <i class="fa fa-quote-left" aria-hidden="true"></i>
+        <div class="comentaccount">{{current_user.content}}</div>
+        <i class="fa fa-user" aria-hidden="true"></i>
+        <div class="usernameaccount">{{ current_user.username }} </div>
+        <i class="fa fa-envelope" aria-hidden="true"></i>
+        <div class="emailaccount">{{ current_user.email }} </div>
+        <i class="fa fa-mobile bigger" aria-hidden="true"></i>
+        <div class="phoneaccount">{{current_user.phone}}</div>
+      </div>
+    </div>
+  </article>
+</div>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane fade in active" id="basics">
-            <ul>
-                <div class="profile-info-component">
-                    <div class="list-group">
-                        <img class="rounded-circle account-img" src="{{ image_file }}">
-                        <div class="media-body">
 
-                        </div>
+<div id="Editar" class="tabcontent">
+  <div id="signin-box-account" class="signin-box-account">
+    <div class="signin-area-account">
+      <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Actualizá tus datos</legend>
+          <div class="form-group">
+            {{ form.username.label(class="form-control-label") }}
+            {% if form.username.errors %}
+            {{ form.username(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.username.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+            {% else %}
+            {{ form.username(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            {{ form.email.label(class="form-control-label") }}
+            {% if form.email.errors %}
+            {{ form.email(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.email.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+            {% else %}
+            {{ form.email(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            {{ form.picture.label() }}
+            {{ form.picture(class="form-control-file") }}
+            {% if form.picture.errors %}
+            {% for error in form.picture.errors %}
+            <span class="text-danger">{{ error }}</span></br>
+            {% endfor %}
+            {% endif %}
+          </div>
+        </fieldset>
+        <div class="form-group">
+          {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-                        <div class="row">
-                            <div class="col-xs-24">
-                                <h2 class="account-heading">{{ current_user.name|capitalize}} {{
-                                    current_user.surname|capitalize}} </h2>
-                                <p class="text-secondary">{{ current_user.email }}</p>
-                            </div>
-                            <div class="list-container">
-                                <div class="list-group-item"><i aria-hidden="true" class="fa fa-quote-left"></i>
-                                    <div class="list-group-item--content italic"> Busco viajes en donde compartir un
-                                        momento agradable y además abaratar costos y tiempo</div>
-                                </div>
-                                <div class="list-group-item"><i class="fa fa-user" aria-hidden="true"></i>
-                                    <div class="list-group-item--content">{{ current_user.username }}</div>
-                                </div>
-                                <div class="list-group-item"><i aria-hidden="true" class="fa fa-envelope"></i>
-                                    <div class="list-group-item--content">{{ current_user.email }}</div>
-                                </div>
-                                <div class="list-group-item"><i aria-hidden="true" class="fa fa-mobile bigger"></i>
-                                    <div class="list-group-item--content">0336154599077</div>
-                                </div>
-                            </div>
-                            <div class="edit-action"><button class="btn btn-primary"> Editar perfil</button> </div>
-                        </div>
-                    </div>
+
+<div id="Mis viajes" class="tabcontent">
+  <div class="tab1">
+    <button class="tablinks" onclick="openCity(event, 'creados')" id="defaultOpen">Mis Viajes creados</button>
+    <button class="tablinks" onclick="openCity(event, 'Solicitudes')">Mis solicitudes a viajes</button>
+    <button class="tablinks" onclick="openCity(event, 'Subidos')">Viajes a los que me subi</button>
+  </div>
+  {% for travel in travels %}
+  {% if travel.status == "disponible" or travel.status == "completo" or travel.status == "en_transito" %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} </a>
+        <a href="{{ url_for('delete_post', id_viaje=travel.id) }}"><i class="fa fa-trash"></i></a>
+        <a href="{{ url_for('update_travels', travel_id=travel.id) }}"><i class="fa fa-edit"></i></a>
+
+        <div class="btn-group">
+          {% if travel.getpending_request()|length > 0 %}
+          <button type="button" class="btn-cantrequests" data-toggle="dropdown">Solicitudes a tu viaje:
+            {{travel.getpending_request()|length}} <span class="caret"></span></button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{{ url_for('account')}}"> {% for request in travel.getpending_request() %}
+                <div class="passagers">{{request.passenger.name|capitalize}} {{request.passenger.surname|capitalize}}
                 </div>
-            </ul>
+                <a class="btn-requestacept"
+                  href="{{ url_for('add_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}">Aceptar</a>
+                <a class="btn-requestreject"
+                  href="{{ url_for('reject_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}">Rechazar</a>
+                {% endfor %}
+              </a></li>
+          </ul>
+
+          {%endif%}
         </div>
 
-        <div role="tabpanel" class="tab-pane fade" id="wdev">
-            <section id="travels">
-                {% for travel in travels %}
-                <div class="popup-map">
-                    <div class="driver"><img src="{{'/static/profile_pics/' + travel.driver.image_file}}"></img>
-                        <h3>{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}}
-                            <div class="stars"><br />{% for i in range (travel.driver.rating) %}★{%endfor%} </div>
-                        </h3>
-                    </div>
-                    <div class="data">
-                        <div class="ori">
-                            <i class="fa fa-map-marker" aria-hidden="true"></i> {{travel.origin.location}}
-                        </div>
-                        <div class="des"><br />
-                            <i class="fa fa-map-marker des" aria-hidden="true"></i> {{travel.dest.location}}
-                        </div>
-                        <div class="fec">
-                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                            <script>
-                                var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-                                var diasSemana = new Array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
-                                var f = new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}');
-                                document.write(diasSemana[f.getDay()] + ", " + (f.getDate() + 1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-                            </script>
-                        </div>
-                        <div class="hor"> {{ travel.travel_hour }}
-                            <i class="fa fa-clock-o" aria-hidden="true"></i>
-                        </div>
-
-                        <div class="glob">
-                            <div class="cantDisp">{{ travel.seats }}</div>
-                            <div class="dis"><br />Asientos disponibles </div>
-                        </div>
-                    </div>
-                    <button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button>
-                </div>
+      </div>
+      <div class="data">
+        <i class="fa fa-map-marker ori" aria-hidden="true"></i>
+        <div class="oriaccount"> {{travel.origin.location}} </div>
+        <i class="fa fa-flag-checkered des" aria-hidden="true"></i>
+        <div class="desaccount">{{travel.dest.location}} </div>
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+        <div class="fecaccount">
+          <script>
+            var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+            var diasSemana = new Array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+            var f = new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}');
+            document.write(diasSemana[f.getDay()] + ", " + (f.getDate() + 1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+          </script>
         </div>
-        {% endfor %}
-        </section>
-    </div>
+        <i class="fa fa-clock-o" aria-hidden="true"></i>
+        <div class="horaccount"> {{ travel.seats }}</div>
+        <div class="btn-group">
+          <!--<button type="button" class="btn-passenger" data-toggle="dropdown">{{travel.getaccept_request()|length}}  Pasajeros subidos <span class="caret"></span></button>-->
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{{ url_for('account')}}"> {% for travel_request in travel.getaccept_request() %}
+                <div class="passagers">{{travel_request.passenger.name|capitalize}}
+                  {{travel_request.passenger.surname|capitalize}}</div>
+                <a class="btn-requestdown"
+                  href="{{ url_for('down_request', id_passenger=travel_request.passenger.dni,id_travel=travel_request.travel.id ) }}">Bajar
+                  del viaje</a>
 
-    <div role="tabpanel" class="tab-pane fade" id="alerts">
-        {% include "alerts.html" %}
+                {% endfor %}
+              </a></li>
+          </ul>
+          {% if travel.status=="disponible" %}
+          <img class="statusdisponible" src="{{'/static/slider/disponible.png'}}">
+          {% else %}
+          <img class="statuscompleto" src="{{'/static/slider/completo.png'}}">
+          {% endif %}
+        </div>
+      </div>
     </div>
+  </article>
+  {% endif %}
+  <!-- Modal -->
+  {% endfor %}
+</div>
+
+<div id="Solicitudes" class="tabcontent">
+  {% for travel_req in travel_reqs %}
+  {%if travel_req.dni_user==current_user.dni%}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel_req.travel.driver.image_file}}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ travel_req.travel.driver.name|capitalize}} {{
+          travel_req.travel.driver.surname|capitalize}} </a>
+        <a class="btn-downtravel"
+          href="{{ url_for('down_request', id_passenger=travel_req.passenger.dni,id_travel=travel_req.travel.id ) }}">Bajarme
+          del viaje</a>
+        {% if travel_req.state == "activa" %}
+        <div id="status" class="statusRequestPend">Pendiente</div>
+        {%elif travel_req.state == "aceptada" %}
+        <div id="status" class="statusRequestAcep">Aceptada</div>
+        {%elif travel_req.state == "rechazada" %}
+        <div id="status" class="statusRequestRech">Rechazada</div>
+        {%elif travel_req.state == "cancelada" %}
+        <div id="status" class="statusRequestCanc">Se canceló tu solicitud</div>
+        {%endif%}
+      </div>
+      <div class="data">
+        <i class="fa fa-map-marker ori" aria-hidden="true"></i>
+        <div class="oriaccount"> {{travel_req.travel.origin.location}} </div>
+        <i class="fa fa-flag-checkered des" aria-hidden="true"></i>
+        <div class="desaccount">{{travel_req.travel.dest.location}} </div>
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+        <div class="fecaccount">
+          <script>
+            var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+            var diasSemana = new Array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+            var f = new Date('{{ travel_req.travel.travel_date.strftime("%Y-%m-%d") }}');
+            document.write(diasSemana[f.getDay()] + ", " + (f.getDate() + 1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+          </script>
+        </div>
+        <i class="fa fa-clock-o" aria-hidden="true"></i>
+        <div class="horaccount"> {{ travel_req.travel.travel_hour }}</div>
+      </div>
+    </div>
+  </article>
+  {%endif%}
+  {% endfor %}
+</div>
+
+<div id="creados" class="tabcontent">
+  {% for travel in travels %}
+  {% if travel.status == "finalizado" or travel.status == "cancelado" %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} </a>
+        <button type="button" class="btn-hiddentravel">Eliminar</button>
+      </div>
+      <div class="data">
+        <i class="fa fa-map-marker ori" aria-hidden="true"></i>
+        <div class="oriaccount"> {{travel.origin.location}} </div>
+        <i class="fa fa-flag-checkered des" aria-hidden="true"></i>
+        <div class="desaccount">{{travel.dest.location}} </div>
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+        <div class="fecaccount">
+          <script>
+            var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+            var diasSemana = new Array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+            var f = new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}');
+            document.write(diasSemana[f.getDay()] + ", " + (f.getDate() + 1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+          </script>
+        </div>
+        <i class="fa fa-clock-o" aria-hidden="true"></i>
+        <div class="horaccount"> {{ travel.travel_hour }}</div>
+        {% if travel.status == "finalizado" %}
+        <img class="statusfin" src="{{'/static/slider/finalizado.png'}}">
+        {%elif travel.status == "cancelado" %}
+        <img class="statuscancel" src="{{'/static/slider/cancelado.png'}}">
+        {%endif%}
+      </div>
+    </div>
+  </article>
+  {% endif %}
+  {% endfor %}
+</div>
+
+
+
+
+
+<div id="Subidos" class="tabcontent">
+  {% for travel_req in travel_reqs %}
+  {%if travel_req.dni_user==current_user.dni and travel_req.state=="finalizada" %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel_req.travel.driver.image_file}}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ travel_req.travel.driver.name|capitalize}} {{
+          travel_req.travel.driver.surname|capitalize}} </a>
+        {% if travel_req.state == "finalizada" %}
+        <div id="status" class="statusRequestCanc">Finalizada</div>
+        {%endif%}
+      </div>
+      <div class="data">
+        <i class="fa fa-map-marker ori" aria-hidden="true"></i>
+        <div class="oriaccount"> {{travel_req.travel.origin.location}} </div>
+        <i class="fa fa-flag-checkered des" aria-hidden="true"></i>
+        <div class="desaccount">{{travel_req.travel.dest.location}} </div>
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+        <div class="fecaccount">
+          <script>
+            var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+            var diasSemana = new Array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+            var f = new Date('{{ travel_req.travel.travel_date.strftime("%Y-%m-%d") }}');
+            document.write(diasSemana[f.getDay()] + ", " + (f.getDate() + 1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+          </script>
+        </div>
+        <i class="fa fa-clock-o" aria-hidden="true"></i>
+        <div class="horaccount"> {{ travel_req.travel.travel_hour }}</div>
+      </div>
+    </div>
+  </article>
+  {%endif%}
+  {% endfor %}
 
 </div>
-{% endblock %}
+
+<div id="Mis alertas" class="tabcontent">
+  <h3>Tokyo</h3>
+  <p>Tokyo is the capital of Japan.</p>
+</div>
+
+<script>
+  function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+  const btnStatus = document.getElementById("status");
+  const btnHidden = document.getElementsByClassName("btn-downtravel")[0];
+  window.addEventListener("load", () => {
+    console.log(btnStatus.textContent);
+    if (btnStatus.textContent == 'Se canceló tu solicitud' || btnStatus.textContent == 'Rechazada') {
+      btnHidden.setAttribute("hidden", true)
+    };
+  })
+</script>
+
+
+{% endblock body %}-->
