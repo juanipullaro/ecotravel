@@ -4,141 +4,99 @@
 
 <div role="tabpanel">
 
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#basics" aria-controls="basics" role="tab" data-toggle="tab">Perfil</a></li>
-    <li role="presentation"><a href="#wdev" aria-controls="wdev" role="tab" data-toggle="tab">Mis Viajes</a></li>
-    <li role="presentation"><a href="#dan" aria-controls="dan" role="tab" data-toggle="tab">Calificaciones</a></li>
-    <li role="presentation"><a href="#dan" aria-controls="dan" role="tab" data-toggle="tab">Mis Alertas</a></li>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#basics" aria-controls="basics" role="tab"
+                data-toggle="tab">Perfil</a></li>
+        <li role="presentation"><a href="#wdev" aria-controls="wdev" role="tab" data-toggle="tab">Mis Viajes</a></li>
+        <li role="presentation"><a href="#dan" aria-controls="dan" role="tab" data-toggle="tab">Calificaciones</a></li>
+        <li role="presentation"><a href="#alerts" aria-controls="dan" role="tab" data-toggle="tab">Mis Alertas</a></li>
 
-  </ul>
+    </ul>
 
-  <!-- Tab panes -->
-<div class="tab-content">
-  <div role="tabpanel" class="tab-pane fade in active" id="basics">
-	<ul>
-        <div    class="profile-info-component">
-            <div    class="list-group">
-                <img class="rounded-circle account-img" src="{{ image_file }}">
-                <div class="media-body">
-                    
-                </div> 
-                
-                <div    class="row">
-                    <div    class="col-xs-24">
-                        <h2 class="account-heading">{{ current_user.name|capitalize}} {{ current_user.surname|capitalize}} </h2>
-                        <p class="text-secondary">{{ current_user.email }}</p>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="basics">
+            <ul>
+                <div class="profile-info-component">
+                    <div class="list-group">
+                        <img class="rounded-circle account-img" src="{{ image_file }}">
+                        <div class="media-body">
+
                         </div>
-                            <div class="list-container"><div    class="list-group-item"><i    aria-hidden="true" class="fa fa-quote-left"></i> 
-                            <div class="list-group-item--content italic"> Busco viajes en donde compartir un momento agradable y además abaratar costos y tiempo</div></div>            
-                            <div    class="list-group-item"><i class="fa fa-user" aria-hidden="true"></i>
-                                <div    class="list-group-item--content">{{ current_user.username }}</div></div> 
-                            <div class="list-group-item"><i    aria-hidden="true" class="fa fa-envelope"></i> 
-                            <div  class="list-group-item--content">{{ current_user.email }}</div></div> 
-                            <div    class="list-group-item"><i    aria-hidden="true" class="fa fa-mobile bigger"></i> 
-                            <div    class="list-group-item--content">0336154599077</div></div> </div> 
-                            <div    class="edit-action"><button class="btn btn-primary"> Editar perfil</button> </div>
+
+                        <div class="row">
+                            <div class="col-xs-24">
+                                <h2 class="account-heading">{{ current_user.name|capitalize}} {{
+                                    current_user.surname|capitalize}} </h2>
+                                <p class="text-secondary">{{ current_user.email }}</p>
+                            </div>
+                            <div class="list-container">
+                                <div class="list-group-item"><i aria-hidden="true" class="fa fa-quote-left"></i>
+                                    <div class="list-group-item--content italic"> Busco viajes en donde compartir un
+                                        momento agradable y además abaratar costos y tiempo</div>
+                                </div>
+                                <div class="list-group-item"><i class="fa fa-user" aria-hidden="true"></i>
+                                    <div class="list-group-item--content">{{ current_user.username }}</div>
+                                </div>
+                                <div class="list-group-item"><i aria-hidden="true" class="fa fa-envelope"></i>
+                                    <div class="list-group-item--content">{{ current_user.email }}</div>
+                                </div>
+                                <div class="list-group-item"><i aria-hidden="true" class="fa fa-mobile bigger"></i>
+                                    <div class="list-group-item--content">0336154599077</div>
+                                </div>
+                            </div>
+                            <div class="edit-action"><button class="btn btn-primary"> Editar perfil</button> </div>
                         </div>
                     </div>
-            </div>
-	</ul>
-  </div>
-  
-  <div role="tabpanel" class="tab-pane fade" id="wdev">
-    <section id="travels">                    
-        {% for travel in travels %}
-        <div class="popup-map">
-          <div class="driver"><img src="{{'/static/profile_pics/' + travel.driver.image_file}}"></img>
-             <h3>{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} 
-                <div class="stars"><br />{% for i in range (travel.driver.rating) %}★{%endfor%} </div> </h3>
-          </div>
-          <div class="data"> <div class="ori">
-               <i class="fa fa-map-marker" aria-hidden="true"></i> {{travel.origin.location}} 
-            </div>
-            <div class="des"><br />
-              <i class="fa fa-map-marker des" aria-hidden="true"></i>  {{travel.dest.location}} </div>
-            <div class="fec"> 
-              <i class="fa fa-calendar" aria-hidden="true"></i>
-                  <script>
-                      var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-                      var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
-                      var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
-                      document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-                  </script> 
-            </div>
-            <div class="hor"> {{ travel.travel_hour }}
-              <i class="fa fa-clock-o" aria-hidden="true"></i>
-            </div>
-          
-        <div class="glob">
-            <div class="cantDisp">{{ travel.seats }}</div> <div  class="dis"><br />Asientos disponibles </div>
-        </div> </div>
-          <button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button></div> 
+                </div>
+            </ul>
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="wdev">
+            <section id="travels">
+                {% for travel in travels %}
+                <div class="popup-map">
+                    <div class="driver"><img src="{{'/static/profile_pics/' + travel.driver.image_file}}"></img>
+                        <h3>{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}}
+                            <div class="stars"><br />{% for i in range (travel.driver.rating) %}★{%endfor%} </div>
+                        </h3>
+                    </div>
+                    <div class="data">
+                        <div class="ori">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i> {{travel.origin.location}}
+                        </div>
+                        <div class="des"><br />
+                            <i class="fa fa-map-marker des" aria-hidden="true"></i> {{travel.dest.location}}
+                        </div>
+                        <div class="fec">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <script>
+                                var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+                                var diasSemana = new Array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+                                var f = new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}');
+                                document.write(diasSemana[f.getDay()] + ", " + (f.getDate() + 1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                            </script>
+                        </div>
+                        <div class="hor"> {{ travel.travel_hour }}
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        </div>
+
+                        <div class="glob">
+                            <div class="cantDisp">{{ travel.seats }}</div>
+                            <div class="dis"><br />Asientos disponibles </div>
+                        </div>
+                    </div>
+                    <button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button>
+                </div>
         </div>
         {% endfor %}
-        </section> 
-  </div>
+        </section>
+    </div>
 
-  <div role="tabpanel" class="tab-pane fade" id="dan">Data analysis!#Q$@!#</div>
-
-</div>
+    <div role="tabpanel" class="tab-pane fade" id="alerts">
+        {% include "alerts.html" %}
+    </div>
 
 </div>
 {% endblock %}
-
-{#<section id="account">
-<div role="tabpanel" id="1" class="tab-pane container active">
-    
-    </div>
-</div>
-</section>
-
-<section id="mytravels">
-
-    <h1> Mis viajes</h1>
-    </section>
-    {% endblock body %}-->
-
-
-<!--<form method="POST" action="" enctype="multipart/form-data">
-                        {{ form.hidden_tag() }}
-                        <fieldset class="form-group">
-                            <div class="form-group">
-                                {{ form.username.label(class="form-control-label") }}
-                                {% if form.username.errors %}
-                                    {{ form.username(class="form-control form-control-lg is-invalid") }}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.username.errors %}
-                                                <span>{{ error }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                    {{ form.username(class="form-control form-control-lg") }}
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                {{ form.email.label(class="form-control-label") }}
-                                {% if form.email.errors %}
-                                    {{ form.email(class="form-control form-control-lg is-invalid") }}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.email.errors %}
-                                                <span>{{ error }}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                    {{ form.email(class="form-control form-control-lg") }}
-                                {% endif %}
-                            </div>
-                            <div class="form-group">
-                                {{ form.picture(class="form-control-file") }}
-                                {% if form.picture.errors %}
-                                    {% for error in form.picture.errors %}
-                                        <span class="text-danger">{{ error }}</span></br>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                        </fieldset>
-                            <div class="form-group">
-                                {{ form.submit(class="btn btn-outline-info") }}
-                            </div>
-                    </form>-->#}

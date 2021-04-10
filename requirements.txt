@@ -13,3 +13,5 @@ autopep8==1.5.5
 pylint
 email-validator==1.1.2
 psycopg2==2.8.6
+pylint-flask
+pylint-flask-sqlalchemy

@@ -74,7 +74,7 @@ class Travel(db.Model):
     __tablename__ = "travels"
     __table_args__ = {'extend_existing': True}
     __table_args__ = (UniqueConstraint(
-        'travel_date', 'travel_hour', 'travel_driver_id', name='travelS'), )
+        'travel_date', 'travel_hour', 'travel_driver_id', name='travels'), )
     id = Column(Integer, primary_key=True)
     travel_date = Column(Date)
     travel_hour = Column(Time)
@@ -175,17 +175,23 @@ class Alert(db.Model):
     travel_date = Column(Date)
     travel_time = Column(Time)
     passenger_id = Column(Integer, ForeignKey('users.dni'))
-    passenger = origin = db.relationship(
+    passenger = relationship(
         "User", backref="alerts", foreign_keys=[passenger_id])
     status = Column(String(60), default="Activo")
-    created_at = Column(DateTime, default=datetime.now())
-    last_modified = Column(DateTime, default=datetime.now())
+    created_at = Column(
+        DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    last_modified = Column(
+        DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    origin = relationship(
+        "Location", backref="alert_origins", foreign_keys=[travel_origin_id])
+    dest = relationship(
+        "Location", backref="alert_destinations", foreign_keys=[travel_dest_id])
 
     def __init__(self, origin, dest, travel_date, travel_time, user):
         self.travel_origin_id = origin.id
         self.travel_dest_id = dest.id
         self.travel_date = travel_date
-        self.travel_time = travel_time
+        self.travel_time = datetime.strptime(travel_time, "%H:%M").time()
         self.passenger_id = user.dni
 
     def save(self):

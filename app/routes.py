@@ -249,23 +249,20 @@ def join_travel(id_viaje):
 @app.route('/account/alert/create', methods=['GET', 'POST'])
 @login_required
 def create_alert():
-    print(request.get_data())
-    try:
-        data = json.loads(request.get_data())
-        print(data)
-        origin = Location.get_location_by_name(data['origin'])
-        dest = Location.get_location_by_name(data['dest'])
-        travel_date = data["travel_date"]
-        travel_time = data["travel_time"]
-        print(current_user)
-        alert = Alert(origin, dest, travel_date, travel_time, current_user)
-        print(origin, dest, travel_date, travel_time, current_user.username)
-        try:
-            alert.save()
-        except Exception as e:
-            print(e)
-            return {"error savig": str(e)}, 500
-    except Exception as e:
-        print(e)
-        return str(e), 500
+    data = json.loads(request.get_data())
+    origin = Location.get_location_by_name(data['origin'])
+    dest = Location.get_location_by_name(data['dest'])
+    travel_date = data["travel_date"]
+    travel_time = data["travel_time"]
+    alert = Alert(origin, dest, travel_date, travel_time, current_user)
+    alert.save()
+    # return {"error savig": str(e)}, 500
     return "Se ha generado una nueva alerta", 200
+
+
+@app.route('/account/alert/myalerts', methods=['GET', 'POST'])
+@login_required
+def my_alerts():
+    alerts = Alert.query.filter_by(
+        passenger_id=current_user.dni, status="Activo")
+    return render_template("alerts.html", alerts=alerts)

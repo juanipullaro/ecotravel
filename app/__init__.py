@@ -11,8 +11,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost:5
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.debug = True
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
+
+from . import routes  # noqa
