@@ -163,9 +163,13 @@
 
 
 
-.data{
+.data-travel{
     height: 158px;
+    display: flex;
+    justify-content: space-between;
 }
+
+
 
  
   
@@ -517,31 +521,90 @@ right: -30%;
           margin-bottom: 5px;
           text-align: center;
         }
-        .statusdisponible{
-          width: 17%;
-          margin-left: 185%;
-          margin-top: -26%;
-          position: absolute;
-          font-size: 20px;
-          color: #009310ba;
-                  }
-        .statuscompleto{
-          width: 17%;
-          margin-left: 185%;
-          margin-top: -20%;
-          position: absolute;
-          font-size: 20px;
-          color:#626a727a;
-        }
-        .statusen_transito{
-          width: 17%;
-          margin-left: 185%;
-          margin-top: -14%;
-          position: absolute;
+     
+        .statustravel1{
           font-size: 20px;
           color: #626a727a;
+          width: 102%;
         }
+        
+    
+       
+      .prueba {
+        display: block;
+        justify-content: center;
+        
+        
+      }
+      .prueba .statustravel1 span:first-child {
+        display: inline-block;
+        padding: 10px;
+      }
+      .prueba .statustravel1 {
+        position: relative;
+        overflow: hidden;
+        width: 241%;
+        text-align: center;
+        margin-left: -72%;
+        margin-bottom: 8px;
+      }
+ 
+      .prueba .statustravel1 span:last-child {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-100%);
+        color: #204051;
+        font-size: 16px;
+        background-color: #b4b8bc;
+        border-radius: 16px;
+        height: 24px;
+              }
+        .prueba .statustravel1 span {
+        transition: transform 0.2s ease-out;
+      }
+       
+      .prueba .statustravel1:hover span:first-child {
+        transform: translateY(100%);
+      }
+       
+      .prueba .statustravel1:hover span:last-child {
+        transform: none;
+      }
+      .prueba [data-animation="to-top"] .statustravel1 span:last-child {
+        transform: translateY(100%);
+      }
+       
+      .prueba [data-animation="to-top"] .statustravel1:hover span:first-child {
+        transform: translateY(-100%);
+      }
+       
+      .prueba [data-animation="to-right"] .statustravel1 span:last-child {
+        transform: translateX(-100%);
+      }
+       
+      .prueba [data-animation="to-right"] .statustravel1:hover span:first-child {
+        transform: translateX(100%);
+      }
+       
+      .prueba [data-animation="to-left"] .statustravel1 span:last-child {
+        transform: translateX(100%);
+      }
+       
+      .prueba [data-animation="to-left"] .statustravel1:hover span:first-child {
+        transform: translateX(-100%);
+      }
 
+
+
+
+
+      
        .statusfin{
                 width: 6%;
                 margin-left: 85%;
