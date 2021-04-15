@@ -87,6 +87,6 @@ class CreateTravelForm(FlaskForm):
     destination = StringField('Destino', validators=[DataRequired()])
     travel_date = DateField('Fecha', validators=[DataRequired()])
     travel_time = TimeField('Hora', validators=[DataRequired()])
-    seats = IntegerField('Asientos', validators=[DataRequired()])
+    seatsdec = IntegerField('Asientos', validators=[DataRequired()])
     submit = SubmitField('Crear Viaje')
     submit1 = SubmitField('Actualizar Viaje')

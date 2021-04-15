@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}>
+<link rel="stylesheet" href="./static/css/account.css">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+<div id="Subidos" class="tabcontent">
+    {% for travel_req in travel_reqs %}
+    {%if travel_req.dni_user==current_user.dni and travel_req.state=="finalizada"  %}
+    <article class="media content-section">
+      <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel_req.travel.driver.image_file}}">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="#">{{ travel_req.travel.driver.name|capitalize}} {{ travel_req.travel.driver.surname|capitalize}} </a>    
+              {% if travel_req.state == "finalizada" %}
+               <div id="status" class="statusRequestCanc">Finalizada</div>
+               {%endif%}
+        </div>
+        <div class="data">
+            <i class="fa fa-map-marker ori" aria-hidden="true"></i><div class="oriaccount"> {{travel_req.travel.origin.location}} </div>
+            <i class="fa fa-flag-checkered des" aria-hidden="true"></i> <div class="desaccount">{{travel_req.travel.dest.location}} </div>
+            <i class="fa fa-calendar" aria-hidden="true"></i>  <div class="fecaccount">
+                <script>
+                    var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                    var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
+                    var f=new Date('{{ travel_req.travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                    document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                </script>  </div>
+          <i class="fa fa-clock-o" aria-hidden="true"></i> <div class="horaccount"> {{ travel_req.travel.travel_hour }}</div>
+        </div>
+      </div>
+    </article>
+    {%endif%}
+    {% endfor %} 
+  
+  </div>
+  
+ {% endblock body %}-->

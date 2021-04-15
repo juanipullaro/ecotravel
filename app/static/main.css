@@ -1160,5 +1160,15 @@ color: #204051;
 }
 
 /* /////////////////////////////////////// FIN Home1 /////////////////////////////////////////*/
+.fa.fa-sign-out{
+  font-size: 19px;
+  color: #cbd5db;
+  margin-top: 31%;
+}
 
+.fa.fa-home {
+  font-size: 18px;
+  color: #cbd5db;
+  margin-top: 13%;
+}
 

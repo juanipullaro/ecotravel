@@ -10,6 +10,9 @@ from . import app, db, bcrypt
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm
 from .models import User, Travel_request, Location, Travel, Alert
 from flask_login import login_user, current_user, logout_user, login_required
+from selenium import webdriver
+import time
+
 
 ################################### INICIO_PANTALLA PRINCIPAL #####################################
 
@@ -30,10 +33,31 @@ def profile():
         travel for travel in travels if travel.travel_driver_id != current_user.dni]
     return render_template('profile.html', travels=travels)
 
-
 @app.route("/generic")
 def generic():
     return render_template('test.html')
+
+@app.route("/userprofile")
+@login_required
+def userprofile():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Se actualizo tu cuenta!', 'success')
+        return redirect(url_for('userprofile'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    image_file = url_for(
+        'static', filename='profile_pics/' + current_user.image_file)
+    return render_template('userprofile.html', title='UserProfile',
+                           image_file=image_file, form=form)
+
 ################################### REGISTRO #######################################################
 
 
@@ -141,7 +165,7 @@ def update_travels(travel_id):
         travel.dest.location = form.destination.data
         travel.travel_date = form.travel_date.data
         travel.travel_hour = form.travel_time.data
-        travel.seats = form.seats.data
+        travel.seatsdec = form.seatsdec.data
         db.session.commit()
         flash('Se actualizó su viaje!', 'success')
         return redirect(url_for('account', travel_id=travel_id))
@@ -150,7 +174,7 @@ def update_travels(travel_id):
         form.destination.data = travel.dest
         form.travel_date.data = travel.travel_date
         form.travel_date.time = travel.travel_hour
-        form.seats = travel.seats
+        form.seatsdec = travel.seatsdec
     return render_template('formulario.html', title='Update Travel',
                            form=form, legend='Update Travel', travel=travel)
 
@@ -163,6 +187,40 @@ def delete_post(id_viaje):
     db.session.commit()
     flash('Su viaje se elimino correctamente!', 'success')
     return redirect(url_for('profile'))
+
+
+@app.route("/usertravelcreate", methods=['GET', 'POST'])
+@login_required
+def usertravelcreate():
+    travels = Travel.query.all()
+    travels = [
+        travel for travel in travels if travel.travel_driver_id == current_user.dni]
+    travel_reqs = Travel_request.query.all()
+    travel_reqs = [
+        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
+    print(travel_reqs)
+    return render_template('usertravelcreate.html',
+                            travels=travels, travel_reqs=travel_reqs)
+
+@app.route("/userrequesttravel", methods=['GET', 'POST'])
+@login_required
+def userrequesttravel():
+    travel_reqs = Travel_request.query.all()
+    travel_reqs = [
+        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
+    print(travel_reqs)
+    return render_template('userrequesttravel.html',
+                           travel_reqs=travel_reqs)
+
+@app.route("/usertravelfin", methods=['GET', 'POST'])
+@login_required
+def usertravelfin():
+    travel_reqs = Travel_request.query.all()
+    travel_reqs = [
+        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
+    print(travel_reqs)
+    return render_template('usertravelfin.html',
+                           travel_reqs=travel_reqs)
 
 ################################### SOLICITUD DE VIAJE #################################################
 
@@ -269,7 +327,7 @@ def create_travel():
 
         try:
             new_travel = Travel(travel_date=form.travel_date.data, travel_hour=form.travel_time.data, driver=driver,
-                                origin=new_origin, dest=new_dest, seats=form.seats.data)
+                                origin=new_origin, dest=new_dest, seatsdec=form.seatsdec.data)
 
             print(new_travel)
             db.session.add(new_travel)

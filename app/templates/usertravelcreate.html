@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}>
+<link rel="stylesheet" href="./static/css/usertravelcreate.css">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+
+<body>
+ {% for travel in travels %}
+  <div id="browser">
+    <div id="browser-bar">
+      <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
+        <a class="mr-2" href="#">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} </a>
+        <div class="requestcant">
+          {% if travel.getpending_request()|length > 0 %}
+                  <div class="btn-cantrequests">{{travel.getpending_request()|length}}</div>
+                  <i class="fas fa-user-plus" data-toggle="dropdown" ><span class="caret"></span></i>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ url_for('account')}}">  {% for request in travel.getpending_request() %}
+                      <div class="passagers">{{request.passenger.name|capitalize}} {{request.passenger.surname|capitalize}}</div>
+                      <a href="{{ url_for('add_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}" ><i class="fa fa-check" aria-hidden="true" 
+                        style="color: white;background-color: green;border-radius: 12px;width: 17%;padding: 4px 6%;font-size: 13px;"></i></a>
+                      <a href="{{ url_for('reject_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}" ><i class="fa fa-times" aria-hidden="true"
+                        style="margin-left: -5%;color: white;background-color: #e73636;;border-radius: 12px;width: 17%;padding: 4px 7%;font-size: 13px;"></i>
+                      </a>
+                      {% endfor %}</a></li>
+                  </ul>
+          {%endif%}
+        </div>  
+        <div class="octbar">
+          <a href="{{ url_for('delete_post', id_viaje=travel.id) }}">
+                        <svg class="octicon octicon-trash" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true" >
+                          <path fill-rule="evenodd" d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z"></path>
+                        </svg>
+                      </a>
+          <a href="{{ url_for('update_travels', travel_id=travel.id) }}" >
+            <svg class="octicon octicon-pencil" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+              <path fill-rule="evenodd" d="M11.013 1.427a1.75 1.75 0 012.474 0l1.086 1.086a1.75 1.75 0 010 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 01-.927-.928l.929-3.25a1.75 1.75 0 01.445-.758l8.61-8.61zm1.414 1.06a.25.25 0 00-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 000-.354l-1.086-1.086zM11.189 6.25L9.75 4.81l-6.286 6.287a.25.25 0 00-.064.108l-.558 1.953 1.953-.558a.249.249 0 00.108-.064l6.286-6.286z"></path>
+            </svg>
+          </a>
+        </div> 
+    </div>
+    <div id="content">
+      <div id="right">
+        <div id="map">
+          <p>Ruta del viaje</p>
+        </div>
+      </div>
+      <div id="left">
+        <div class="prueba">
+                <div id ="disp" class="statustravel1"   {% if travel.status =='disponible'%}  style="color:#1ebb1ed6 "   {%endif%}  >
+                    <span><i  class="fas fa-circle" aria-hidden="true" ></i></span>
+                    <span style="color: white;background-color: green;width: 51%;margin-left: 27%;">Disponible</span>
+                </div> 
+                <div id="com" class="statustravel1"  {% if travel.status =='completo'%}    style="color:#204051;"   {%endif%} >
+                    <span><i  class="fas fa-circle" aria-hidden="true"></i></span>
+                    <span style="color: white;background-color: #204051;width: 57%;margin-left: 20%;">Completo</span>
+                </div> 
+                <div id="tran" class="statustravel1"  {% if travel.status =='en_transito'%} style="color:#e6c203d6;"   {%endif%} >
+                    <span><i  class="fas fa-circle" aria-hidden="true"></i></span>
+                    <span style="color: white;background-color: #e6c203d6;width: 57%;margin-left: 20%;">En curso</span>
+                  </div>  
+        </div>
+        <form>
+          <div  class="oriaccount"><p>Origen:</p> {{travel.origin.location | capitalize}}</div>
+          <div  class="desaccount"><p>Destino:</p> {{travel.dest.location}}</div>
+          <div  class="fecaccount"><p>Fecha:</p> <script>
+                            var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                            var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
+                            var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                            document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                        </script></div>
+            <div  class="horaccount"><p>Hora:</p>{{ travel.travel_hour}}</div>
+        </form>
+        <p>Ecotravelers subidos</p>
+        <div class="seatsdis">
+          <br />{% for i in range (travel.seatsdec - travel.seats) %}
+                  <i class="fa fa-user v1" aria-hidden="true" ></i>
+                {%endfor%}
+                {% for i in range (travel.seats) %}
+                  <i class="fa fa-user v2" aria-hidden="true"></i>
+                {%endfor%}   
+        </div>
+    </div>
+  </div>
+</div>
+{% endfor %} 
+</body>
+{% endblock body %}-->
+

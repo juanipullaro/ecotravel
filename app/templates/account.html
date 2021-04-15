@@ -144,15 +144,15 @@
               </div>
       
               <div class="prueba">
-                <div class="statustravel1"  {% if travel.status =='disponible'%}  style="color:#1ebb1ed6"  {%endif%} >
+                <div id ="disp" class="statustravel1"   {% if travel.status =='disponible'%}  style="color:#1ebb1ed6 "   {%endif%}  >
                     <span><i  class="fas fa-circle" aria-hidden="true"></i></span>
                     <span style="color: white;background-color: #42c642;">Disponible</span>
                 </div> 
-                <div class="statustravel1"  {% if travel.status =='completo'%}    style="color:#204051;"   {%endif%} >
+                <div id="com" class="statustravel1"  {% if travel.status =='completo'%}    style="color:#204051;"   {%endif%} >
                     <span><i  class="fas fa-circle" aria-hidden="true"></i></span>
                     <span style="color: white;background-color: #204051;">Completo</span>
                 </div> 
-                <div class="statustravel1"  {% if travel.status =='en_transito'%} style="color:#e6c203d6;"  {%endif%} >
+                <div id="tran" class="statustravel1"  {% if travel.status =='en_transito'%} style="color:#e6c203d6;"   {%endif%} >
                     <span><i  class="fas fa-circle" aria-hidden="true"></i></span>
                     <span style="color: white;background-color: #e6c203d6;;">En curso</span>
                  </div>  
@@ -274,6 +274,8 @@
     <h3>Tokyo</h3>
     <p>Tokyo is the capital of Japan.</p>
   </div>
+
+  
   
   <script>
   function openCity(evt, cityName) {
@@ -300,12 +302,9 @@
       btnHidden.setAttribute("hidden",true)
     };
   })
+ 
   </script>
-  <script>
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();   
-    });
-    </script>
+ 
  {% endblock body %}-->
 
     
