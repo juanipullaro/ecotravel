@@ -165,7 +165,7 @@ def update_travels(travel_id):
         travel.dest.location = form.destination.data
         travel.travel_date = form.travel_date.data
         travel.travel_hour = form.travel_time.data
-        travel.seatsdec = form.seatsdec.data
+        travel.seats = form.seats.data
         db.session.commit()
         flash('Se actualizó su viaje!', 'success')
         return redirect(url_for('account', travel_id=travel_id))
@@ -174,7 +174,7 @@ def update_travels(travel_id):
         form.destination.data = travel.dest
         form.travel_date.data = travel.travel_date
         form.travel_date.time = travel.travel_hour
-        form.seatsdec = travel.seatsdec
+        form.seats = travel.seats
     return render_template('formulario.html', title='Update Travel',
                            form=form, legend='Update Travel', travel=travel)
 
@@ -230,7 +230,7 @@ def add_request(id_passenger, id_travel):
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
     travel_request.acept()
-    return redirect(url_for('account'))
+    return redirect(url_for('usertravelcreate'))
 
 
 @app.route("/account/<id_passenger>/<id_travel>/reject", methods=['GET', 'POST'])
@@ -238,7 +238,7 @@ def reject_request(id_passenger, id_travel):
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
     travel_request.reject()
-    return redirect(url_for('account'))
+    return redirect(url_for('usertravelcreate'))
 
 
 @app.route("/account/<id_passenger>/<id_travel>/down", methods=['GET', 'POST'])
@@ -246,7 +246,7 @@ def down_request(id_passenger, id_travel):
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
     travel_request.down()
-    return redirect(url_for('account'))
+    return redirect(url_for('userrequesttravel'))
 
 ################################### BUSCAR VIAJE #######################################################
 
@@ -327,7 +327,7 @@ def create_travel():
 
         try:
             new_travel = Travel(travel_date=form.travel_date.data, travel_hour=form.travel_time.data, driver=driver,
-                                origin=new_origin, dest=new_dest, seatsdec=form.seatsdec.data)
+                                origin=new_origin, dest=new_dest, seats=form.seats.data,seatsdec=form.seats.data)
 
             print(new_travel)
             db.session.add(new_travel)

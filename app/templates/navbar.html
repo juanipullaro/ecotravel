@@ -24,11 +24,13 @@
                       data-toggle="dropdown" style="background-color: transparent;color: #cbd5db;font-family: 'Open Sans', sans-serif;box-shadow: none;margin-left:17%;width: 26%;">
                 Mis Viajes <span class="caret"></span>
               </button>
-              <ul class="dropdown-menu" role="menu"  style="margin-top: -5%;margin-left: 6%;background-color: #f5f5f5;border-radius: 11px;width: 146%;height: 165px;padding: 8px 5%;">
-                <li><a href="{{ url_for('usertravelcreate') }}" style="font-size: 14px;color: #204051;">Mis viajes creados</a></li>
-                <li><a href="{{ url_for('userrequesttravel') }}"style="font-size: 14px;color: #204051;">Solicitudes a viajes</a></li>
-                <li><a  href="{{ url_for('usertravelfin') }}"style="font-size: 14px;color: #204051;">Viajes a los que me subi</a></li>
-              </ul>
+              <div class="misviajes">
+                <ul class="dropdown-menu" role="menu"  style="margin-top: -5%;margin-left: 6%;background-color: #f5f5f5;border-radius: 11px;width: 146%;height: 165px;padding: 8px 5%;">
+                  <li><a href="{{ url_for('usertravelcreate') }}" style="font-size: 14px;color: #204051;">Mis viajes creados</a></li>
+                  <li><a href="{{ url_for('userrequesttravel') }}"style="font-size: 14px;color: #204051;">Solicitudes a viajes</a></li>
+                  <li><a  href="{{ url_for('usertravelfin') }}"style="font-size: 14px;color: #204051;">Viajes a los que me subi</a></li>
+                </ul>
+              </div>
             </div> 
             <!--<a class="nav-item nav-link" href="{{ url_for('account') }}">Cuenta</a>-->
             <a class="nav-item nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i>

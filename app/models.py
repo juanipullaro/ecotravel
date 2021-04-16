@@ -114,7 +114,7 @@ class Travel(db.Model):
     dest = relationship(
         "Location", backref="travel_destinations", foreign_keys=[dest_id])
     #driver = relationship("TravelDriver",backref="travels",foreign_keys=[travel_driver_id])
-    seats = Column(Integer,default=0)
+    seats = Column(Integer)
     created_at = Column(DateTime, default=datetime.now())
     status = db.Column(db.String(60), default="disponible")
     seatsdec= Column(Integer)

@@ -56,6 +56,8 @@ a {
         display: -webkit-inline-box;
         margin-bottom: -24px;
         margin-top: 3%;
+        margin-left: 8%;
+        width: 19%;
 }
         
         
@@ -130,28 +132,38 @@ a {
     display: flex;
     margin-top: 3%;
     inline-size: 36%;
-    margin-left: 21%;
+    margin-left: 4%;
 }
 .fa.fa-user {
     margin-right: 21%;
     font-size: 21px;
     text-align: center;
 }
+
  .fa.fa-user.v1{
-      color: #8f9393;
+  color:#e73636;
+     
           
         }
 .fa.fa-user.v2{
-         color:#e73636;
+  color: #8f9393;
         }
+
+.passenger{
+  color: #486a6a;
+  font-size: 13px;
+  margin-top: 9px;
+  font-family: 'Open Sans', sans-serif;
+}       
 .fas.fa-user-plus{
     font-size: 17px;
     display: inline-flex;
 }
 
+
 .requestcant{
     display: inline-block;
-    margin-left: 14%;
+    margin-left: 2%;
 }
 .dropdown-menu {
     font-size: 1rem;
@@ -187,7 +199,7 @@ a {
 
 .octbar{
     display: inline;
-    margin-left: 56%;
+    margin-left: 70%;
 }
  .octicon.octicon-pencil{
      
@@ -199,8 +211,12 @@ a {
      fill: #cb2431;
    }
 
+   .octicon.octicon-trash.user{
+     margin-left: -42%;
+     width: 37%;}
+
 #content {
-  background: #454f4f;}
+  background:  #f5f5f5;}
 
 #content #left { 
     height: 107%;
@@ -217,10 +233,19 @@ a {
     float: right;
     width:61%;
     background:  #A5CCAB;}
+    .map {
+      height: 100%;
+      position: relative;
+      background-size: cover;}
+
 
 
 @media all and (max-width: 780px) { 
-      #right{width: 100%;}
+      #right{width: 100%;
+      }
+      #content #right {
+        height: 137px;
+    }
       .prueba{
           display: inline-flex;
           margin-left: 43%;
@@ -228,27 +253,28 @@ a {
       }
       .octbar {
     display: inline;
-    margin-left: -17%;
+    margin-left: -2%;
 }
     #browser{display: table;}
     }
 
-    #map {
+    .map {
       height: 100%;
       position: relative;
       background-size: cover;}
-     
-    #map p {
+    
+    .map p {
         text-transform: uppercase;
         padding-top: 20px;
         padding-left: 30px;
         font-size: 0.9em;
         font-weight: 600;
       }
-          li {
+          .misviajes li {
             border-bottom: solid thin #CCC;
             padding: 10px;
-            white-space: nowrap;}
+            white-space: nowrap;
+          }
             a { color: #51B2D6;
           }
   
@@ -260,8 +286,20 @@ a {
     padding: 15px;}
 
     @media all and (max-width: 780px) { 
-      #content #left {width: 100%;}
+      #content #left {width: 100%;
+      }
+      .octicon.octicon-trash.user {
+        margin-left: 98%;
+        width: 15%;
+        margin-top: -45%;
+        margin-bottom: -13px;
     }
+    .fa.fa-user.v1 {
+      display: ruby;
+  }
+  .seatsdis {
+    display: inline-grid;
+    margin-left: 4%;}}
     .oriaccount{
         display: inline-block;
         margin-top: -3%;
@@ -293,27 +331,18 @@ a {
     text-transform: uppercase;
     color: #7bc087;
     }
-    a {
-      &:hover {color: #51B2D6;}
-    }
+    
     
     form{
       border-top: solid thin #8e9699;
       border-bottom: solid thin #8e9699;
       margin: 20px 0;
       padding: 20px 0;
-    }//endofform
+    }
 
 
     p.other {
       font-size: 0.7;
       margin-bottom: 5px;
       text-transform: lowercase;
-      font-weight: 100;
-      &,
-      a {
-        color: #8e9699;
-      }
-    }
-  }
-}
+      font-weight: 100;}
