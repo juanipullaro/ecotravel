@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TextAreaField, TimeField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TextAreaField, TimeField,RadioField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
-from .models import User
+from .models import User 
 
 
 class RegistrationForm(FlaskForm):
@@ -58,6 +58,7 @@ class UpdateAccountForm(FlaskForm):
                         FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Actualizar Perfil')
 
+
     def validate_username(self, username):
         if username.data != current_user.username:
             user = User.query.filter_by(username=username.data).first()
@@ -90,3 +91,8 @@ class CreateTravelForm(FlaskForm):
     seats = IntegerField('Asientos', validators=[DataRequired()])
     submit = SubmitField('Crear Viaje')
     submit1 = SubmitField('Actualizar Viaje')
+
+class ScoreForm(FlaskForm):
+    point=RadioField('Calificacion',choices=[(1,'good'),(0,'bad')])
+    comment= TextAreaField('Comentario')
+    submit2 = SubmitField('Calificar')  

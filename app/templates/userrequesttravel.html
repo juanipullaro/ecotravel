@@ -39,8 +39,10 @@
                           </script></div>
               <div  class="horaccount"><p>Hora:</p>{{ travel_req.travel.travel_hour}}</div>
           </form>
+          {%if travel_req.state != "rechazada" and travel_req.state != "cancelada" %}
           <a class="btn-downtravel" href="{{ url_for('down_request', id_passenger=travel_req.passenger.dni,id_travel=travel_req.travel.id ) }}" >Bajarme del viaje</a>    
-      </div>
+          {%endif%}
+        </div>
     </div>
   </div>
     {%endif%}

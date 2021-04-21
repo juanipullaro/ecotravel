@@ -27,7 +27,7 @@ class User(db.Model, UserMixin):
     image_file = Column(String(20), nullable=False,
                         default='default.jpg')
     travel_requests = relationship('Travel_request', backref='passenger')
-    travels = relationship('Travel', backref='driver')
+    travelsuser = relationship('Travel', backref='driver')
     rating = Column(Integer)
     content = db.Column(db.String(200))
     phone= db.Column(db.BigInteger)
@@ -109,13 +109,11 @@ class Travel(db.Model):
     travel_driver_id = Column(Integer, ForeignKey('users.dni'))
     origin_id = Column(Integer, ForeignKey('locations.id'))
     dest_id = Column(Integer, ForeignKey('locations.id'))
-    origin = relationship(
-        "Location", backref="travel_origins", foreign_keys=[origin_id])
-    dest = relationship(
-        "Location", backref="travel_destinations", foreign_keys=[dest_id])
+    origin = relationship("Location", backref="travel_origins", foreign_keys=[origin_id])
+    dest = relationship("Location", backref="travel_destinations", foreign_keys=[dest_id])
     #driver = relationship("TravelDriver",backref="travels",foreign_keys=[travel_driver_id])
     seats = Column(Integer)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     status = db.Column(db.String(60), default="disponible")
     seatsdec= Column(Integer)
     # pasajeros
@@ -243,3 +241,17 @@ class Alert(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+################################### CALIFICACIONES #######################################################
+
+class Scores(db.Model):
+    __tablename__ = "scores"
+    travel_id = Column(Integer, ForeignKey('travels.id'), primary_key=True)
+    passenger_id = Column(Integer, ForeignKey('users.dni'), primary_key=True)
+    travel_driver_id = Column(Integer, ForeignKey('users.dni'))
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    comment = Column(Text())
+    point=Column(Integer)
+
+    def __repr__(self):
+        return f"Scores('{self.comment}', '{self.date_posted}')"

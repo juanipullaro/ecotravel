@@ -128,6 +128,32 @@ a.article-title:hover {
     border-bottom: 1px solid #dee2e6;
     margin-top: 7%;}
 
+    @media all and (max-width: 780px) { 
+      .navbar-nav {
+        display: -webkit-box;
+        margin-left: 21%;}
+        .navbar-nav .nav-link {
+          padding-right: 6px;
+          margin-left: 8%;}
+          .navbar-nav .fa.fa-sign-out {
+            margin-top:0%;
+            margin-left: 1%;}
+            .navbar-nav .fa.fa-home {
+              margin-top: 13%;
+              margin-left: 1%;
+          }
+        .navbar-collapse {
+          flex-basis: 0%;}
+          .btn-group{margin-left: -17%;}
+          .navbar-nav .dropdown-menu {
+            position: absolute;
+      
+    }}
+    
+    
+    
+    
+
 .account-img {
   max-width: 150px;
   max-height: 150px;
@@ -1163,12 +1189,12 @@ color: #204051;
 .fa.fa-sign-out{
   font-size: 19px;
   color: #cbd5db;
-  margin-top: 31%;
+  margin-top: 22%;
 }
 
 .fa.fa-home {
   font-size: 18px;
   color: #cbd5db;
-  margin-top: 13%;
+  margin-top: 16%;
 }
 

@@ -638,21 +638,25 @@ right: -30%;
         }
 
         .dropdown-menu {
-          font-size: 1rem;
-          color: #fff;
-          text-align: left;
-          list-style: none;
-          width: 202%;
-          border-radius: 22px;
-          padding: 7px 12%;
-          border-width: 2px;
-          border-color: #204051;
-      }
-
-   
+          
+            font-size: 1rem;
+            color: #fff;
+            text-align: left;
+            list-style: none;
+            width: 30%;
+            border-radius: 22px;
+            padding: 7px 12%;
+            border-width: 2px;
+            border-color: #204051;
         
+      }
+      li {
+        border-bottom: solid thin #CCC;
+        padding: 10px;
+        white-space: nowrap;
+    }
 
-      
+
         
 .signin-box-account {
   margin: auto;
@@ -814,162 +818,3 @@ margin-top: 11%;}
   
   
 
-/* ////////////////////////////////////////////  Test travel ////////////////////////////////////////////////////*/
-
-
-
-  /* entypo */
-[class*="entypo-"]:before {
-  font-family: 'entypo', sans-serif;
-  padding-right: 10px;
-}
-
-@mixin clearfix {
-  &:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-}
-@mixin box-shadow($horizontal: 1px, $vertical: 1px, $blur: 2px, $color: rgba(0,0,0,0.5)) {
-  -webkit-box-shadow: $horizontal $vertical $blur $color;
-  -moz-box-shadow: $horizontal $vertical $blur $color;
-  box-shadow: $horizontal $vertical $blur $color;
-}
-
-$dkgray: #394141;
-$gray: #454f4f ;
-$ltgray: #8e9699;
-$seafoam: #7BC087;
-$green: #5FA269;
-$accent: #51B2D6;
-
-
-body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 100%;
-  background: lighten($gray, 25%);
-}
-*, *:before, *:after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  border: 0;
-}
-
-ul {list-style:none;}
-a {
-  color: white; 
-  text-decoration: none;
-}
-
-#browser {
-  margin: 10px auto; 
-  color: white;
-  width: 80%;
-  @include box-shadow(2px, 5px, 15px);
-}
-#browser-bar {
-  background: $dkgray;
-  width: 100%;
-  padding: 8px;
-  margin: 0 auto;
-  font-weight: 300;
-  font-size: 0.9em;
-  position: relative;
-  p {text-align: center;}
-  .circles {
-    border-radius: 10px;
-    height: 13px;
-    width: 13px;
-    background: #ff3434 ;
-    float: left;
-    margin-left: 7px;
-    margin-top: 3px;
-    &:nth-of-type(2) {
-      background: #ffdd33 ;
-    }
-    &:nth-of-type(3) {
-      background: #67b678 ;
-    } 
-  }
-}
-.arrow {
-  position: absolute;
-  right: 3px;
-  top: 6px;
-  font-size: 1.2em;
-  color: $ltgray;
-}
-
-#content {
-  @include clearfix;
-  background: $gray;
-  #left, #right { 
-    height: 100%;
-  } 
-  #right {
-    float: right;
-    width:75%;
-    background: $seafoam;
-    @media all and (max-width: 780px) { 
-      width: 100%;
-    }
-    #map {
-      height: 400px;
-      position: relative;
-      background-size: cover;
-      p {
-        text-transform: uppercase;
-        padding-top: 20px;
-        padding-left: 30px;
-        font-size: 0.9em;
-        font-weight: 600;
-      }
-
-          li {
-            border-bottom: solid thin #CCC;
-            padding: 10px;
-            white-space: nowrap;
-            a { color: $accent;}
-            &:hover [class*="entypo-"] {color: $accent}
-          }
-        }
-    
-  }
-  
-  #left {
-    float: right;
-    width:25%;
-    background: $gray;
-    font-size: 0.75em;
-    padding: 15px;
-    @media all and (max-width: 780px) { 
-      width: 100%;
-    }
-    p {
-      margin-bottom: 10px; 
-      text-transform: uppercase;
-    }
-    a {
-      &:hover {color: $accent;}
-    }
-    
-    form{
-      border-top: solid thin $ltgray;
-      border-bottom: solid thin $ltgray;
-      margin: 20px 0;
-      padding: 20px 0;
-    }//endofform
-    p.other {
-      font-size: 0.7;
-      margin-bottom: 5px;
-      text-transform: lowercase;
-      font-weight: 100;
-      &,
-      a {
-        color: $ltgray;
-      }
-    }
-  }
-}

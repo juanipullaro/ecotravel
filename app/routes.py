@@ -7,11 +7,12 @@ from datetime import datetime
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from . import app, db, bcrypt
-from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm
-from .models import User, Travel_request, Location, Travel, Alert
+from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm,ScoreForm,ScoreForm
+from .models import User, Travel_request, Location, Travel, Alert, Scores
 from flask_login import login_user, current_user, logout_user, login_required
 from selenium import webdriver
 import time
+from sqlalchemy import desc
 
 
 ################################### INICIO_PANTALLA PRINCIPAL #####################################
@@ -156,7 +157,22 @@ def travel(travel_id):
     return render_template('account.html', id=travel.id, travel=travel)
 
 
-@app.route("/account/<int:travel_id>/update", methods=['GET', 'POST'])
+
+
+
+@app.route("/usertravelcreate", methods=['GET', 'POST'])
+@login_required
+def usertravelcreate():
+   
+    travels = Travel.query.order_by(Travel.created_at.desc()).all()
+    travels = [travel for travel in travels if travel.travel_driver_id == current_user.dni]
+    travel_reqs=Travel_request.query.order_by(Travel_request.date_posted.desc()).all()
+    travel_reqs = [ travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
+    print(travel_reqs)
+    return render_template('usertravelcreate.html',
+                            travels=travels, travel_reqs=travel_reqs)
+
+@app.route("/usertravelcreate/<int:travel_id>/update", methods=['GET', 'POST'])
 def update_travels(travel_id):
     travel = Travel.query.get_or_404(travel_id)
     form = CreateTravelForm()
@@ -166,20 +182,21 @@ def update_travels(travel_id):
         travel.travel_date = form.travel_date.data
         travel.travel_hour = form.travel_time.data
         travel.seats = form.seats.data
+        travel.seatsdec=form.seats.data
         db.session.commit()
         flash('Se actualizó su viaje!', 'success')
-        return redirect(url_for('account', travel_id=travel_id))
+        return redirect(url_for('usertravelcreate', travel_id=travel_id))
     elif request.method == 'GET':
-        form.origin.data = travel.origin
-        form.destination.data = travel.dest
+        form.origin.data = travel.origin.location
+        form.destination.data = travel.dest.location
         form.travel_date.data = travel.travel_date
-        form.travel_date.time = travel.travel_hour
-        form.seats = travel.seats
+        form.travel_time.data = travel.travel_hour
+        form.seats.data = travel.seatsdec
     return render_template('formulario.html', title='Update Travel',
                            form=form, legend='Update Travel', travel=travel)
 
 
-@app.route("/account/<id_viaje>/delete", methods=['GET', 'POST'])
+@app.route("/usertravelcreate/<id_viaje>/delete", methods=['GET', 'POST'])
 @login_required
 def delete_post(id_viaje):
     travel = Travel.query.get_or_404(id_viaje)
@@ -188,40 +205,39 @@ def delete_post(id_viaje):
     flash('Su viaje se elimino correctamente!', 'success')
     return redirect(url_for('profile'))
 
-
-@app.route("/usertravelcreate", methods=['GET', 'POST'])
-@login_required
-def usertravelcreate():
-    travels = Travel.query.all()
-    travels = [
-        travel for travel in travels if travel.travel_driver_id == current_user.dni]
-    travel_reqs = Travel_request.query.all()
-    travel_reqs = [
-        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
-    print(travel_reqs)
-    return render_template('usertravelcreate.html',
-                            travels=travels, travel_reqs=travel_reqs)
-
 @app.route("/userrequesttravel", methods=['GET', 'POST'])
 @login_required
 def userrequesttravel():
-    travel_reqs = Travel_request.query.all()
+    travel_reqs = Travel_request.query.order_by(Travel_request.date_posted.desc()).all()
     travel_reqs = [
         travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
-    print(travel_reqs)
     return render_template('userrequesttravel.html',
                            travel_reqs=travel_reqs)
 
 @app.route("/usertravelfin", methods=['GET', 'POST'])
 @login_required
 def usertravelfin():
-    travel_reqs = Travel_request.query.all()
-    travel_reqs = [
-        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
-    print(travel_reqs)
-    return render_template('usertravelfin.html',
-                           travel_reqs=travel_reqs)
+    scores = Scores.query.all() 
+    scores = [score for score in scores if score.passenger_id == current_user.dni]
+    form = ScoreForm()
+    travel_reqs=Travel_request.query.order_by(Travel_request.date_posted.desc()).all()
+    travel_reqs = [travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
 
+    return render_template('usertravelfin.html',
+                           travel_reqs=travel_reqs,form=form,scores=scores)
+
+@app.route("/usertravelfin/<int:travel_id>", methods=['GET', 'POST'])
+def new_post(travel_id):
+    form = ScoreForm()
+    travel = Travel.query.get_or_404(travel_id)
+    score = Scores(travel_id=travel.id,passenger_id=current_user.dni,travel_driver_id=travel.travel_driver_id,comment=form.comment.data,point=form.point.data)
+    db.session.add(score)
+    db.session.commit()
+    flash('Your post has been created!', 'success')
+    return redirect(url_for('userprofile'))
+   
+
+ 
 ################################### SOLICITUD DE VIAJE #################################################
 
 

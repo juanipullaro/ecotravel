@@ -2,14 +2,15 @@
 {% block body %}
 {% include "navbar.html" %}>
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/form.css') }}">
-
-
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <div id="signin-box-form" class="signin-box-form">
     <div class="signin-area-form">
+        <a class="btn-back" href="{{ url_for('usertravelcreate') }}" style="font-size: 14px;color: #204051;margin-left: 85%;"> <i class="fas fa-backward" style="margin-right: 2%;
+            margin-left: -2%;font-size: 13px;"></i>Volver</a>
             <form method="POST" action="" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Actualizá tus datos</legend>
+                    <legend class="border-bottom mb-4">Actualizá tu viaje</legend>
                     <div class="form-group">
                         {{ form.origin.label(class="form-control-label") }} 
                         {% if form.origin.errors %}
@@ -20,7 +21,7 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.origin(class="form-control form-control-lg", value=travel.origin) }}
+                            {{ form.origin(class="form-control form-control-lg")}}
                         {% endif %}
                     </div>
                     <div class="form-group">
@@ -63,8 +64,18 @@
                         {% endif %}
                     </div>
                     <div class="form-group">
-                        {{ form.seats.label }} {{ form.seats }}
-                    </div>
+                        {{ form.seats.label(class="form-control-label") }}
+                        {% if form.seats.errors %}
+                            {{ form.seats(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.seats.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.seats(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>    
                 </fieldset>
                 <div class="form-group">
                     {{ form.submit1(class="btn btn-outline-info") }}
