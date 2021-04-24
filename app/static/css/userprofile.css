@@ -1,0 +1,340 @@
+@import "compass/css3";
+@import "compass/utilities/general/clearfix";
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600);
+@import url(http://weloveiconfonts.com/api/?family=brandico|entypo);
+
+
+
+@mixin clearfix () {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 100%;
+  background: lighten(#454f4f, 25%);
+}
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: 0;
+}
+
+ul {list-style:none;}
+a {
+  color: white; 
+  text-decoration: none;
+}
+
+#browser {
+  margin: 10px auto; 
+  color: white;
+  width: 87%;
+  margin-top:5%;
+  display:grid;
+}
+#browser-bar {
+  background: #486a6a;
+  width: 100%;
+  padding: 8px;
+  margin: 0 auto;
+  font-weight: 300;
+  font-size: 0.9em;
+  position: relative;
+  
+}
+
+
+.article-img {
+    height: 150px;
+    width: 150px;
+    margin-right: 42px;
+    margin-left: 31%;
+    margin-top: -4%;
+}
+   
+    .btn-alert{
+        padding: 6px;
+        transition: 0.3s;
+        font-size: 14px;
+        border-radius: 10px;
+        background-color: #486a6a;
+        color: #fff;
+        text-align: center;
+        margin-left: 37%;
+        }
+      
+     .cantscoresgood{
+        color: #486a6a;
+        font-size: 14px;
+        margin-top: -5%;
+        margin-left: 24%;
+     }
+     .cantscoresbad{
+        color: #ca5656;
+        font-size: 14px;
+        margin-top: -5%;
+        margin-left: 33%;
+    }
+    a:hover {
+        color: #0056b3;
+        text-decoration: none;
+    }
+     
+     
+     form.leftdata{
+        border-top: none;
+     }
+     .form-group1{
+        margin-top: 7%;
+        margin-bottom: -26px;
+     }
+
+
+  
+  .mr-2{
+        margin-right: .4rem !important;
+        font-size: 22px;
+        color:white;
+}
+
+
+
+#content {
+  background:  #f5f5f5;}
+
+#content #left { 
+    height: 94%;
+    margin-top: 0%;
+    width: 36%;
+  } 
+#content #right { 
+    height: 100%;
+    
+    
+  } 
+
+  #right {
+    float: right;
+    width:61%;
+    background: #F5F5F5;}
+    .map {
+        margin-top: -15%;
+        padding: 136px;
+        font-size: 13px;}
+
+
+
+@media all and (max-width: 780px) { 
+      #right{width: 100%;
+      }
+      #content #right {
+        height: 137px;
+    }
+      
+    #browser{display: table;}
+    }
+
+    .map {
+        margin-top: -15%;
+        padding: 136px;
+        font-size: 13px;}
+    
+    .map p {
+        text-transform: uppercase;
+        padding-top: 20px;
+        padding-left: 30px;
+        font-size: 0.9em;
+        font-weight: 600;
+      }
+          .misviajes li {
+            border-bottom: solid thin #CCC;
+            padding: 10px;
+            white-space: nowrap;
+          }
+            a { color: #51B2D6;
+          }
+  
+  #left {
+    float: right;
+    width:25%;
+    background-color: whitesmoke;
+    font-size: 0.75em;
+    padding: 15px;}
+
+    label{color: #486a6a;}
+    .form-control-label-file{
+        width: 63%;
+        font-size: 11px;
+        margin-bottom: 46px;
+        margin-top: 1%;
+    }
+    .btn.btn-outline-info{
+
+        background-color: #486a6a;
+        color: white;
+        margin-left: 29%;
+    }
+
+    @media all and (max-width: 780px) { 
+      #content #left {width: 100%;
+      }
+    
+    
+    }
+      
+    #left p {
+     margin-bottom: 10px;
+    text-transform: uppercase;
+    color: #7bc087;
+    }
+    
+    
+    form{
+      border-top: solid thin #8e9699;
+      border-bottom: solid thin #8e9699;
+      margin: 20px 0;
+      padding: 20px 0;
+    }
+
+
+    p.other {
+      font-size: 0.7;
+      margin-bottom: 5px;
+      text-transform: lowercase;
+      font-weight: 100;}
+      /**************************************************************************************/
+      .JwPp0e {
+        display: -webkit-inline-box;
+        -webkit-flex-wrap: wrap;
+        padding-left: 1.5rem;
+        padding-top:  6.5rem;;
+    }
+
+    .Y5vSD{
+        color:#486a6a;
+        
+    }
+    
+    .gHz6xd {
+        background-clip: padding-box;
+        display: flex;
+    
+        flex-direction: column;
+        height: 11.375rem;
+        margin-bottom: 1.5rem;
+        margin-right: 1.5rem;
+        overflow: hidden;
+        position: relative;
+        text-align: left;
+        width: 18.75rem;
+    }
+    
+    .Aopndd {
+        background-color: #fff;
+        border: .0625rem solid #dadce0;
+        border-radius: 0.5rem;
+        box-shadow: 0px 0px 6px #a4a4a4;
+    }
+    .Tc9hUd {
+        position: relative;
+    }
+    .OjOEXb, .ZizeYd, .O7utsb, .ZmqAt {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+    .onkcGd, .onkcGd:visited {
+        color: #333;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .prWPdf {
+        position: relative;
+    }
+    .kj3hr {
+        color: #204051;;
+        display: block;
+        margin: 0 -0.25rem;
+        padding: 0 0.25rem;
+    }
+    
+    .YVvGBb {
+        
+        display: flex;
+        color: #fff;;
+        font-size: 20px;
+        margin-bottom: 14px;
+        text-shadow: 0px 1px 4px #1c1c1c;
+    
+    }
+    .YVvGBb.csjh4b{
+        overflow: visible;
+        white-space: nowrap;
+        margin-top: 6%;
+        margin-bottom: 3px;
+        margin-left: 2%;
+
+    }
+    .onkcGd, .onkcGd:visited {
+    
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .QRiHXd {
+        -webkit-align-items: center;
+        display: -webkit-box;
+        -webkit-flex-direction: row;
+        
+    }
+    .kj3hr {
+        color: #fff;
+        display: block;
+        margin: 0 -0.25rem;
+        padding: 0 0.25rem;
+    }
+    
+    .jJIbcc {
+        position: relative;
+    }
+    .YVvGBb {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+       
+    }
+    .TQYOZc {
+        -webkit-box-flex: 1;
+        flex-grow: 1;
+        min-height: 0;
+        padding: 1rem;
+        padding-top: 0.75rem;
+    }
+    
+    .article-imgcal {
+        border-radius: 50%;
+        float: right;
+        height: 4.6875rem;
+        position: relative;
+        margin-top: -3.09375rem;
+        width: 4.6875rem;
+    }
+    .SZ0kZe {
+        border-top: .0625rem solid #e0e0e0;
+        line-height: 0;
+        padding: 0.25rem;
+    }
+    .F2CcI, .SZ0kZe {
+        display: flex;
+        flex-shrink: 0;
+        justify-content: flex-end;
+    }
