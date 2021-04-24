@@ -31,34 +31,73 @@ def home():
 def profile():
     travels = Travel.query.all()
     travels = [
-        travel for travel in travels if travel.travel_driver_id != current_user.dni]
+        travel for travel in travels if travel.travel_driver_id != current_user.dni 
+        and travel.status =='disponible']
     return render_template('profile.html', travels=travels)
 
 @app.route("/generic")
 def generic():
     return render_template('test.html')
+  
+
+
+  ################################### GUARDAR IMAGEN DE USUARIO #####################################
+
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(
+        app.root_path, 'static/profile_pics', picture_fn)
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+ ################################### PERFIL DE USUARIO #####################################
 
 @app.route("/userprofile")
 @login_required
 def userprofile():
+    users = User.query.all()
+    scores = Scores.query.order_by(Scores.date_posted.desc()).all()
+    scores  = [score for score in scores if score.travel_driver_id == current_user.dni]
+    scores1 = [score for score in scores if score.travel_driver_id == current_user.dni and score.point==1]
+    scores2 = [score for score in scores if score.travel_driver_id == current_user.dni and score.point==0]
+    image_file = url_for(
+        'static', filename='profile_pics/' + current_user.image_file)
+    return render_template('userprofile.html', title='UserProfile',
+                           image_file=image_file,scores=scores,scores1=scores1,users=users,scores2=scores2)  
+
+    
+@app.route("/userprofile/<dni>/updateprofile", methods=['GET', 'POST'])
+@login_required
+def update_profile(dni):
+    user = User.query.get_or_404(dni)
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
-        current_user.username = form.username.data
-        current_user.email = form.email.data
+        user.content= form.content.data
+        user.username = form.username.data
+        user.email = form.email.data
+        user.phone=form.phone.data
         db.session.commit()
         flash('Se actualizo tu cuenta!', 'success')
         return redirect(url_for('userprofile'))
     elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.email.data = current_user.email
+        form.content.data= user.content
+        form.username.data = user.username
+        form.email.data = user.email
+        form.phone.data= user.phone
     image_file = url_for(
-        'static', filename='profile_pics/' + current_user.image_file)
-    return render_template('userprofile.html', title='UserProfile',
-                           image_file=image_file, form=form)
-
+        'static', filename='profile_pics/' + user.image_file)
+    return render_template('formulario_profile.html', title='UserProfile',
+                           image_file=image_file, form=form, user=user)
 ################################### REGISTRO #######################################################
 
 
@@ -103,67 +142,12 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-################################### GUARDAR IMAGEN DE USUARIO #####################################
-
-
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(
-        app.root_path, 'static/profile_pics', picture_fn)
-    output_size = (125, 125)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-
-    return picture_fn
-
-################################### CUENTA DE USUARIO ###############################################
-
-
-@app.route("/account", methods=['GET', 'POST'])
-@login_required
-def account():
-    form = UpdateAccountForm()
-    if form.validate_on_submit():
-        if form.picture.data:
-            picture_file = save_picture(form.picture.data)
-            current_user.image_file = picture_file
-        current_user.username = form.username.data
-        current_user.email = form.email.data
-        db.session.commit()
-        flash('Se actualizo tu cuenta!', 'success')
-        return redirect(url_for('account'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.email.data = current_user.email
-    image_file = url_for(
-        'static', filename='profile_pics/' + current_user.image_file)
-    travels = Travel.query.all()
-    travels = [
-        travel for travel in travels if travel.travel_driver_id == current_user.dni]
-    travel_reqs = Travel_request.query.all()
-    travel_reqs = [
-        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
-    print(travel_reqs)
-    return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, travels=travels, travel_reqs=travel_reqs)
-
-
-@app.route("/account/<int:travel_id>")
-def travel(travel_id):
-    travel = Travel.query.get_or_404(travel_id)
-    return render_template('account.html', id=travel.id, travel=travel)
-
-
-
+################################### SESSION VIAJES CREADOS ###############################################
 
 
 @app.route("/usertravelcreate", methods=['GET', 'POST'])
 @login_required
 def usertravelcreate():
-   
     travels = Travel.query.order_by(Travel.created_at.desc()).all()
     travels = [travel for travel in travels if travel.travel_driver_id == current_user.dni]
     travel_reqs=Travel_request.query.order_by(Travel_request.date_posted.desc()).all()
@@ -205,14 +189,54 @@ def delete_post(id_viaje):
     flash('Su viaje se elimino correctamente!', 'success')
     return redirect(url_for('profile'))
 
+@app.route("/usertravelcreate/<id_passenger>/<id_travel>/add", methods=['GET', 'POST'])
+def add_request(id_passenger, id_travel):
+    travel_request = Travel_request.query.filter_by(
+        dni_user=id_passenger, travel_id=id_travel).first()
+    travel_request.acept()
+    return redirect(url_for('usertravelcreate'))
+
+
+@app.route("/usertravelcreate/<id_passenger>/<id_travel>/reject", methods=['GET', 'POST'])
+def reject_request(id_passenger, id_travel):
+    travel_request = Travel_request.query.filter_by(
+        dni_user=id_passenger, travel_id=id_travel).first()
+    travel_request.reject()
+    return redirect(url_for('usertravelcreate'))
+
+
+@app.route("/usertravelcreate/<id_passenger>/<id_travel>/downpassenger", methods=['GET', 'POST'])
+def down_request_driver(id_passenger, id_travel):
+    travel_request = Travel_request.query.filter_by(
+        dni_user=id_passenger, travel_id=id_travel).first()
+    travel_request.down()
+    return redirect(url_for('usertravelcreate'))
+
+@app.route("/usertravelcreate/<id_passenger>/<id_travel>/downme", methods=['GET', 'POST'])
+def down_request_passenger(id_passenger, id_travel):
+    travel_request = Travel_request.query.filter_by(
+        dni_user=id_passenger, travel_id=id_travel).first()
+    travel_request.down()
+    return redirect(url_for('userrequesttravel'))
+
+################################### FIN SESSION VIAJES CREADOS ###############################################
+
+
+################################### SOLICITUD DE VIAJE #################################################
+
 @app.route("/userrequesttravel", methods=['GET', 'POST'])
 @login_required
 def userrequesttravel():
-    travel_reqs = Travel_request.query.order_by(Travel_request.date_posted.desc()).all()
+    travel_reqs = Travel_request.query.order_by(Travel_request.state.asc(),Travel_request.date_posted.desc()).all()
     travel_reqs = [
         travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
     return render_template('userrequesttravel.html',
                            travel_reqs=travel_reqs)
+
+################################### FIN SOLICITUD DE VIAJE #################################################
+
+
+################################### SESSION VIAJES FINALIZADOS ###############################################
 
 @app.route("/usertravelfin", methods=['GET', 'POST'])
 @login_required
@@ -221,7 +245,7 @@ def usertravelfin():
     scores = [score for score in scores if score.passenger_id == current_user.dni]
     form = ScoreForm()
     travel_reqs=Travel_request.query.order_by(Travel_request.date_posted.desc()).all()
-    travel_reqs = [travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
+    travel_reqs = [travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni and travel_req.state=='finalizada']
 
     return render_template('usertravelfin.html',
                            travel_reqs=travel_reqs,form=form,scores=scores)
@@ -235,34 +259,8 @@ def new_post(travel_id):
     db.session.commit()
     flash('Your post has been created!', 'success')
     return redirect(url_for('userprofile'))
-   
 
- 
-################################### SOLICITUD DE VIAJE #################################################
-
-
-@app.route("/account/<id_passenger>/<id_travel>/add", methods=['GET', 'POST'])
-def add_request(id_passenger, id_travel):
-    travel_request = Travel_request.query.filter_by(
-        dni_user=id_passenger, travel_id=id_travel).first()
-    travel_request.acept()
-    return redirect(url_for('usertravelcreate'))
-
-
-@app.route("/account/<id_passenger>/<id_travel>/reject", methods=['GET', 'POST'])
-def reject_request(id_passenger, id_travel):
-    travel_request = Travel_request.query.filter_by(
-        dni_user=id_passenger, travel_id=id_travel).first()
-    travel_request.reject()
-    return redirect(url_for('usertravelcreate'))
-
-
-@app.route("/account/<id_passenger>/<id_travel>/down", methods=['GET', 'POST'])
-def down_request(id_passenger, id_travel):
-    travel_request = Travel_request.query.filter_by(
-        dni_user=id_passenger, travel_id=id_travel).first()
-    travel_request.down()
-    return redirect(url_for('userrequesttravel'))
+################################### FIN SESSION VIAJES CREADOS ###############################################
 
 ################################### BUSCAR VIAJE #######################################################
 

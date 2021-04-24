@@ -5,6 +5,9 @@
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+{% if travel_reqs|length == 0 %}
+<p class="text-travelnull">No tenés solicitudes enviadas</p>
+{%else%}
     {% for travel_req in travel_reqs %}
     {%if travel_req.dni_user==current_user.dni and travel_req.state != "finalizada" %}
     <div id="browser">
@@ -40,7 +43,7 @@
               <div  class="horaccount"><p>Hora:</p>{{ travel_req.travel.travel_hour}}</div>
           </form>
           {%if travel_req.state != "rechazada" and travel_req.state != "cancelada" %}
-          <a class="btn-downtravel" href="{{ url_for('down_request', id_passenger=travel_req.passenger.dni,id_travel=travel_req.travel.id ) }}" >Bajarme del viaje</a>    
+          <a class="btn-downtravel" href="{{ url_for('down_request_passenger', id_passenger=travel_req.passenger.dni,id_travel=travel_req.travel.id ) }}" >Bajarme del viaje</a>    
           {%endif%}
         </div>
     </div>
@@ -54,5 +57,6 @@
       map.addLayer(layer);
     </script>
     {% endfor %} 
+    {%endif%}
     </div>
 {% endblock body %}-->

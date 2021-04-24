@@ -293,41 +293,39 @@ top: -178px;
 
     }
       
-      .article-title1 {
-        color: #444444;
+      .profiledata{
+        margin-left: 52%;
+        box-shadow: 0px 1px 5px #282828;
+        width: 46%;
+        margin-top: 3%;
+      }
+      .img-data{
+        margin-left: 1%;
+        box-shadow: 0px 1px 5px #5e5e5e;
+        width: 50%;
+        margin-top: 3%;
+      }
+      .form-group-data{
+        margin-top: -40%;
+        padding: 38px;
+      }
+      .form-group1{
+        margin-left: -63%;
+        width: 50%;
+        margin-top: -37%;
         font-size: 12px;
-        display: revert;
-      }
-      
-      a.article-title1:hover {
-        color: #428bca;
-        text-decoration: none;
-      }
-      
-      .article-content1 {
-        white-space: pre-line;
-      }
-      
-      .article-img1 {
-        height: 180px;
-        width: 15%;
-        margin-right: 14px;
-        margin-top: 6%;
-      }
-      
-      .article-metadata1 {
-        padding-bottom: 0px;
-        margin-bottom: 19px;
-        border-bottom: 1px solid #e3e3e3;
-        margin-left: -31%;
-        margin-right: -62%;
     }
       
-      
-      .article-metadata1 a:hover {
-        color: #333;
-        text-decoration: none;
+      .form-group-submit{
+        margin-top: 15%;
       }
+
+
+      legend {
+        margin-top: 3%;
+        margin-left: 5%;
+        font-size: 36px;
+    }
       .rounded-circle {
         border-radius: 40% !important;
     }
@@ -336,6 +334,13 @@ top: -178px;
         height: 100px;
         vertical-align: middle;
       }
+      .article-img1 {
+        height: 157px;
+        width: 8%;
+        margin-right: -111px;
+        margin-top: 2%;
+        margin-left: 51%;
+    }
       
       .account-img {
         height: 125px;

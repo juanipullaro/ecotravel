@@ -50,12 +50,11 @@ class LoginForm(FlaskForm):
 
 
 class UpdateAccountForm(FlaskForm):
-    username = StringField('Usuario',
-                           validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    picture = FileField('Actualice foto de perfil', validators=[
-                        FileAllowed(['jpg', 'png'])])
+    content = TextAreaField('Contanos sobre vos')
+    username = StringField('Usuario',validators=[Length(min=2, max=20)])
+    email = StringField('Email', validators=[Email()])
+    phone = StringField('Telefono')
+    picture = FileField('Cambiar foto de perfil', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Actualizar Perfil')
 
 

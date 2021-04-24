@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/userprofile.css') }}">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+{%for score in scores %}
+                {%for user in users%}
+                    {%if score.passenger_id==user.dni %}
+                        <ol jsname="bN97Pc" class="JwPp0e">
+                            <li class="gHz6xd Aopndd rZXyy">
+                                <div class="Tc9hUd DShyMc-MzA5MDg5NDcxMDM4">
+                                    <div class="O7utsb bFjUmb-Tvm9db"></div>
+                                        <div class="OjOEXb Gf8MK" {% if score.point == 1 %} style="background-color:#486a6a;box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+                                        <div class="OjOEXb Gf8MK" {% if score.point == 0 %} style="background-color:rgba(206, 60, 60, 0.96);box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+                                        <div class="R4EiSb">
+                                            <h2 class="prWPdf">
+                                                <a class="onkcGd kj3hr YVvGBb" target="_self" href="#" >
+                                                <div class="YVvGBb csjh4b">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} 
+                                                </div></a>
+                                            </h2>
+                                        </div>
+                                </div>
+                                <div class="TQYOZc">
+                                    <img class="rounded-circle article-imgcal" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
+                                    <div class="lziZub sdDCme" style="text-align: left;">
+                                        <div class="data"> 
+                                            <div class="ori">
+                                               <i class="fa fa-map-marker" aria-hidden="true"></i> {{travel.origin.location}} 
+                                            </div>
+                                            <div class="des"><br />
+                                              <i class="fa fa-map-marker des" aria-hidden="true"></i>  {{travel.dest.location}} </div>
+                                            <div class="fec"> 
+                                              <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                  <script>
+                                                      var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                                                      var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
+                                                      var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                                                      document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                                                  </script> 
+                                            </div>
+                                            <div class="hor"> {{ travel.travel_hour }}
+                                              <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            </div>
+                                          
+                                        <div class="glob">
+                                            <div class="cantDisp">{{ travel.seats }}</div> <div  class="dis"><br />Asientos disponibles </div>
+                                        </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    {%endif%}
+                 {%endfor%}
+            {%endfor%}
+{% endblock body %}-->
