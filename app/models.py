@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
     travelsuser = relationship('Travel', backref='driver')
     rating = Column(Integer)
     content = db.Column(db.String(200))
-    phone= db.Column(db.BigInteger)
+    phone = db.Column(db.BigInteger)
 
     def __init__(self, name, surname, email, dni, username, password):
         self.name = name
@@ -147,6 +147,18 @@ class Travel(db.Model):
     def getaccept_request(self):
         return[request for request in self.travel_requests if request.state == "aceptada"]
 
+    def are_near(self, new_origin, new_dest):
+        return self.origin.is_in_radius(new_origin, 5000) and self.dest.is_in_radius(new_dest, 5000)
+
+    def match_alert(self, alert):
+        if self.travel_hour != alert.travel_time:
+            return False
+        if self.travel_date != alert.travel_date:
+            return False
+        if not self.are_near(alert.origin, alert.dest):
+            return False
+        return True
+
 
 ################################### LOCALIZACION #######################################################
 
@@ -211,6 +223,31 @@ class Location(db.Model):
         db.session.commit()
 
 
+class TravelAlerts(db.Model):
+    __tablename__ = "travel_alerts"
+    id_travel = Column(Integer,  db.ForeignKey('travels.id'), primary_key=True)
+    id_alert = Column(Integer, db.ForeignKey('alerts.id'), primary_key=True)
+    alert = relationship("Alert", foreign_keys=[
+        id_alert], backref='travels_alerts')
+    travel = relationship("Travel", foreign_keys=[
+        id_travel], backref='travels_alerts')
+
+    def __init__(self, travel, alert):
+        print(travel)
+        self.id_travel = travel.id
+        self.id_alert = alert.id
+
+    @classmethod
+    def alerts(cls, travel):
+        print(travel)
+        alerts = Alert.query.all()
+        for alert in alerts:
+            if travel.match_alert(alert):
+                travel_alert = TravelAlerts(travel, alert)
+                db.session.add(travel_alert)
+        db.session.commit()
+
+
 class Alert(db.Model):
     __tablename__ = "alerts"
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -221,7 +258,7 @@ class Alert(db.Model):
     passenger_id = Column(Integer, ForeignKey('users.dni'))
     passenger = relationship(
         "User", backref="alerts", foreign_keys=[passenger_id])
-    status = Column(String(60), default="Activo")
+    status = Column(String(60), default="ACTIVA")
     created_at = Column(
         DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     last_modified = Column(

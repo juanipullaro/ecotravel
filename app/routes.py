@@ -6,9 +6,10 @@ import json
 from datetime import datetime
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, jsonify
-from . import app, db, bcrypt
-from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm, ScoreForm, ScoreForm
+from . import app, db, bcrypt, socketio
+from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm, ScoreForm
 from .models import User, Travel_request, Location, Travel, Alert, Scores
+from .data import ALERT_STATUS
 from flask_login import login_user, current_user, logout_user, login_required
 from selenium import webdriver
 import time
@@ -40,6 +41,8 @@ def profile():
 def generic():
     return render_template('test.html')
 
+
+<< << << < HEAD
   ################################### GUARDAR IMAGEN DE USUARIO #####################################
 
 
@@ -57,6 +60,10 @@ def save_picture(form_picture):
     return picture_fn
 
  ################################### PERFIL DE USUARIO #####################################
+
+
+== == == =
+>>>>>> > 2f00cac... add alerts
 
 
 @app.route("/userprofile")
@@ -116,7 +123,7 @@ def register():
                     dni=form.dni.data, username=form.username.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        #flash('Your account has been created! You are now able to log in', 'success')
+        # flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -159,6 +166,38 @@ def usertravelcreate():
     travel_reqs = [
         travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
     print(travel_reqs)
+
+
+<< << << < HEAD
+== == == =
+    alerts = Alert.query.filter(Alert.passenger_id == current_user.dni,
+                                Alert.status != ALERT_STATUS[2]).all()
+    print(alerts)
+    return render_template('account.html', title='Account',
+                           image_file=image_file, form=form, travels=travels, travel_reqs=travel_reqs, alerts=alerts)
+
+
+@app.route("/account/<int:travel_id>")
+def travel(travel_id):
+    travel = Travel.query.get_or_404(travel_id)
+    return render_template('account.html', id=travel.id, travel=travel)
+
+
+@app.route("/usertravelcreate", methods=['GET', 'POST'])
+@login_required
+def usertravelcreate():
+
+    travels = Travel.query.order_by(Travel.created_at.desc()).all()
+    travels = [
+        travel for travel in travels if travel.travel_driver_id == current_user.dni]
+    travel_reqs = Travel_request.query.order_by(
+        Travel_request.date_posted.desc()).all()
+    travel_reqs = [
+        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
+    print(travel_reqs)
+
+
+>>>>>> > 2f00cac... add alerts
     return render_template('usertravelcreate.html',
                            travels=travels, travel_reqs=travel_reqs)
 
@@ -197,6 +236,9 @@ def delete_post(id_viaje):
     return redirect(url_for('profile'))
 
 
+<< << << < HEAD
+
+
 @app.route("/usertravelcreate/<id_passenger>/<id_travel>/add", methods=['GET', 'POST'])
 def add_request(id_passenger, id_travel):
     travel_request = Travel_request.query.filter_by(
@@ -233,41 +275,59 @@ def down_request_passenger(id_passenger, id_travel):
 
 ################################### SOLICITUD DE VIAJE #################################################
 
+== == == =
+>>>>>> > 2f00cac... add alerts
+
+
 @app.route("/userrequesttravel", methods=['GET', 'POST'])
 @login_required
 def userrequesttravel():
     travel_reqs = Travel_request.query.order_by(
+<< << << < HEAD
         Travel_request.state.asc(), Travel_request.date_posted.desc()).all()
-    travel_reqs = [
+
+
+== == == =
+        Travel_request.date_posted.desc()).all()
+>> >>>> > 2f00cac... add alerts
+    travel_reqs=[
         travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
     return render_template('userrequesttravel.html',
-                           travel_reqs=travel_reqs)
+                           travel_reqs = travel_reqs)
 
+<< << << < HEAD
 ################################### FIN SOLICITUD DE VIAJE #################################################
 
 
 ################################### SESSION VIAJES FINALIZADOS ###############################################
+== == ===
+>>>>>> > 2f00cac... add alerts
 
-@app.route("/usertravelfin", methods=['GET', 'POST'])
-@login_required
+@ app.route("/usertravelfin", methods = ['GET', 'POST'])
+@ login_required
 def usertravelfin():
-    scores = Scores.query.all()
-    scores = [score for score in scores if score.passenger_id == current_user.dni]
-    form = ScoreForm()
-    travel_reqs = Travel_request.query.order_by(
+    scores=Scores.query.all()
+    scores=[score for score in scores if score.passenger_id == current_user.dni]
+    form=ScoreForm()
+    travel_reqs=Travel_request.query.order_by(
         Travel_request.date_posted.desc()).all()
-    travel_reqs = [travel_req for travel_req in travel_reqs if travel_req.dni_user ==
+<< << << < HEAD
+    travel_reqs=[travel_req for travel_req in travel_reqs if travel_req.dni_user ==
                    current_user.dni and travel_req.state == 'finalizada']
+== == ===
+    travel_reqs = [
+        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
+>> >>>> > 2f00cac... add alerts
 
     return render_template('usertravelfin.html',
-                           travel_reqs=travel_reqs, form=form, scores=scores)
+                           travel_reqs = travel_reqs, form = form, scores = scores)
 
 
-@app.route("/usertravelfin/<int:travel_id>", methods=['GET', 'POST'])
+@ app.route("/usertravelfin/<int:travel_id>", methods = ['GET', 'POST'])
 def new_post(travel_id):
-    form = ScoreForm()
-    travel = Travel.query.get_or_404(travel_id)
-    score = Scores(travel_id=travel.id, passenger_id=current_user.dni,
+    form=ScoreForm()
+    travel=Travel.query.get_or_404(travel_id)
+    score=Scores(travel_id = travel.id, passenger_id = current_user.dni,
                    travel_driver_id=travel.travel_driver_id, comment=form.comment.data, point=form.point.data)
     db.session.add(score)
     db.session.commit()
@@ -360,8 +420,14 @@ def create_travel():
             print(new_travel)
             db.session.add(new_travel)
             db.session.commit()
+            TravelAlerts.alerts(new_travel)
             travels = [new_travel.to_json()]
+            travel_alerts = [
+                travel_alert.alert.id for travel_alert in new_travel.travels_alerts]
             flash('Se ha registrado un nuevo viaje')
+            print(travel_alerts)
+            socketio.emit(
+                'message', {"id": 1, "mensaje": "Se ha creado un nuevo viaje"}, broadcast=True)
             return redirect(url_for('create_travel'))
 
         except sqlalchemy.exc.IntegrityError:
@@ -377,8 +443,6 @@ def create_travel():
         finally:
             travels_json = {"travels": travels}
 
-    else:
-        print("fail")
     return render_template('create_travel.html', form=form, travels=travels_json, error=error)
 
 ################################### UNIRSE AL VIAJE #######################################################
@@ -414,9 +478,24 @@ def create_alert():
     return "Se ha generado una nueva alerta", 200
 
 
-@app.route('/account/alert/myalerts', methods=['GET', 'POST'])
+@app.route('/account/alert/<int:id>/update', methods=['GET', 'POST'])
 @login_required
-def my_alerts():
-    alerts = Alert.query.filter_by(
-        passenger_id=current_user.dni, status="Activo")
-    return render_template("alerts.html", alerts=alerts)
+def update_alert(id):
+    status = int(request.args.get("status"))
+    alert = Alert.query.filter_by(id=id).first()
+    alert.status = ALERT_STATUS[status]
+    print(alert.status)
+    db.session.commit()
+    return f"Alerta {alert.id} updated", 200
+
+
+@app.route('/account/alert/travels', methods=['GET', 'POST'])
+@login_required
+def get_travel_alerts():
+    alerts = Alert.query.filter_by(passenger_id=current_user.dni)
+    travel_alerts = []
+    for alert in alerts:
+        if alert.travels_alerts is not None:
+            print(alert.travels_alerts)
+            travel_alerts.append(alert)
+    return travel_alerts
