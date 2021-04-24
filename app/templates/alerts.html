@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}>
+<style>
+    .content {
+        padding: 100px;
+        font-family: 'Rubik', Arial, sans-serif, inherit;
+    }
+
+    .alert {
+        border-radius: 10px;
+        border-style: solid;
+        border-color: gray;
+        box-shadow: 10px 5px 5px #cfcfcf;
+        margin-top: 20px;
+    }
+
+    .alert-opt {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .alert-opt a {
+        margin-right: 10px;
+    }
+
+    .alert-descr {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .alert-element {
+        margin: 10px;
+        text-align: center;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked+.slider {
+        background-color: #2196F3;
+    }
+
+    input:focus+.slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+</style>
+<div class="content">
+    <section id="my-alerts">
+        <h1>Mis Alertas</h1>
+        {% for alert in alerts %}
+        <div class="alert">
+            <div class="alert-opt">
+                <a href="/account/alert/{{alert.id}}/delete"><i class="fa fa-edit" style="font-size:24px"></i></a>
+                <a href="/account/alert/{{alert.id}}/edit"><i class="fa fa-times" style="font-size:24px"></i></a>
+            </div>
+            <div class="alert-descr">
+                <div class="alert-element">
+                    <h5>Origen</h5>
+                    <p>{{alert.origin.location}}</p>
+                </div>
+                <div class="alert-element">
+                    <h5>Destino</h5>
+                    <p>{{alert.dest.location}}</p>
+                </div>
+                <div class="alert-element">
+                    <h5>Fecha</h5>
+                    <p>{{alert.travel_date}}</p>
+                </div>
+                <div class="alert-element">
+                    <h5>Hora</h5>
+                    <p>{{alert.travel_time}}</p>
+                </div>
+                <div class="alert-element">
+                    ​<label class="switch">
+                        <input type="checkbox" class="alert-status" id="{{alert.id}}" {%if alert.status=="Activo" %}
+                            checked {%endif%}>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</div>
+<script>
+    const btnStatus = document.getElementsByClassName("alert-status")
+    const btnStatusArr = [...btnStatus]
+    btnStatusArr.map(btn => {
+        btn.addEventListener("click", e => {
+            conlose.log("activar o desactivar")
+
+        })
+    });
+</script>
+
+
+{% endblock %}

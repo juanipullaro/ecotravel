@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar.html" %}>
+<link rel="stylesheet" href="./static/css/usertravelcreate.css">
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <section id="main-slider">
   <div class="owl-carousel">
     <img class="item" src="static/slider/bn8.png" alt="">
@@ -29,9 +31,21 @@
       </div><!--/.item-->
  </div>    
  </div>
- <section id="travels">                    
+ <section id="travels"> 
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      <ul class=flashes>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+  {% endif %}
+{% endwith %}                 
 {% for travel in travels %}
-<div class="popup-map">
+<div class="popup-map" id="{{travel.id}}">
+  {%if error %}
+  <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}  
   <div class="driver"><img src="{{'/static/profile_pics/' + travel.driver.image_file}}"></img>
      <h3>{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} 
         <div class="stars"><br />{% for i in range (travel.driver.rating) %}★{%endfor%} </div> </h3>
@@ -57,9 +71,10 @@
 <div class="glob">
     <div class="cantDisp">{{ travel.seats }}</div> <div  class="dis"><br />Asientos disponibles </div>
 </div> </div>
-  <button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button></div> 
+<a class="btn-join-travel" href="{{ url_for('join_travel', id_viaje=travel.id ) }}">Unirme al viaje</a></div>
 </div>
 {% endfor %}
 </section> 
+
 {% endblock body %}
 

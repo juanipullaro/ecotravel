@@ -7,29 +7,51 @@ Buscar Viajes
     <aside class="search-travel-aside">
         <section id=tab-container class="tabs">
             <div id="tablist" role="tablist">
-                <button type="button" class="tablink" disabled="true">Buscar Viajes</button>
-                <button type="button" class="tablink"> <a href="{{url_for('create_travel')}}">Crear Viajes</a></button>
+                <button type="button" class="tablink" ><a href="{{url_for('search_travels')}}">Buscar Viajes</a></button>
+                <button type="button" class="tablink" disabled="true"> Crear Viajes</button>
             </div>
-            
         </section>
            
         <section id="search-travel-panel">
-           
-            {%if error %}
-            <p class=error><strong>Error:</strong> {{ error }}
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
                 {% endif %}
+            {% endwith %}
+            {%if error %}
+                <p class=error><strong>Error:</strong> {{ error }}
+            {% endif %}
+
             <form method="POST" class="search-travel-form">
                 {{ form.csrf_token }}
                 {{ form.origin.label }} {{ form.origin() }}
                 {{ form.destination.label }} {{ form.destination() }}
                 {{ form.travel_date.label }} {{ form.travel_date(type="date") }}
                 {{ form.travel_time.label }} {{ form.travel_time(type="time") }}
+                {{ form.seats.label }} {{ form.seats }}
                 {{ form.submit(class="btn") }}
             </form>
         </section>
     </aside>
     <div id="map"></div>
 </div>
+<section class="hero">
+  <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>EcoTravel</strong> by Damian Lacomba / Juan Ignacio Pullaro
+          <span class="icon is-small">
+            <i class="fa fa-copyright"></i>
+          </span>2020</span>
+        </p>
+      </div>
+  </footer>
+</section>
+
 <script type="text/javascript">
 
 </script>
@@ -50,46 +72,25 @@ Buscar Viajes
     // Now add the layer onto the map
     map.addLayer(layer);
 
-    const jointravel = (id)=>{
-        fetch('/unirme/'+id)
-        .then(()=>{
-            console.log("se ha unido satisfactoriamente")
-        })
-    };
     //travels
     {%if travels:%}
         const {travels} = {{ travels| safe}}
+
         console.log(travels)
-        var myIcon = L.icon({
-                     iconUrl: "static/slider/coche.png" ,
-                     iconSize: [20, 60],
-                     iconAnchor: [22, 94],
-                     popupAnchor: [-3, -76],
-                     shadowSize: [68, 95],
-                     shadowAnchor: [22, 94]});
         travels.map(travel => {
-            const origin = L.marker([travel.origen.lat, travel.origen.lon],{icon: myIcon}).addTo(map);
-            origin.on('mouseover',function(ev) {ev.target.openPopup();});
+            const origin = L.marker([travel.origen.lat, travel.origen.lon]).addTo(map);
+            const dest = L.marker([travel.destino.lat, travel.destino.lon]).addTo(map);
             const popup = '<div class="popup-map">'+
-                '<div class="driver"><img src="'+travel.foto_conductor+'"></img><h3>'+travel.conductor+'</h3></div>' +
-                '<p class="stars">'+"★".repeat(travel.rating)+"☆".repeat(5-travel.rating)+'</p>' +
+                '<div class="driver"><img href="'+travel.foto_conductor+'"></img><h3>'+travel.conductor+'</h3></div>' +
+                '<p className="stars">'+"★".repeat(travel.rating)+"☆".repeat(5-travel.rating)+'</p>' +
                 '<b>Origen:</b>'+ travel.origen.nombre +
                 '<br /><b>Destino:</b>'+ travel.destino.nombre +
                 '<br /><b>Fecha:</b>'+travel.fecha+
                 '<br /><b>Hora:</b>'+travel.hora+
-                '<br /><b>Asientos disponibles:</b>'+travel.asientos_disp+
-                `<button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button></div>`
+                ' <button className="btn-grad btn-travel">Viajar</button></div>'
             origin.bindPopup(popup).openPopup();
         })
-
-        
     {% endif %}
-
-    
-
-
-
-
 
 
 </script>
