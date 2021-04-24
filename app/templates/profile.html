@@ -58,7 +58,7 @@
                        </div>
                       </div>
                   </div>
-              </div>
+                  </div>
           </li>
       </ol>
       {% endfor %}
@@ -66,12 +66,6 @@
  
 
 </section>
-
-
-
-
-    
-
 
 <script >
     const jointravel = (id) => {
@@ -96,15 +90,5 @@
 </script>
 
 
-<script >
-    const jointravel = (id) => {
-        fetch('/unirme/' + id)
-            .then(() => {
-                console.log("se ha unido satisfactoriamente")
-            })
-    };
-</script>
-
 
 {% endblock body %}
-

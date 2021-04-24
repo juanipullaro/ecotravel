@@ -6,9 +6,10 @@ import json
 from datetime import datetime
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, jsonify
-from . import app, db, bcrypt,socketio
-from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm,ScoreForm,ScoreForm
+from . import app, db, bcrypt, socketio
+from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm, ScoreForm, ScoreForm
 from .models import User, Travel_request, Location, Travel, Alert, Scores
+from .data import ALERT_STATUS
 from flask_login import login_user, current_user, logout_user, login_required
 import time
 from sqlalchemy import desc
@@ -402,7 +403,10 @@ def create_travel():
             print(new_travel)
             db.session.add(new_travel)
             db.session.commit()
+            TravelAlerts.alerts(new_travel)
             travels = [new_travel.to_json()]
+            travel_alerts = [
+                travel_alert.alert.id for travel_alert in new_travel.travels_alerts]
             flash('Se ha registrado un nuevo viaje')
             socketio.emit('message', {"id": 1, "mensaje": "Se ha creado un nuevo viaje"}, broadcast=True)
             return redirect(url_for('create_travel'))
@@ -420,8 +424,6 @@ def create_travel():
         finally:
             travels_json = {"travels": travels}
 
-    else:
-        print("fail")
     return render_template('create_travel.html', form=form, travels=travels_json, error=error)
 
 ################################### UNIRSE AL VIAJE #######################################################
@@ -458,9 +460,24 @@ def create_alert():
     return "Se ha generado una nueva alerta", 200
 
 
-@app.route('/account/alert/myalerts', methods=['GET', 'POST'])
+@app.route('/account/alert/<int:id>/update', methods=['GET', 'POST'])
 @login_required
-def my_alerts():
-    alerts = Alert.query.filter_by(
-        passenger_id=current_user.dni, status="Activo")
-    return render_template("alerts.html", alerts=alerts)
+def update_alert(id):
+    status = int(request.args.get("status"))
+    alert = Alert.query.filter_by(id=id).first()
+    alert.status = ALERT_STATUS[status]
+    print(alert.status)
+    db.session.commit()
+    return f"Alerta {alert.id} updated", 200
+
+
+@app.route('/account/alert/travels', methods=['GET', 'POST'])
+@login_required
+def get_travel_alerts():
+    alerts = Alert.query.filter_by(passenger_id=current_user.dni)
+    travel_alerts = []
+    for alert in alerts:
+        if alert.travels_alerts is not None:
+            print(alert.travels_alerts)
+            travel_alerts.append(alert)
+    return travel_alerts
