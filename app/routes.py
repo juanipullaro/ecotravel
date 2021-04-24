@@ -11,7 +11,6 @@ from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchF
 from .models import User, Travel_request, Location, Travel, Alert, Scores
 from .data import ALERT_STATUS
 from flask_login import login_user, current_user, logout_user, login_required
-from selenium import webdriver
 import time
 from sqlalchemy import desc
 
