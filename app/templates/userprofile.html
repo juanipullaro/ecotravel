@@ -1,109 +1,180 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar.html" %}>
-<link rel="stylesheet" href="./static/css/account.css">
+
+<link rel="stylesheet" href="./static/css/pruebaprofile.css">
+<link rel="stylesheet" href="./static/css/usertravelcreate.css">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-
-<div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'Perfil')" id="defaultOpen">Perfil</button>
-    <button class="tablinks" onclick="openCity(event, 'Calificaciones')">Calificaciones</button>
-    <button class="tablinks" onclick="openCity(event, 'Alertas')">Mis alertas</button>
-  </div>
-  
-  <div id="Perfil" class="tabcontent">
-      <article class="media content-section1">
-          <img class="rounded-circle article-img1" src="{{ image_file }}">
-          <div class="media-body1">
-              <div class="article-metadata1">
-                  <a class="mr1-2" href="#">{{ current_user.name|capitalize}} {{ current_user.surname|capitalize}} </a>
-                  <button type="button" class="btn-editprofile" onclick="openCity(event, 'Editar')">Editar perfil</button>
-              </div>
-              <div class="data">
-                  <i class="fa fa-quote-left" aria-hidden="true"></i><div class="comentaccount">{{current_user.content}}</div>
-                  <i class="fa fa-user" aria-hidden="true"></i><div class="usernameaccount">{{ current_user.username }} </div>
-                  <i class="fa fa-envelope" aria-hidden="true"></i> <div class="emailaccount">{{ current_user.email }} </div>
-                  <i class="fa fa-mobile bigger" aria-hidden="true"></i> <div class="phoneaccount">{{current_user.phone}}</div>           
-              </div>
-          </div>
-      </article>
-  </div>
-       
-
-  <div id="Editar" class="tabcontent">
-    <div id="signin-box-account" class="signin-box-account">
-      <div class="signin-area-account">
-        <form method="POST" action="" enctype="multipart/form-data">
-          {{ form.hidden_tag() }}
-          <fieldset class="form-group">
-              <legend class="border-bottom mb-4">Actualizá tus datos</legend>
-              <div class="form-group">
-                  {{ form.username.label(class="form-control-label") }}
-                  {% if form.username.errors %}
-                      {{ form.username(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.username.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
+<div class="container">
+    <div class="main-body">
+          <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex flex-column align-items-center text-center">
+                    <img src="{{ image_file }}" alt="Admin" class="rounded-circle" width="150">
+                    <div class="cantscores ">         
+                      <a class="cantscoresgood" href="#scores" ><i class="fas fa-thumbs-up" style="margin-left: 4%;"></i>{{scores1|length}}</a>
+                      <a class="cantscoresbad" href="#scores"  ><i class="fas fa-thumbs-down" style="margin-left: 4%;"></i>{{scores2|length}}</a>
+                     </div>   
+                    <div class="mt-3">
+                      <h4>{{current_user.name|capitalize}} {{current_user.surname|capitalize}}</h4>
+                      <p class="text-secondary mb-1"></p>
+                      <div class="card mt-3">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: -6px;" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
+                            <a href="https://www.instagram.com/{{current_user.name}}/"><span class="text-secondary">damianlacomba20</span></a>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap" style="margin-bottom: -15px;">
+                            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: -6px;" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
+                            <a href="https://www.facebook.com/{{current_user.name}}{{current_user.surname}}/"><span class="text-secondary">damianlacomba</span></a> 
+                          </li>
+                        </ul>
                       </div>
-                  {% else %}
-                      {{ form.username(class="form-control form-control-lg") }}
-                  {% endif %}
+                      <button class="btn btn-primary">Alertas</button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-group">
-                  {{ form.email.label(class="form-control-label") }}
-                  {% if form.email.errors %}
-                      {{ form.email(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.email.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.email(class="form-control form-control-lg") }}
-                  {% endif %}
+            </div>
+            
+            <div class="col-md-8">
+              <div class="card mb-3">
+                <div class="card-body1">
+                  <a href="{{ url_for('update_profile',dni=current_user.dni) }}">
+                    <svg class="octicon octicon-pencil-profile" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M11.013 1.427a1.75 1.75 0 012.474 0l1.086 1.086a1.75 1.75 0 010 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 01-.927-.928l.929-3.25a1.75 1.75 0 01.445-.758l8.61-8.61zm1.414 1.06a.25.25 0 00-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 000-.354l-1.086-1.086zM11.189 6.25L9.75 4.81l-6.286 6.287a.25.25 0 00-.064.108l-.558 1.953 1.953-.558a.249.249 0 00.108-.064l6.286-6.286z"></path>
+                    </svg>
+                  </a>
+                  <h2 class="text-score1">Información</h2>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Usuario</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      {{current_user.username}}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Email</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      {{current_user.email}}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Celular</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      {{current_user.phone}}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Comentario</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      {{current_user.content}}
+                    </div>
+                  </div>
+                  <hr>
+                </div>
               </div>
-              <div class="form-group">
-                  {{ form.picture.label() }}
-                  {{ form.picture(class="form-control-file") }}
-                  {% if form.picture.errors %}
-                      {% for error in form.picture.errors %}
-                          <span class="text-danger">{{ error }}</span></br>
-                      {% endfor %}
-                  {% endif %}
-              </div>
-          </fieldset>
-          <div class="form-group">
-              {{ form.submit(class="btn btn-outline-info") }}
-          </div>
-      </form>
-   </div>
-    </div>
-  </div>
-  <script>
-    function openCity(evt, cityName) {
-      var i, tabcontent, tablinks;
-      tabcontent = document.getElementsByClassName("tabcontent");
-      for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-      }
-      tablinks = document.getElementsByClassName("tablinks");
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-      }
-      document.getElementById(cityName).style.display = "block";
-      evt.currentTarget.className += " active";
+              
+            </div>
+            <div class="card-body3">
+              <scroll-container>
+                <section id="scores">
+                  <h2 class="text-score">Calificaciones</h2>
+                  {% if scores|length == 0 %}
+                    <p class="text-scorenull">Aún no recibiste calificaciones</p>
+                  {%else%}  
+                    {%for score in scores %}
+                    {%for user in users%}
+                        {%if score.passenger_id==user.dni %}
+                            <ol jsname="bN97Pc" class="JwPp0e">
+                                <li class="gHz6xd Aopndd rZXyy">
+                                    <div class="Tc9hUd DShyMc-MzA5MDg5NDcxMDM4">
+                                        <div class="O7utsb bFjUmb-Tvm9db"></div>
+                                            <div class="OjOEXb Gf8MK" {% if score.point == 1 %} style="background-color:#486a6a;box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+                                            <div class="OjOEXb Gf8MK" {% if score.point == 0 %} style="background-color:rgba(206, 60, 60, 0.96);box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+                                            <div class="R4EiSb">
+                                                <h2 class="prWPdf">
+                                                    <a class="onkcGd kj3hr YVvGBb" target="_self" href="#" >
+                                                    <div class="YVvGBb csjh4b">{{user.name|capitalize}} {{user.surname|capitalize}}
+                                                      <div class="kj3hr YVvGBb jJIbcc">
+                                                        <script>
+                                                          var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                                                          var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
+                                                          var f=new Date('{{score.date_posted.strftime("%Y-%m-%d") }}'  );
+                                                          document.write((f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                                                       </script>
+                                                       </div>
+                                                        {%if score.point == 1%}
+                                                        <i class="fas fa-thumbs-up" style="margin-left: 9%;"></i>
+                                                        {%else%}
+                                                        <i class="fas fa-thumbs-down" style="margin-left: 9%;margin-top: 2%;"></i>
+                                                        {%endif%}
+                                                    </div></a>
+                                                </h2>
+                                            </div>
+                                    </div>
+                                    <div class="TQYOZc">
+                                        <img class="rounded-circle article-imgcal" src="{{'/static/profile_pics/' + user.image_file}}">
+                                        <div class="lziZub sdDCme" style="text-align: left;">
+                                            <span class="Y5vSD">{{score.comment}}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ol>
+                        {%endif%}
+                    {%endfor%}
+                {%endfor%}
+               {%endif%} 
+              </section>
+              </scroll-container>
+            </div>
+         
+          
+          
+          
+
+        </div>
+    </div> 
+</div>  
+<script>
+  function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
     }
-    
-    // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click();
-    const btnStatus =document.getElementById("status");
-    const btnHidden =document.getElementsByClassName("btn-downtravel")[0];
-    window.addEventListener("load",()=>{
-      console.log(btnStatus.textContent);
-      if(btnStatus.textContent=='Se canceló tu solicitud' || btnStatus.textContent=='Rechazada' ){
-        btnHidden.setAttribute("hidden",true)
-      };
-    })
-   
-    </script>
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+  
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+  const btnStatus =document.getElementById("status");
+  const btnHidden =document.getElementsByClassName("btn-downtravel")[0];
+  window.addEventListener("load",()=>{
+    console.log(btnStatus.textContent);
+    if(btnStatus.textContent=='Se canceló tu solicitud' || btnStatus.textContent=='Rechazada' ){
+      btnHidden.setAttribute("hidden",true)
+    };
+  })
+  </script>
+
+
+
 {% endblock body %}-->

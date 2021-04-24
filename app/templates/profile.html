@@ -2,6 +2,7 @@
 {% block body %}
 {% include "navbar.html" %}>
 <link rel="stylesheet" href="./static/css/usertravelcreate.css">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/profile.css') }}">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <section id="main-slider">
   <div class="owl-carousel">
@@ -31,50 +32,60 @@
       </div><!--/.item-->
  </div>    
  </div>
- <section id="travels"> 
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-      <ul class=flashes>
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-      </ul>
-  {% endif %}
-{% endwith %}                 
-{% for travel in travels %}
-<div class="popup-map" id="{{travel.id}}">
-  {%if error %}
-  <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}  
-  <div class="driver"><img src="{{'/static/profile_pics/' + travel.driver.image_file}}"></img>
-     <h3>{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} 
-        <div class="stars"><br />{% for i in range (travel.driver.rating) %}★{%endfor%} </div> </h3>
-  </div>
-  <div class="data"> <div class="ori">
-       <i class="fa fa-map-marker" aria-hidden="true"></i> {{travel.origin.location}} 
-    </div>
-    <div class="des"><br />
-      <i class="fa fa-map-marker des" aria-hidden="true"></i>  {{travel.dest.location}} </div>
-    <div class="fec"> 
-      <i class="fa fa-calendar" aria-hidden="true"></i>
-          <script>
-              var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-              var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
-              var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
-              document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-          </script> 
-    </div>
-    <div class="hor"> {{ travel.travel_hour }}
-      <i class="fa fa-clock-o" aria-hidden="true"></i>
-    </div>
-  
-<div class="glob">
-    <div class="cantDisp">{{ travel.seats }}</div> <div  class="dis"><br />Asientos disponibles </div>
-</div> </div>
-<a class="btn-join-travel" href="{{ url_for('join_travel', id_viaje=travel.id ) }}">Unirme al viaje</a></div>
-</div>
+<section id="travels"> 
+    {% for travel in travels %}
+    <ol jsname="bN97Pc" class="JwPp0e">
+      <li class="gHz6xd Aopndd rZXyy">
+          <div class="Tc9hUd DShyMc-MzA5MDg5NDcxMDM4">
+              <div class="O7utsb bFjUmb-Tvm9db"></div>
+              <div class="OjOEXb Gf8MK" {% if travel.seats == 4 or travel.seats == 3 %} style="background-color:#486a6a;box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+              <div class="OjOEXb Gf8MK" {% if travel.seats == 2 %} style="background-color:rgba(234, 141, 42, 0.96);box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+              <div class="OjOEXb Gf8MK" {% if travel.seats == 1 %} style="background-color:rgba(221, 41, 41, 0.96);box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+                  <div class="R4EiSb">
+                      <h2 class="prWPdf">
+                          <a class="onkcGd kj3hr YVvGBb" target="_self" href="#" >
+                          <div class="YVvGBb csjh4b">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} 
+                          </div></a>
+                      </h2>
+                  </div>
+          </div>
+          <div class="TQYOZc">
+              <img class="rounded-circle article-imgcal" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
+              <div class="lziZub sdDCme" style="text-align: left;">
+                    <div id={{travel.id}}>
+                      <form class="traveldata">
+                        <div  class="oriaccount"><p>Origen:</p> {{travel.origin.location | capitalize}}</div>
+                        <div  class="desaccount"><p>Destino:</p> {{travel.dest.location}}</div>
+                        <div  class="fecaccount"><p>Fecha:</p> <script>
+                                      var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                                      var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
+                                      var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                                      document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                                  </script></div>
+                        <div  class="horaccount"><p>Hora:</p>{{ travel.travel_hour}}</div>
+                        <div  class="seatsccount"><p>Asientos disponibles</p><div class="seatssize">{{travel.seats}}</div></div> 
+                        <button class="btn-uptravel" onclick="jointravel('{{travel.id}}')">Unirme al viaje</button>
+                      </form>
+                    
+                     <!--<a class="btn-uptravel" href="{{ url_for('join_travel', id_viaje=travel.id ) }}">Unirme al viaje</a>-->
+                   </div>
+                  </div>
+              </div>
+          </div>
+      </li>
+  </ol>
 {% endfor %}
 </section> 
+
+<script >
+    const jointravel = (id) => {
+        fetch('/unirme/' + id)
+            .then(() => {
+                console.log("se ha unido satisfactoriamente")
+            })
+    };
+</script>
+
 
 {% endblock body %}
 
