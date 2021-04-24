@@ -1,9 +1,6 @@
-{% extends "base.html" %}
-{% block body %}
-{% include "navbar.html" %}>
 <style>
     .content {
-        padding: 100px;
+        padding: 5%;
         font-family: 'Rubik', Arial, sans-serif, inherit;
     }
 
@@ -94,15 +91,82 @@
     .slider.round:before {
         border-radius: 50%;
     }
+
+    /*Botón*/
+    .drop-button {
+        background-color: #8DEBF7;
+        color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /*Botón hover y focus*/
+    .drop-button:hover,
+    drop-buttton:hover {
+        background-color: #2EABAB;
+    }
+
+    /*Posición del contenedor*/
+    .travel-notifications {
+        position: relative;
+        display: inline-block;
+    }
+
+    /*submenu*/
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        min-width: 100px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        right: 60px;
+        background-color: azure;
+    }
+
+    .dropdown-content a {
+        color: #207878;
+        padding: 12px 16px;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1
+    }
+
+    .show {
+        display: block;
+    }
+
+    .alerts-header {
+        display: flex;
+        justify-content: space-between;
+    }
 </style>
 <div class="content">
     <section id="my-alerts">
-        <h1>Mis Alertas</h1>
+        <div class="alerts-header">
+            <h1>Mis Alertas</h1>
+            <div class="alert-notifications">
+                <button onclick="notificationsDropdown()" class="drop-button">Notificaciones</button>
+                <div id="travelsDropdown" class="dropdown-content">
+                    {%for alert in alerts%}
+                    {% for travel_alert in alert.travels_alerts%}
+                    <a>Nuevo viaje a {{travel_alert.travel.dest.location}}</a>
+                    {% endfor %}
+                    {%endfor %}
+                </div>
+            </div>
+        </div>
+        <div id="newTravelsNot" class="new-travels">
+        </div>
         {% for alert in alerts %}
         <div class="alert">
-            <div class="alert-opt">
+            <div class="alert-opt" id="alert-{{alert.id}}">
                 <a href="/account/alert/{{alert.id}}/delete"><i class="fa fa-edit" style="font-size:24px"></i></a>
-                <a href="/account/alert/{{alert.id}}/edit"><i class="fa fa-times" style="font-size:24px"></i></a>
+                <button id={{alert.id}} onclick="removeAlert"><i class="fa fa-times" style="font-size:24px"></i></a>
             </div>
             <div class="alert-descr">
                 <div class="alert-element">
@@ -123,7 +187,7 @@
                 </div>
                 <div class="alert-element">
                     ​<label class="switch">
-                        <input type="checkbox" class="alert-status" id="{{alert.id}}" {%if alert.status=="Activo" %}
+                        <input type="checkbox" class="alert-status" id="{{alert.id}}" {%if alert.status=="ACTIVA" %}
                             checked {%endif%}>
                         <span class="slider round"></span>
                     </label>
@@ -134,15 +198,67 @@
     </section>
 </div>
 <script>
-    const btnStatus = document.getElementsByClassName("alert-status")
-    const btnStatusArr = [...btnStatus]
+    const btnAlertStatus = document.getElementsByClassName("alert-status")
+    const btnStatusArr = [...btnAlertStatus]
     btnStatusArr.map(btn => {
         btn.addEventListener("click", e => {
-            conlose.log("activar o desactivar")
-
+            let status = "0";
+            if (btn.hasAttribute("checked")) {
+                btn.removeAttribute("checked");
+                status = "1";
+            }
+            else {
+                btn.setAttribute("checked", "checked");
+            }
+            fetch(`account/alert/${btn.id}/update?status=${status}`);
         })
     });
+    const removeAlert = e => {
+        fetch(`account/alert/${e.id}/update?status=2`);
+    }
+
+    /*Cuando se hace click en el botón, muestra el submenu*/
+    function notificationsDropdown() {
+        //Añade una clase al elemento que tenga el id myDropdown
+        document.getElementById("travelsDropdown").classList.toggle("show");
+    }
+
+    //Cierra el submenu si se clica fuera
+    window.onclick = function (event) {
+        if (!event.target.matches('.drop-button')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                //Busca dentro de drop-content los elementos con la clase show
+                if (openDropdown.classList.contains('show')) {
+                    //elimina la clase show de los elementos dentro de drop-content
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+    /*const checkNewTravels = () => {
+
+        fetch("/account/alert/travels")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            }
+            );
+
+        setTimeout(checkNewTravels, 5000);
+    }
+
+    checkNewTravels();*/
 </script>
-
-
-{% endblock %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    socket.on('message', data => {
+        console.log(data)
+        newTravels.appendChild(`<h1>Nuevo viaje ${data}</h1>`)
+    });
+</script>
