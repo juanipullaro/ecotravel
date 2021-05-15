@@ -46,6 +46,12 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return (self.dni)
 
+    def get_alerts(self):
+        try:
+            active_alerts = [alert for alert in self.alerts if alert.status!="ELIMINADA"]
+            return active_alerts
+        except Exception as e:
+            return []
 
 ################################### USUARIO #######################################################
 
@@ -109,13 +115,16 @@ class Travel(db.Model):
     travel_driver_id = Column(Integer, ForeignKey('users.dni'))
     origin_id = Column(Integer, ForeignKey('locations.id'))
     dest_id = Column(Integer, ForeignKey('locations.id'))
-    origin = relationship("Location", backref="travel_origins", foreign_keys=[origin_id])
-    dest = relationship("Location", backref="travel_destinations", foreign_keys=[dest_id])
-    #driver = relationship("TravelDriver",backref="travels",foreign_keys=[travel_driver_id])
+    origin = relationship(
+        "Location", backref="travel_origins", foreign_keys=[origin_id])
+    dest = relationship(
+        "Location", backref="travel_destinations", foreign_keys=[dest_id])
+    # driver = relationship("TravelDriver",backref="travels",foreign_keys=[travel_driver_id])
     seats = Column(Integer)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
     status = db.Column(db.String(60), default="disponible")
-    seatsdec= Column(Integer)
+    seatsdec = Column(Integer)
     # pasajeros
 
     def to_json(self):
@@ -127,7 +136,8 @@ class Travel(db.Model):
                   "hora": str(self.travel_hour),
                   "conductor": self.driver.name+' '+self.driver.surname,
                   "foto_conductor": '/static/profile_pics/'+self.driver.image_file,
-                  "rating": self.driver.rating,
+                  "score_bueno": 0,
+                  "score_malo": 0,
                   "asientos_disp": self.seats}
         return travel
 
@@ -158,6 +168,9 @@ class Travel(db.Model):
         if not self.are_near(alert.origin, alert.dest):
             return False
         return True
+
+    def get_destino(self):
+        return self.dest.location.split(",")[0]
 
 
 ################################### LOCALIZACION #######################################################
@@ -244,9 +257,16 @@ class TravelAlerts(db.Model):
         for alert in alerts:
             if travel.match_alert(alert):
                 travel_alert = TravelAlerts(travel, alert)
+                user = alert.passenger
+                notification = NewTravelNotification(travel, user)
+                print(notification)
                 db.session.add(travel_alert)
-        db.session.commit()
-
+                db.session.add(notification)
+        try:
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            
 
 class Alert(db.Model):
     __tablename__ = "alerts"
@@ -278,19 +298,40 @@ class Alert(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
-
 ################################### CALIFICACIONES #######################################################
+
 
 class Scores(db.Model):
     __tablename__ = "scores"
     travel_id = Column(Integer, ForeignKey('travels.id'), primary_key=True)
     passenger_id = Column(Integer, ForeignKey('users.dni'), primary_key=True)
     travel_driver_id = Column(Integer, ForeignKey('users.dni'))
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date_posted = db.Column(db.DateTime, nullable=False,
+                            default=datetime.utcnow)
     comment = Column(Text())
-    point=Column(Integer)
+    point = Column(Integer)
 
     def __repr__(self):
         return f"Scores('{self.comment}', '{self.date_posted}')"
 
-    
+
+class NewTravelNotification(db.Model):
+    __tablename__ = "travel_notifications"
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    message = Column(String(120),  nullable=False)
+    passenger_id = Column(Integer, ForeignKey('users.dni'))
+    passenger = relationship(
+        "User", backref="notifications", foreign_keys=[passenger_id])
+    created_at = Column(
+        DateTime, default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    viewed_at = Column(DateTime)
+    deleted_at = Column(DateTime)
+    travel_id = Column(Integer, ForeignKey(
+        'travels.id'), primary_key=True)
+    travel = relationship("Travel", foreign_keys=[
+        travel_id])
+
+    def __init__(self, travel, user):
+        self.message = f"Nuevo viaje creado con destino a {travel.get_destino()}"
+        self.passenger_id = user.dni
+        self.travel_id = travel.id

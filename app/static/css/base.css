@@ -115,9 +115,12 @@ footer{
     margin: 20px;
 }
 
-
-
-
+#map { 
+    height: 700px;
+    width: 600px;
+    border-radius: 20px;
+    box-shadow: 10px 6px 4px #ccc, 0em 0 0.4em;
+}
 
 .popup-map{
     display: flex;
@@ -147,8 +150,7 @@ footer{
 }
 
 .stars{
-    font-size: x-large;
-    color: yellow;
+    font-size: medium;
 }
 
 #tablist{
