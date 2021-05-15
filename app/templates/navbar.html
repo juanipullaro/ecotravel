@@ -3,7 +3,7 @@
 <header class="site-header">
   <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
     <div class="container">
-      <a class="navbar-brand mr-4" href="/">Ecotravel</a>
+      <a class="navbar-brand mr-4" href="{{ url_for('profile') }}">Ecotravel</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"       aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -27,9 +27,9 @@
                 Mis Viajes <span class="caret"></span>
               </button>
               <div class="misviajes">
-                <ul class="dropdown-menu" role="menu"  style="margin-top: -5%;margin-left: 6%;background-color: #f5f5f5;border-radius: 11px;width: 146%;height: 165px;padding: 8px 5%;">
+                <ul class="dropdown-menu" role="menu"  style="margin-top: -5%;margin-left: 6%;background-color: #f5f5f5;border-radius: 11px;width: 156%;height: 165px;padding: 8px 5%;">
                   <li><a href="{{ url_for('usertravelcreate') }}" style="font-size: 14px;color: #204051;">Mis viajes creados</a></li>
-                  <li><a href="{{ url_for('userrequesttravel') }}"style="font-size: 14px;color: #204051;">Solicitudes a viajes</a></li>
+                  <li><a href="{{ url_for('userrequesttravel') }}"style="font-size: 14px;color: #204051;">Solicitudes en curso</a></li>
                   <li><a  href="{{ url_for('usertravelfin') }}"style="font-size: 14px;color: #204051;">Viajes a los que me subi</a></li>
                 </ul>
               </div>

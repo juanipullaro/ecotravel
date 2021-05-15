@@ -94,4 +94,4 @@ class CreateTravelForm(FlaskForm):
 class ScoreForm(FlaskForm):
     point=RadioField('Calificacion',choices=[(1,'good'),(0,'bad')])
     comment= TextAreaField('Comentario')
-    submit2 = SubmitField('Calificar')  
+    submit2 = SubmitField('Enviar Calificaión')  

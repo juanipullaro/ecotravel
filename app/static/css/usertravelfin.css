@@ -21,10 +21,9 @@
   padding-left: 1.5rem;
   padding-top:  6.5rem;;
 }
-
-.Y5vSD{
-  color:#486a6a;
-  
+.Y5vSD {
+    color: #204051;
+    font-size: 13px;
 }
 
 .gHz6xd {
@@ -80,11 +79,11 @@ margin-left: -42%;
 
 }
 .YVvGBb.csjh4b {
-overflow: visible;
-white-space: nowrap;
-margin-top: 8%;
-margin-bottom: 0px;
-margin-left: 23%;
+  overflow: visible;
+  white-space: nowrap;
+  margin-top: 8%;
+  margin-bottom: 0px;
+  margin-left: 22%;
 }
 .onkcGd, .onkcGd:visited {
 
@@ -129,7 +128,7 @@ position: relative;
 margin-top: -29%;
 width: 3.688rem;
 margin-bottom: 12%;
-margin-left: -1%;
+margin-left: -3%;
 }
 .SZ0kZe {
   border-top: .0625rem solid #e0e0e0;
@@ -243,7 +242,7 @@ form.traveldata{
   border-top: 1px solid #204051;
   margin-top: 11%;
 }
-.btn-downtravel {
+.btn-uptravel {
 padding: 6px;
 transition: 0.3s;
 font-size: 14px;
@@ -252,7 +251,7 @@ background-color: #486a6a;
 color: #fff;
 display: inherit;
 text-align: center;
-margin-top: 0%;
+margin-top: 13%;
 width: 100%;
 border-color: transparent;
 }
@@ -270,6 +269,7 @@ border-color: transparent;
   position: relative;
   overflow: hidden;
   margin-top: -13%;
+ 
 
 }
       
@@ -459,14 +459,27 @@ border-color: transparent;
       .profiletitle{
         margin-top: 10%;}
 
-      .text-travelnull {
-    margin-top: 15%;
-    color: #ff1e1eeb;
-    text-shadow: 0px 0px 1px #111;
+        .statustravelscore p {
+          text-align: center;
+          background: #7bc0874a;
+          border-radius: 12px;
+          color: #204051;
+          height: 32px;
+          padding: 5px;
+          text-shadow: 0px 0px 3px white;
+      }
+.btn-scoretravel {
+    padding: 6px;
+    transition: 0.3s;
+    font-size: 14px;
+    border-radius: 10px;
+    background-color: #486a6a;
+    color: #fff;
+    display: inherit;
     text-align: center;
-    margin-left: 38%;
-    margin-bottom: 100%;
-    font-size: 139%;
+    margin-top: 0%;
+    width: 100%;
+    border-color: transparent;
 }
 /*****************************************************BOTONES CIRCULOS*******************************************************************/
 
@@ -475,8 +488,8 @@ border-color: transparent;
   margin-bottom: -93%;
   margin-top: 6.8%;
   margin-left: 60%;
-  width: 19%;}
-
+  width: 19%;
+}
 
 .prueba .statustravel1 span:first-child {
   display: inline-block;
@@ -552,4 +565,84 @@ border-color: transparent;
  
 .prueba [data-animation="to-left"] .statustravel1:hover span:first-child {
   transform: translateX(-100%);
+}
+
+
+
+    .comment{
+      background-color: #fff;
+      width: 98%;
+      margin-bottom: 13px;}
+    .labelcomment{
+      display: flex;
+      color: #90c99a;
+      text-transform: uppercase;
+}
+    .point{
+      display: inline-flex;
+      width: 32%;
+      font-size: 16px;
+      color: #486a6a;
+      margin-bottom: 15px;
+}   
+    .score{
+      border-top: none;
+      color: #486a6a;
+    
+}
+    .scores_v1 {
+     display: flex;
+      width: 41%;
+      margin-bottom: 45px;
+      margin-left: 20%;
+}
+    .fas.fa-thumbs-down{
+      font-size: 20px;
+      margin-left: -23%;
+
+}
+    .fas.fa-thumbs-up{
+      font-size: 20px;
+      margin-left: -22%;
+      margin-top: -3%;
+
+}
+    .modal-footer {
+      display: block;
+      padding: 1rem;
+}
+    .modal-content {
+      position: relative;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      width: 80%;
+      pointer-events: auto;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid rgba(0,0,0,.2);
+      border-radius: 2.3rem;
+      outline: 0;
+      margin-left: 12%;
+}
+  .modal-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+    margin-left: 22%;
+    color: #486a6a;
+}
+
+    #point ul{
+    display: flex;
+}
+.text-travelnull {
+    margin-top: 15%;
+    color: #ff1e1eeb;
+    text-shadow: 0px 0px 1px #111;
+    text-align: center;
+    margin-left: 38%;
+    margin-bottom: 100%;
+    font-size: 139%;
 }
