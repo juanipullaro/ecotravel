@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TextAreaField, TimeField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TextAreaField, TimeField,RadioField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
-from .models import User
+from .models import User 
 
 
 class RegistrationForm(FlaskForm):
@@ -50,13 +50,13 @@ class LoginForm(FlaskForm):
 
 
 class UpdateAccountForm(FlaskForm):
-    username = StringField('Usuario',
-                           validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    picture = FileField('Actualice foto de perfil', validators=[
-                        FileAllowed(['jpg', 'png'])])
+    content = TextAreaField('Contanos sobre vos')
+    username = StringField('Usuario',validators=[Length(min=2, max=20)])
+    email = StringField('Email', validators=[Email()])
+    phone = StringField('Telefono')
+    picture = FileField('Cambiar foto de perfil', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Actualizar Perfil')
+
 
     def validate_username(self, username):
         if username.data != current_user.username:
@@ -90,3 +90,8 @@ class CreateTravelForm(FlaskForm):
     seats = IntegerField('Asientos', validators=[DataRequired()])
     submit = SubmitField('Crear Viaje')
     submit1 = SubmitField('Actualizar Viaje')
+
+class ScoreForm(FlaskForm):
+    point=RadioField('Calificacion',choices=[(1,'good'),(0,'bad')])
+    comment= TextAreaField('Comentario')
+    submit2 = SubmitField('Enviar Calificaión')  

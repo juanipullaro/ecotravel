@@ -27,7 +27,7 @@ class User(db.Model, UserMixin):
     image_file = Column(String(20), nullable=False,
                         default='default.jpg')
     travel_requests = relationship('Travel_request', backref='passenger')
-    travels = relationship('Travel', backref='driver')
+    travelsuser = relationship('Travel', backref='driver')
     rating = Column(Integer)
     content = db.Column(db.String(200))
     phone= db.Column(db.BigInteger)
@@ -53,14 +53,18 @@ class Travel_request(db.Model):
     __tablename__ = "travel_request"
     __table_args__ = {'extend_existing': True}
     dni_user = Column(Integer, ForeignKey(
-        'users.dni'), primary_key=True)
+        'users.dni'),primary_key=True)
     travel_id = Column(Integer, ForeignKey(
-        'travels.id'), primary_key=True)
+        'travels.id'),primary_key=True)
+    score_id=Column(Integer, ForeignKey(
+        'scores.id'))   
     state = db.Column(db.String(60), default="activa")
     date_posted = Column(DateTime, nullable=False,
                          default=datetime.utcnow)
     travel = relationship("Travel", foreign_keys=[
         travel_id], backref='travel_requests')
+    score = relationship('Scores', foreign_keys=[
+        score_id], backref='userscore')
 
     def __init__(self, travel, passenger):
         self.dni_user = passenger.dni
@@ -101,22 +105,20 @@ class Travel_request(db.Model):
 class Travel(db.Model):
     __tablename__ = "travels"
     __table_args__ = {'extend_existing': True}
-    __table_args__ = (UniqueConstraint(
-        'travel_date', 'travel_hour', 'travel_driver_id', name='travels'), )
+   
     id = Column(Integer, primary_key=True)
     travel_date = Column(Date)
     travel_hour = Column(Time)
     travel_driver_id = Column(Integer, ForeignKey('users.dni'))
     origin_id = Column(Integer, ForeignKey('locations.id'))
     dest_id = Column(Integer, ForeignKey('locations.id'))
-    origin = relationship(
-        "Location", backref="travel_origins", foreign_keys=[origin_id])
-    dest = relationship(
-        "Location", backref="travel_destinations", foreign_keys=[dest_id])
+    origin = relationship("Location", backref="travel_origins", foreign_keys=[origin_id])
+    dest = relationship("Location", backref="travel_destinations", foreign_keys=[dest_id])
     #driver = relationship("TravelDriver",backref="travels",foreign_keys=[travel_driver_id])
     seats = Column(Integer)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     status = db.Column(db.String(60), default="disponible")
+    seatsdec= Column(Integer)
     # pasajeros
 
     def to_json(self):
@@ -147,6 +149,9 @@ class Travel(db.Model):
 
     def getaccept_request(self):
         return[request for request in self.travel_requests if request.state == "aceptada"]
+
+    def getfin_request(self):
+        return[request for request in self.travel_requests if request.state == "finalizada"]    
 
 
 ################################### LOCALIZACION #######################################################
@@ -242,3 +247,23 @@ class Alert(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+################################### CALIFICACIONES #######################################################
+
+class Scores(db.Model):
+    __tablename__ = "scores"
+    id = Column(Integer, primary_key=True)
+    travel_id = Column(Integer, ForeignKey('travels.id'))
+    passenger_id = Column(Integer, ForeignKey('users.dni'))
+    travel_driver_id = Column(Integer, ForeignKey('users.dni'))
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    comment = Column(Text())
+    point=Column(Integer)
+    driver= relationship('User', foreign_keys=[ passenger_id],backref='scores_as_driver' )
+    passenger= relationship('User', foreign_keys=[travel_driver_id],backref='scores_as_passenger' )
+    
+
+    def __repr__(self):
+        return f"Scores('{self.comment}', '{self.date_posted}')"
+
+    

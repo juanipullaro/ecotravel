@@ -1,78 +1,100 @@
 {% extends "base.html" %}
 {% block body %}
-{% include "navbar.html" %}>
-<section id="main-slider">
-  <div class="owl-carousel">
-    <img class="item" src="static/slider/bn8.png" alt="">
-          <div class="slider-inner">
-              <div class="container">
-                  <div class="row">
-                      <div class="col-md-12">
-                        <div class="column is-auto">
-                          <p class="subtitle is-4"><i>¡Encontrá a tu próximo <br>compañero de viaje!</br></i></p>
-                          <p class="subtitle1"><i>¿Cuál es tu siguiente paso?</i></p>
-                          
-                         <div class="profiletitle">
+{% include "navbar.html" %}
+<link rel="stylesheet" href="./static/css/profile.css">
+<!--<link rel="stylesheet" href="{{ url_for('static', filename = 'css/profile.css') }}">-->
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+<section id="banner" class="bg-img" data-bg="banner.jpg" style="background-image: url('static/images/banner13.jpg');">
+    <div class="inner">
+        <header>
+            <h1>¡ Encontrá tu proximo <br>compañero de viaje !</br></h1>
+        </header>
+        
+                        <div class="but-slider">
+                            <a class="btnprofile btn-lg btn-filledprofile boton-usa-plataforma" href="{{ url_for('search_travels') }}">Buscar Viaje</a>
+                            <a class="btnprofile1 btn-lg btn-filledprofile boton-usa-plataforma" href="{{ url_for('create_travel') }}">Crear Viaje</a>
+                        </div>    
+
+    </div>
+    <a href="#banner1" class="more " style="margin-bottom: -4px;"></a>
+</section>
+<section id="banner1" class="bg-img" data-bg="banner.jpg" style="background-image: url('static/images/banner11.jpg');">
+    
+        {% for travel in travels %}
+        <ol class="JwPp0e" style="padding-top: 4.5rem;">
+          <li class="gHz6xd Aopndd rZXyy">
+              <div class="Tc9hUd DShyMc-MzA5MDg5NDcxMDM4">
+                  <div class="O7utsb bFjUmb-Tvm9db"></div>
+                  <div class="OjOEXb Gf8MK" {% if travel.seats == 4 or travel.seats == 3 %} style="background-color:#54804bc7;box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
+                  <div class="OjOEXb Gf8MK" {% if travel.seats == 2 %} style="background-color:rgb(187, 120, 33);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
+                  <div class="OjOEXb Gf8MK" {% if travel.seats == 1 %} style="background-color:rgb(157, 66, 66);box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+                      <div class="R4EiSb">
+                          <h2 class="prWPdf">
+                              <a class="onkcGd kj3hr YVvGBb" target="_self" href="{{ url_for('passenger_profile',dni=travel.driver.dni) }}" >
+                              <div class="YVvGBb csjh4b">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} 
+                              </div></a>
+                          </h2>
+                      </div>
+              </div>
+              <div class="TQYOZc">
+                  <img class="rounded-circle article-imgcal" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
+                  <div class="lziZub sdDCme" style="text-align: left;">
+                        <div id={{travel.id}}>
+                          <form class="traveldata">
+                            <div  class="oriaccount"><p>Origen:</p> {{travel.origin.location | capitalize}}</div>
+                            <div  class="desaccount"><p>Destino:</p> {{travel.dest.location}}</div>
+                            <div  class="fecaccount"><p>Fecha:</p> <script>
+                                          var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                                          var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
+                                          var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                                          document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                                      </script></div>
+                            <div  class="horaccount"><p>Hora:</p>{{ travel.travel_hour}}</div>
+                            <div  class="seatsccount"><p>Asientos disponibles</p><div class="seatssize">{{travel.seats}}</div></div> 
+                            <button class="btn-uptravel" onclick="jointravel('{{travel.id}}')">Unirme al viaje</button>
+                          </form>
                         
-                          <div class="but-slider">
-                          <a class="btnprofile btn-lg btn-filledprofile boton-usa-plataforma" href="{{ url_for('search_travels') }}">Buscar Viaje</a>
-                          <a class="btnprofile1 btn-lg btn-filledprofile boton-usa-plataforma" href="{{ url_for('create_travel') }}">Crear Viaje</a>
-                         </div>
-                        
+                         <!--<a class="btn-uptravel" href="{{ url_for('join_travel', id_viaje=travel.id ) }}">Unirme al viaje</a>-->
+                       </div>
                       </div>
                   </div>
-                  <p class="subtitle2"><i>Explará los viajes disponibles</i></p>
-                  <a href="#travels" class="more" > </a>
               </div>
-          </div>
-          
-      </div><!--/.item-->
- </div>    
- </div>
- <section id="travels"> 
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-      <ul class=flashes>
-      {% for message in messages %}
-      <li>{{ message }}</li>
+          </li>
+      </ol>
       {% endfor %}
-      </ul>
-  {% endif %}
-{% endwith %}                 
-{% for travel in travels %}
-<div class="popup-map" id="{{travel.id}}">
-  {%if error %}
-  <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}  
-  <div class="driver"><img src="{{'/static/profile_pics/' + travel.driver.image_file}}"></img>
-     <h3>{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} 
-        <div class="stars"><br />{% for i in range (travel.driver.rating) %}★{%endfor%} </div> </h3>
-  </div>
-  <div class="data"> <div class="ori">
-       <i class="fa fa-map-marker" aria-hidden="true"></i> {{travel.origin.location}} 
-    </div>
-    <div class="des"><br />
-      <i class="fa fa-map-marker des" aria-hidden="true"></i>  {{travel.dest.location}} </div>
-    <div class="fec"> 
-      <i class="fa fa-calendar" aria-hidden="true"></i>
-          <script>
-              var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-              var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
-              var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
-              document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-          </script> 
-    </div>
-    <div class="hor"> {{ travel.travel_hour }}
-      <i class="fa fa-clock-o" aria-hidden="true"></i>
-    </div>
-  
-<div class="glob">
-    <div class="cantDisp">{{ travel.seats }}</div> <div  class="dis"><br />Asientos disponibles </div>
-</div> </div>
-<a class="btn-join-travel" href="{{ url_for('join_travel', id_viaje=travel.id ) }}">Unirme al viaje</a></div>
-</div>
-{% endfor %}
-</section> 
+
+ 
+
+</section>
+
+
+
+
+    
+
+
+<script >
+    const jointravel = (id) => {
+        fetch('/unirme/' + id)
+            .then(() => {
+                console.log("se ha unido satisfactoriamente")
+            })
+    };
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous">
+</script>
+
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    socket.on('message', data => {
+        location.reload()
+    });
+</script>
+
 
 {% endblock body %}
 

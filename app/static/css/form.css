@@ -1,21 +1,38 @@
 
+.btn.btn-outline-info {
+  left: 6%;
+  position: relative;
+  width: 80%;
+  margin-top: 8%;
+  background-color: #204051;
+  color: #fff;
+  text-align: center;
 
-.btn.btn-outline-info{
-        left: 30%;
-position: relative;
-width: 36%;
-margin-top: 6%;
-background-color: #dc3545;
-color: white;
-text-align: center;
-right: -30%;
+}
+.dropdown-menu {
+  font-size: 1rem;
+  color: #fff;
+  text-align: left;
+  list-style: none;
+  width: 30%;
+  border-radius: 22px;
+  padding: 7px 12%;
+  border-width: 2px;
+  border-color: #204051;
+}
+.misviajes li {
+  border-bottom: solid thin #CCC;
+  padding: 10px;
+  white-space: nowrap;
+}
 
-      }
+      
 
       label {
         display: table;
         margin-bottom: 1%;
         margin-top: 1%;
+        color: #486a6a;
     }
 
       .form-control-file {
@@ -33,25 +50,74 @@ right: -30%;
       .mr1-2{
         margin-right: .4rem !important;
         font-size: 22px;}
-
+        .mb-4 {
+          margin-bottom: 1.5rem !important;
+          color:  #486a6a;
+}
         
+ 
 .signin-box-form {
-  margin: auto;
-  margin-top: auto;
-width: 50%;
-background: #204051a8;
-border: 2px transparent rgba(156, 154, 154, 0.582);
-border-radius: 10px;
-font-family: 'Roboto Slab';
-margin-top: 4%;
+  width: 34%;
+  margin-top: 20%;
+  border-radius: 30px;
+  margin-left: 37%;
+  box-shadow: 0px 1px 10px #4a4a4a;
+  text-shadow: 0px 1px 1px #e1e1e1;
+
 }
-
-
 .signin-area-form {
-  padding: 30px;
+  padding: 4%;
+  margin-top: -44%;
+  font-size: 12px;
+}
+.form-control-lg{
+  padding: .5rem 1rem;
+font-size: 14px;
+line-height: 1.5;
+border-radius: .3rem;
 }
 
-@media (max-width: 850px){
-  .signin-box-form{
-    margin-top: 50px;
-  }}
+        form{
+          border-top: none;
+        }
+
+
+  
+
+      
+
+@media all and (max-width: 780px) { 
+  .form-control-lg{font-size: 13px;}
+  .signin-box-form {width: 90%;
+    margin-top: 11%;}
+  .mb-4{font-size: 26px;}
+  .btn.btn-outline-info{
+   left:4%;}
+   .signin-area-form {
+    padding: 37px;
+}
+.btn-back .fas.fa-backward{
+      margin-left: -3%;
+  
+}
+
+}
+
+a:hover {
+  color: #cbd5db;
+  text-decoration: underline;}
+
+.misviajes ul {list-style:none;}
+
+
+
+  a { color: #51B2D6;
+}
+.navbar-nav .btn-group{
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 2px;
+  margin-left: -7%;
+  margin-right: 4%;
+}

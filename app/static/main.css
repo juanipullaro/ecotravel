@@ -5,10 +5,28 @@ body, button, input, select, textarea,p,title{
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #444444;
+  color: #fff;
 
 }
-
+.card > .list-group:first-child .list-group-item:first-child {
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+  background: transparent;
+}
+.card > .list-group:last-child .list-group-item:last-child {
+  border-bottom-right-radius: .25rem;
+  border-bottom-left-radius: .25rem;
+  background: transparent;
+}
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 12px;
+        border-top-color: currentcolor;
+        border-top-style: none;
+        border-top-width: 12px;
+    border-top: 4px solid rgba(255, 255, 255, 0.1);
+}
 .bg-steel {
   background-color: #204051;
 }
@@ -128,6 +146,32 @@ a.article-title:hover {
     border-bottom: 1px solid #dee2e6;
     margin-top: 7%;}
 
+    @media all and (max-width: 780px) { 
+      .navbar-nav {
+        display: -webkit-box;
+        margin-left: 21%;}
+        .navbar-nav .nav-link {
+          padding-right: 6px;
+          margin-left: 8%;}
+          .navbar-nav .fa.fa-sign-out {
+            margin-top:0%;
+            margin-left: 1%;}
+            .navbar-nav .fa.fa-home {
+              margin-top: 13%;
+              margin-left: 1%;
+          }
+        .navbar-collapse {
+          flex-basis: 0%;}
+          .btn-group{margin-left: -17%;}
+          .navbar-nav .dropdown-menu {
+            position: absolute;
+      
+    }}
+    
+    
+    
+    
+
 .account-img {
   max-width: 150px;
   max-height: 150px;
@@ -148,12 +192,19 @@ a.article-title:hover {
     font-size: 28px;
   }
 
+  
   .text-secondary {
-    margin-left: 39%;
-margin-top: 3%;
-margin-bottom: -3%;
-font-size: 16px;}
-
+    color: #cbd5db !important;
+}
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 12px;
+      border-top-color: currentcolor;
+      border-top-style: none;
+      border-top-width: 12px;
+  border-top: 4px solid rgba(255, 253, 253, 0.1);
+}
 
 .list-group-item--content{margin-left: 4%;
   margin-top: -4%;}
@@ -212,7 +263,7 @@ margin-top: 15%;
   -webkit-animation: more 0.75s ease-out 3s forwards;
   -ms-animation: more 0.75s ease-out 3s forwards;
   animation: more 0.75s ease-out 3s forwards;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color:rgba(72, 106, 106, 0.66);
   border: 0;
   border-radius: 1em 1em 0 0;
   bottom: -10.2em;
@@ -269,6 +320,7 @@ margin-top: 15%;
 /* ////////////////////////////////////////////  HOME ////////////////////////////////////////////////////*/
 
 /*imagen principal login*/
+
 .hero.is-primary.is-bold {
 background-image: url(slider/bg2.jpg);
 background-size: cover;
@@ -360,7 +412,7 @@ margin-top: 6%;
   text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.125);
   text-transform: none;
   text-align: center;
-  margin-top: -5.5%;}
+  margin-top: 1.5%;}
 
 /* Google Fonts */
 @import url(https://fonts.googleapis.com/css?family=Anonymous+Pro);
@@ -460,9 +512,10 @@ img {
     width: 50%;
 }
 .boton-usa-plataforma:hover {
-    color: #fff;
-    background-color: #17a2b8;
-    border-color: #17a2b8;
+  color: #fff;
+  background-color: #204051;
+  border-color: #486a6a;
+  text-decoration: none;
 }
 .btn-filled {
     background: #204051;
@@ -470,97 +523,10 @@ img {
 }
 
 .btn-filledprofile {
-  background: #b32525;;
+  background:transparent;
   color: #fff;
   line-height: 3.5;
-border-radius: 16.25rem;
-}
-
-.but-slider {
-    display: inline;
-}
-
-.btn2{
-  width: 40%;
-}
-
-.row {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-    margin-top: 60px;
-}
-
-.btn {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid transparent;
-    line-height: 1.5;
-    border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    width: 180px;
-    margin: 10px;}
-
-
-    .btnprofile {
-      display: inline-block;
-font-weight: 400;
-text-align: center;
-white-space: nowrap;
-vertical-align: middle;
-user-select: none;
-border: 12px solid transparent;
-border-top-color: transparent;
-border-right-color: transparent;
-border-bottom-color: transparent;
-border-left-color: transparent;
-line-height: 1.5;
-border-radius: 3.25rem;
-transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-width: 22%;
-margin: 10px;
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-top: -24%;
-margin-left: 39%;
-  }
-  .btnprofile1 {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    user-select: none;
-    border: 12px solid transparent;
-    border-top-color: transparent;
-    border-right-color: transparent;
-    border-bottom-color: transparent;
-    border-left-color: transparent;
-    line-height: 1.5;
-    border-radius: 3.25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    width: 22%;
-    margin: 10px;
-        margin-top: 10px;
-        
-        margin-top: -27.5%;
-margin-left: 67%;
-}
-
-.profiletitle{
-  margin-top: 10%;
-
+  border-radius: 16.25rem;
 }
 
 
@@ -711,46 +677,8 @@ background-color: transparent; }
   border-radius: .4em;
 }
 
-.card {
-  position: relative;
-  display: inline-flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1px solid rgba(0,0,0,.125);
-  margin-left: 15px;
-  width: 23%;
 
 
-}
-
-.trip_driver_details{
-  margin-left: 54%;
-
-}
-
-.row {
-
-  display: initial;
-
-  flex-wrap: wrap;
-  margin-right: -22px;
-  margin-left: 22px;
-  margin-top: 53px;
-}
-
-.panel-body  .card_body{
-  margin-left: 16px;
-}
-
-.panel-heading.card_heading{
-  background: #FE9900;
-  border-radius: 0.4em 0.4em 5.5em 0.5em;
-}
 
 /* //////////////////////////////////////////  FIN viajes  ////////////////////////////////////////////////////*/
 
@@ -1160,5 +1088,15 @@ color: #204051;
 }
 
 /* /////////////////////////////////////// FIN Home1 /////////////////////////////////////////*/
+.fa.fa-sign-out{
+  font-size: 19px;
+  color: #cbd5db;
+  margin-top: 22%;
+}
 
+.fa.fa-home {
+  font-size: 18px;
+  color: #cbd5db;
+  margin-top: 16%;
+}
 
