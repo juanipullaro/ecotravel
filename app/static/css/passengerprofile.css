@@ -47,18 +47,19 @@ ul.dropdown-menu {
 
 
 .card {
-    position: relative;
-    width: 100%;
     border-radius: 12px;
     background: white;
     box-shadow: 0px 2px 5px #4f4f4f;
+    display: flex;
+    justify-content: center;
+    width: 139%;
     
 }
 
 .card-body {
-    flex: 1 1 auto;
-    min-height: 1px;
-    padding: 1rem;
+    height: 500px;
+    display: flex;
+    justify-content: center;
     height: 500px;
 }
 .card-body1 {
@@ -78,10 +79,12 @@ ul.dropdown-menu {
 }
 
 
-.card-body3{
--webkit-box-flex: 0;
-margin-left: 5%;
-max-width: 33%;}
+.card-body3 {
+    display: flex;
+    justify-content: center;
+    margin-left: 9%;
+    width: 57%;
+}
 
 
 .card.mb-3{
@@ -103,7 +106,6 @@ max-width: 33%;}
 .mb-0, .my-0 {
     margin-bottom: 0 !important;
     font-size: 13px;
-    margin-left: -5%;
 }
 
 .bg-gray-300 {
@@ -168,9 +170,9 @@ max-width: 33%;}
         color: #204051;
     }
     .card.mt-3 {
-        margin-left: 0%;
         box-shadow: none;
-        width: 100%;
+        width: 120%;
+        margin-left: -10%;
     }
     .octicon.octicon-pencil-profile {
         margin-left: 96%;
@@ -191,10 +193,10 @@ max-width: 33%;}
 }
 
 img {
-    vertical-align: middle;
     border-style: none;
-    width: 32%;
-    height: 123px;}
+    width: 50%;
+    
+}
 .btn.btn-primary{
     margin-top: 13%;
 }
@@ -230,7 +232,7 @@ a:hover {
 .text-score {
     text-align: center;
     font-size: 23px;
-    margin-top: 9%;
+    margin-top: 4%;
     margin-bottom: 31px;
     text-decoration: underline;
 
@@ -253,12 +255,13 @@ a:hover {
     margin-top: 3%;
 }
 
+
 .JwPp0e {
-    display: flex;
+    display: -webkit-inline-box;
     -webkit-flex-wrap: wrap;
-    padding-left: 10%;
+    padding-left: 3%;
     margin-bottom: -5px;
-    
+    float: left;
 }
 
 .Y5vSD {
@@ -386,14 +389,14 @@ a:hover {
 
 
 scroll-container {
-  display: block;
-  width: 350px;
-  height: 500px;
-  overflow-y: scroll;
-  scroll-behavior: smooth;
-  background-color: white;
-  box-shadow: 0px 2px 5px #4f4f4f;
-  border-radius: 12px;
+    display: block;
+    width: 649px;
+    height: 500px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    background-color: white;
+    box-shadow: 0px 2px 5px #4f4f4f;
+    border-radius: 12px;
 }
 scroll-page {
   display: flex;
@@ -431,7 +434,7 @@ scroll-page {
     text-align: center;
     overflow: hidden;
   }
-
+  
     #banner .inner {
       -moz-transform: scale(1.0);
       -webkit-transform: scale(1.0);

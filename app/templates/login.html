@@ -40,7 +40,7 @@
                                     {{ form.password(class="form-control form-control-lg") }}
                                 {% endif %}
                             </div>
-                            {% with messages = get_flashed_messages() %}
+                            {% with messages = get_flashed_messages(category_filter=['danger']) %}
                             {% if messages %}
                                 <ul class=danger>
                                 {% for message in messages %}
@@ -73,9 +73,7 @@
       <div class="content has-text-centered">
         <p>
           <strong>EcoTravel</strong> by Damian Lacomba / Juan Ignacio Pullaro
-          <span class="icon is-small">
-            <i class="fa fa-copyright"></i>
-          </span>2020<span>
+          <span class="icon is-small"></span>2020
         </p>
       </div>
   </footer>

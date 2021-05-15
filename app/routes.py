@@ -6,11 +6,10 @@ import json
 from datetime import datetime
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, jsonify
-from . import app, db, bcrypt
+from . import app, db, bcrypt,socketio
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm,ScoreForm,ScoreForm
 from .models import User, Travel_request, Location, Travel, Alert, Scores
 from flask_login import login_user, current_user, logout_user, login_required
-from selenium import webdriver
 import time
 from sqlalchemy import desc
 
@@ -72,7 +71,19 @@ def userprofile():
     return render_template('userprofile.html', title='UserProfile',
                            image_file=image_file,scores=scores,scores1=scores1,users=users,scores2=scores2)  
 
-    
+@app.route("/usertravelcreate/<dni>/passengerprofile")
+@login_required
+def passenger_profile(dni):
+    user = User.query.get_or_404(dni)
+    scores = Scores.query.order_by(Scores.date_posted.desc()).all()
+    scores  = [score for score in scores if score.travel_driver_id == user.dni]
+    scores1 = [score for score in scores if score.travel_driver_id == user.dni and score.point==1]
+    scores2 = [score for score in scores if score.travel_driver_id== user.dni and score.point==0]
+    image_file = url_for(
+        'static', filename='profile_pics/' + user.image_file)
+    return render_template('passengerprofile.html', title='passengerProfile',
+                           image_file=image_file,scores=scores,scores1=scores1,user=user,scores2=scores2)
+
 @app.route("/userprofile/<dni>/updateprofile", methods=['GET', 'POST'])
 @login_required
 def update_profile(dni):
@@ -148,13 +159,16 @@ def logout():
 @app.route("/usertravelcreate", methods=['GET', 'POST'])
 @login_required
 def usertravelcreate():
+    scores = Scores.query.all() 
+    scores = [score for score in scores if score.passenger_id == current_user.dni]
+    form = ScoreForm()
     travels = Travel.query.order_by(Travel.created_at.desc()).all()
     travels = [travel for travel in travels if travel.travel_driver_id == current_user.dni]
     travel_reqs=Travel_request.query.order_by(Travel_request.date_posted.desc()).all()
     travel_reqs = [ travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
     print(travel_reqs)
     return render_template('usertravelcreate.html',
-                            travels=travels, travel_reqs=travel_reqs)
+                            travels=travels, travel_reqs=travel_reqs,form=form,scores=scores)
 
 @app.route("/usertravelcreate/<int:travel_id>/update", methods=['GET', 'POST'])
 def update_travels(travel_id):
@@ -186,14 +200,29 @@ def delete_post(id_viaje):
     travel = Travel.query.get_or_404(id_viaje)
     travel.status = "cancelado"
     db.session.commit()
+    socketio.emit('message', {"id": 1, "mensaje": "viaje eliminado"}, broadcast=True)
     flash('Su viaje se elimino correctamente!', 'success')
     return redirect(url_for('profile'))
+
+@app.route("/usertravelcreate/<id_travel>/fin", methods=['GET', 'POST'])
+@login_required
+def fin_travel(id_travel):
+    travel = Travel.query.get_or_404(id_travel)
+    travel_request = Travel_request.query.filter_by(travel_id=id_travel)
+    for i in travel_request:
+        i.state='finalizada'
+    travel.status = "finalizado"
+    db.session.commit()
+    socketio.emit('message', {"id": 1, "mensaje": "viaje Finalizado"}, broadcast=True)
+    flash('Su viaje finalizo correctamente!', 'success')
+    return redirect(url_for('usertravelcreate'))
 
 @app.route("/usertravelcreate/<id_passenger>/<id_travel>/add", methods=['GET', 'POST'])
 def add_request(id_passenger, id_travel):
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
     travel_request.acept()
+    socketio.emit('message', {"id": 1, "mensaje": "pasajero aceptado"}, broadcast=True)
     return redirect(url_for('usertravelcreate'))
 
 
@@ -202,6 +231,7 @@ def reject_request(id_passenger, id_travel):
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
     travel_request.reject()
+    socketio.emit('message', {"id": 1, "mensaje": "pasajero rechazado"}, broadcast=True)
     return redirect(url_for('usertravelcreate'))
 
 
@@ -210,6 +240,7 @@ def down_request_driver(id_passenger, id_travel):
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
     travel_request.down()
+    socketio.emit('message', {"id": 1, "mensaje": "pasajero bajado de mi viaje"}, broadcast=True)
     return redirect(url_for('usertravelcreate'))
 
 @app.route("/usertravelcreate/<id_passenger>/<id_travel>/downme", methods=['GET', 'POST'])
@@ -217,7 +248,10 @@ def down_request_passenger(id_passenger, id_travel):
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
     travel_request.down()
+    socketio.emit('message', {"id": 1, "mensaje": "me bajo del viaje"}, broadcast=True)
     return redirect(url_for('userrequesttravel'))
+
+
 
 ################################### FIN SESSION VIAJES CREADOS ###############################################
 
@@ -250,14 +284,19 @@ def usertravelfin():
     return render_template('usertravelfin.html',
                            travel_reqs=travel_reqs,form=form,scores=scores)
 
-@app.route("/usertravelfin/<int:travel_id>", methods=['GET', 'POST'])
-def new_post(travel_id):
+@app.route("/usertravelfin/<id_passenger>/<travel_id>", methods=['GET', 'POST'])
+def new_post(id_passenger,travel_id):
     form = ScoreForm()
+    travel_request = Travel_request.query.filter_by(dni_user=id_passenger, travel_id=travel_id).first()
     travel = Travel.query.get_or_404(travel_id)
     score = Scores(travel_id=travel.id,passenger_id=current_user.dni,travel_driver_id=travel.travel_driver_id,comment=form.comment.data,point=form.point.data)
     db.session.add(score)
+    s=Scores.query.filter_by(passenger_id=id_passenger, travel_id=travel_id).first()
+    travel_request.score_id=s.id
+    db.session.add(travel_request)
     db.session.commit()
-    flash('Your post has been created!', 'success')
+    socketio.emit('message', {"id": 1, "mensaje": "nueva calificacion"}, broadcast=True)
+    flash('Calificacion enviada!', 'success')
     return redirect(url_for('userprofile'))
 
 ################################### FIN SESSION VIAJES CREADOS ###############################################
@@ -348,6 +387,7 @@ def create_travel():
             db.session.commit()
             travels = [new_travel.to_json()]
             flash('Se ha registrado un nuevo viaje')
+            socketio.emit('message', {"id": 1, "mensaje": "Se ha creado un nuevo viaje"}, broadcast=True)
             return redirect(url_for('create_travel'))
 
         except sqlalchemy.exc.IntegrityError:
@@ -380,6 +420,7 @@ def join_travel(id_viaje):
         travel_request = Travel_request(travel, passanger)
         db.session.add(travel_request)
         db.session.commit()
+        socketio.emit('message', {"id": 1, "mensaje": "Tenes una nueva solicitud de viaje"}, broadcast=True)
         print("se ha agregado el viaje")
     except Exception as e:
         print(e)
