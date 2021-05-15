@@ -1,0 +1,363 @@
+@import "compass/css3";
+@import "compass/utilities/general/clearfix";
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600);
+@import url(http://weloveiconfonts.com/api/?family=brandico|entypo);
+
+
+
+@mixin clearfix () {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 100%;
+  background: lighten(#454f4f, 25%);
+}
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: 0;
+}
+
+ul {list-style:none;}
+a {
+  color: white; 
+  text-decoration: none;
+}
+
+#browser {
+  margin: 10px auto; 
+  color: white;
+  width: 87%;
+  margin-top:5%;
+  display:grid;
+}
+#browser-bar {
+  background: #486a6a;
+  width: 100%;
+  padding: 8px;
+  margin: 0 auto;
+  font-weight: 300;
+  font-size: 0.9em;
+  position: relative;
+  
+}
+
+.text-travelnull {
+  text-align: center;
+  color: #ca5656;
+  margin-top: 7%;
+  font-size: 21px;
+  text-shadow: 0px 1px 1px black;
+}
+/*****************************************************BOTONES CIRCULOS*******************************************************************/
+.prueba {
+        display: -webkit-inline-box;
+        margin-bottom: -24px;
+        margin-top: 3%;
+        margin-left: 8%;
+        width: 19%;
+}
+        
+        
+      
+      .prueba .statustravel1 span:first-child {
+        display: inline-block;
+        padding: 10px;
+      }
+      .prueba .statustravel1 {
+        position: relative;
+        overflow: hidden;
+        width: 241%;
+        text-align: center;
+        margin-left: -72%;
+        margin-bottom: 8px;
+        color: #3941418a;
+      }
+ 
+      .prueba .statustravel1 span:last-child {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-100%);
+        color: #204051;
+        font-size: 16px;
+        background-color: #b4b8bc;
+        border-radius: 16px;
+        height: 24px;
+              }
+        .prueba .statustravel1 span {
+        transition: transform 0.2s ease-out;
+      }
+       
+      .prueba .statustravel1:hover span:first-child {
+        transform: translateY(100%);
+      }
+       
+      .prueba .statustravel1:hover span:last-child {
+        transform: none;
+      }
+      .prueba [data-animation="to-top"] .statustravel1 span:last-child {
+        transform: translateY(100%);
+      }
+       
+      .prueba [data-animation="to-top"] .statustravel1:hover span:first-child {
+        transform: translateY(-100%);
+      }
+       
+      .prueba [data-animation="to-right"] .statustravel1 span:last-child {
+        transform: translateX(-100%);
+      }
+       
+      .prueba [data-animation="to-right"] .statustravel1:hover span:first-child {
+        transform: translateX(100%);
+      }
+       
+      .prueba [data-animation="to-left"] .statustravel1 span:last-child {
+        transform: translateX(100%);
+      }
+       
+      .prueba [data-animation="to-left"] .statustravel1:hover span:first-child {
+        transform: translateX(-100%);
+      }
+
+/********************************************************FIN ****************************************************************/
+.seatsdis{
+    display: flex;
+    margin-top: 3%;
+    inline-size: 36%;
+    margin-left: 4%;
+}
+.fa.fa-user {
+    margin-right: 21%;
+    font-size: 21px;
+    text-align: center;
+}
+
+ .fa.fa-user.v1{
+  color:#e73636;
+     
+          
+        }
+.fa.fa-user.v2{
+  color: #8f9393;
+        }
+
+.passenger{
+  color: #486a6a;
+  font-size: 13px;
+  margin-top: 9px;
+  font-family: 'Open Sans', sans-serif;
+}       
+.fas.fa-user-plus{
+    font-size: 17px;
+    display: inline-flex;
+}
+
+
+.requestcant{
+    display: inline-block;
+    margin-left: 2%;
+}
+.dropdown-menu {
+    font-size: 1rem;
+    color: #fff;
+    text-align: left;
+    list-style: none;
+    width: 30%;
+    border-radius: 22px;
+    padding: 7px 12%;
+    border-width: 2px;
+    border-color: #204051;
+}
+.btn-cantrequests {
+      display: flex;
+    background-color: #e73636;
+    color: rgb(255, 255, 255);
+    border-radius: 12px;
+    padding: 0px 28%;
+    width: 91%;
+    font-size: 11px;
+    margin-left: 49%;}
+
+.article-img {
+    height: 50px;
+    width: 50px;
+    margin-right: 16px;
+  }
+  .mr-2{
+        margin-right: .4rem !important;
+        font-size: 22px;
+        color:white;
+}
+
+.octbar{
+    display: inline;
+    margin-left: 68%;
+}
+ .octicon.octicon-pencil{
+     
+     fill:#cbd5db;
+     margin-left:1%;
+   }
+   .octicon.octicon-trash{
+     
+     fill: #cb2431;
+   }
+
+   .octicon.octicon-trash.user{
+     margin-left: -42%;
+     width: 37%;}
+
+#content {
+  background:  #f5f5f5;}
+
+#content #left { 
+    height: 107%;
+    margin-top:-2%;
+    width: 39%;
+  } 
+#content #right { 
+    height: 100%;
+    
+    
+  } 
+
+  #right {
+    float: right;
+    width:61%;
+    background:  #A5CCAB;}
+    .map {
+      height: 100%;
+      position: relative;
+      background-size: cover;}
+
+      .statusRequestRech{
+        margin-left: 64%;
+        color: rgb(255, 78, 78);
+        display: unset;
+        font-size: 15px;
+        font-weight: bold;
+        text-shadow: 0px 2px 2px #000;
+    
+      }
+
+@media all and (max-width: 780px) { 
+      #right{width: 100%;
+      }
+      #content #right {
+        height: 137px;
+    }
+      .prueba{
+          display: inline-flex;
+          margin-left: 43%;
+          inline-size: 50%;
+      }
+      .octbar {
+    display: inline;
+    margin-left: -2%;
+}
+    #browser{display: table;}
+    }
+
+    .map {
+      height: 100%;
+      position: relative;
+      background-size: cover;}
+    
+    .map p {
+        text-transform: uppercase;
+        padding-top: 20px;
+        padding-left: 30px;
+        font-size: 0.9em;
+        font-weight: 600;
+      }
+          .misviajes li {
+            border-bottom: solid thin #CCC;
+            padding: 10px;
+            white-space: nowrap;
+          }
+            a { color: #51B2D6;
+          }
+  
+  #left {
+    float: right;
+    width:25%;
+    background-color: whitesmoke;
+    font-size: 0.75em;
+    padding: 15px;}
+
+    @media all and (max-width: 780px) { 
+      #content #left {width: 100%;
+      }
+      .octicon.octicon-trash.user {
+        margin-left: 98%;
+        width: 15%;
+        margin-top: -45%;
+        margin-bottom: -13px;
+    }
+    .fa.fa-user.v1 {
+      display: ruby;
+  }
+  .seatsdis {
+    display: inline-grid;
+    margin-left: 4%;}}
+    .oriaccount{
+        display: inline-block;
+        margin-top: -3%;
+        margin-bottom: 22px;
+        text-transform: uppercase;
+        color: #204051;
+}
+    .desaccount{
+        display: inline-block;
+        margin-top: -3%;
+        margin-bottom: 22px;
+        text-transform: uppercase;
+        color: #204051;
+}
+    .fecaccount{
+        margin-top: -3%;
+        margin-bottom: 22px;
+        text-transform: uppercase;
+        color: #204051;
+}
+    .horaccount{
+        margin-top: -3%;
+        margin-bottom: -3px;
+        text-transform: uppercase;
+        color: #204051;
+}
+    #left p {
+     margin-bottom: 10px;
+    text-transform: uppercase;
+    color: #7bc087;
+    }
+    
+    
+    form{
+      border-top: solid thin #8e9699;
+      border-bottom: solid thin #8e9699;
+      margin: 20px 0;
+      padding: 20px 0;
+    }
+
+
+    p.other {
+      font-size: 0.7;
+      margin-bottom: 5px;
+      text-transform: lowercase;
+      font-weight: 100;}
