@@ -8,7 +8,7 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from . import app, db, bcrypt, socketio
 from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm, ScoreForm, ScoreForm
-from .models import User, Travel_request, Location, Travel, Alert, Scores
+from .models import User, Travel_request, Location, Travel, Alert, Scores, TravelAlerts
 from .data import ALERT_STATUS
 from flask_login import login_user, current_user, logout_user, login_required
 import time
@@ -177,8 +177,6 @@ def usertravelcreate():
         Travel_request.date_posted.desc()).all()
     travel_reqs = [
         travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
-    alerts = Alert.query.filter_by(
-        passenger_id=current_user.dni, status="Activo")
     return render_template('usertravelcreate.html',
                             travels=travels, travel_reqs=travel_reqs,form=form,scores=scores)
 
@@ -364,7 +362,7 @@ def search_travels():
 
         return render_template('travel_search.html', form=form, error=error, travels=travels_json,
                                origin=new_origin, dest=new_dest)
-    return render_template('travel_search.html', form=form)
+    return render_template('travel_search.html', form=form, travels=[])
 
 ################################### CREAR VIAJE #######################################################
 
@@ -481,3 +479,14 @@ def get_travel_alerts():
             print(alert.travels_alerts)
             travel_alerts.append(alert)
     return travel_alerts
+
+
+@app.route("/notificaciones", methods=["GET"])
+def get_notifications():
+    notifications = current_user.notifications
+    data = []
+    for notification in notifications:
+        data.append({"id":notification.id,
+        "type": type(notification).__name__,
+        "message": notification.message})
+    return {"notificaciones": data}, 200
