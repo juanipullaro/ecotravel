@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,300i,400,500,700,900&display=swap");
 
-body, button, input, select, textarea,p,title{
-    font-family: 'Roboto Slab' ;
+
+
+.bg-dark{
+  background-color: #204051;
 }
 
 h1, h2, h3, h4, h5, h6 {
