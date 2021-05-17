@@ -384,6 +384,14 @@
     socket.on('message', data => {
         location.reload()
     });
+    
+    const updateTravels = () =>{
+      fetch("/update_travels_status")
+      .then(response =>{
+        setTimeout(updateTravels,10000)
+      })
+    }
+    setTimeout(updateTravels,10000)
 </script>
 
 {% endblock body %}

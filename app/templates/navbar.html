@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="nav-item nav-link">
-            <button onclick="notificationsDropdown()" style="background: center;"><i id="bell" class="fas fa-bell" style="color:white; font-size: medium;"></i></button>
+            <button onclick="notificationsDropdown()" style="background: center;border:none;"><i id="bell" class="fas fa-bell" style="color:white; font-size: medium;"></i></button>
             <div id="notificationsDropdown" class="dropdown-content">
             </div>
           </div>
@@ -72,7 +72,7 @@
         notifications = jsonData.notificaciones;
         notifications.map(notification => {
           console.log(notification);
-          dropdown.append(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`)
+          dropdown.prepend(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`)
         })
       })
   }
@@ -90,7 +90,7 @@
           if (notifications.filter(not =>{return not["id"]===notification["id"]}).length === 0){
             $("#bell").addClass("new-not");
             notifications.append(notification)
-            dropdown.append(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`);
+            dropdown.prepend(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`);
           }
         })
         

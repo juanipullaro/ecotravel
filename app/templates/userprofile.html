@@ -3,52 +3,53 @@
 {% include "navbar.html" %}
 <link rel="stylesheet" href="./static/css/userprofile.css">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-<section id="banner" class="bg-img" data-bg="banner.jpg" style="background-image: url('static/images/banner10.jpg');">
+<section id="banner" class="bg-img" data-bg="banner.jpg" style="background-image: url('static/images/banner10.jpg'); height:100%;display: flex;
+  padding-top: 60px;
+  flex-direction: column;">
+  
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="alert alert-primary">
+      <ul class="success" style="text-decoration: none;list-style: none;">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  
+{% endwith %}
 <div class="container">
-  <div class="main-body">
-    <div class="row gutters-sm">
-      <div class="col-md-4 mb-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex flex-column align-items-center text-center">
-              <img src="{{ image_file }}" alt="Admin" class="rounded-circle" width="150">
-              <div class="cantscores ">
-                <a class="cantscoresgood" href="#scores"><i class="fas fa-thumbs-up"
-                    style="margin-left: 4%;"></i>{{scores1|length}}</a>
-                <a class="cantscoresbad" href="#scores"><i class="fas fa-thumbs-down"
-                    style="margin-left: 4%;"></i>{{scores2|length}}</a>
-              </div>
-              <div class="mt-3">
-                <h4>{{current_user.name|capitalize}} {{current_user.surname|capitalize}}</h4>
-                <p class="text-secondary mb-1"></p>
-                <div class="card mt-3">
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                      <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round" style="margin-bottom: -6px;"
-                          class="feather feather-instagram mr-2 icon-inline text-danger">
-                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                        </svg>Instagram</h6>
-                      <a href="https://www.instagram.com/{{current_user.name}}/"><span
-                          class="text-secondary">damianlacomba20</span></a>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap"
-                      style="margin-bottom: -15px;">
-                      <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round" style="margin-bottom: -6px;"
-                          class="feather feather-facebook mr-2 icon-inline text-primary">
-                          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                        </svg>Facebook</h6>
-                      <a href="https://www.facebook.com/{{current_user.name}}{{current_user.surname}}/"><span
-                          class="text-secondary">damianlacomba</span></a>
-                    </li>
-                  </ul>
+    <div class="main-body">
+          <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex flex-column align-items-center text-center">
+                    <img src="{{ image_file }}" alt="Admin" class="rounded-circle" width="150">
+                    <div class="cantscores ">         
+                      <a class="cantscoresgood" href="#scores" ><i class="fas fa-thumbs-up" style="margin-left: 4%;"></i>{{scores1|length}}</a>
+                      <a class="cantscoresbad" href="#scores"  ><i class="fas fa-thumbs-down" style="margin-left: 4%;"></i>{{scores2|length}}</a>
+                     </div>   
+                    <div class="mt-3">
+                      <h4>{{current_user.name|capitalize}} {{current_user.surname|capitalize}}</h4>
+                      <p class="text-secondary mb-1"></p>
+                      <div class="card mt-3">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: -6px;" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
+                            <a href="https://www.instagram.com/{{current_user.name}}/"><span class="text-secondary1">{{current_user.name|capitalize}}{{current_user.surname|capitalize}}</span></a>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap" style="margin-bottom: -15px;">
+                            <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: -6px;" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
+                            <a href="https://www.facebook.com/{{current_user.name}}{{current_user.surname}}/"><span class="text-secondary1" >{{current_user.name|capitalize}}{{current_user.surname|capitalize}}</span></a> 
+                          </li>
+                        </ul>
+                      </div>
+                      <button class="btn btn-primary" onclick=showHideAlerts(event)>Alertas</button>
+                    </div>
+                  </div>
                 </div>
-                <button class="btn btn-primary" onclick=showHideAlerts(event)>Alertas</button>
               </div>
             </div>
             
@@ -107,6 +108,7 @@
                   <hr style=" border-top: 2px solid rgba(32, 64, 81, 0.35);">
                 </div>
               </div>
+              
             </div>
             <div class="card-body3">
               <scroll-container>
@@ -160,12 +162,16 @@
               </section>
               </scroll-container>
             </div>
+            <div id="alerts" class="card col-md-11" style="margin: auto; height:30%" hidden>
+              {% include "alerts.html" %}
+            </div>
         </div>
     </div> 
 </div>  
 
 
 </section>
+
 <script>
   function openCity(evt, cityName) {
     var i, tabcontent, tablinks;
@@ -180,15 +186,15 @@
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
   }
-
+  
   // Get the element with id="defaultOpen" and click on it
   document.getElementById("defaultOpen").click();
-  const btnStatus = document.getElementById("status");
-  const btnHidden = document.getElementsByClassName("btn-downtravel")[0];
-  window.addEventListener("load", () => {
+  const btnStatus =document.getElementById("status");
+  const btnHidden =document.getElementsByClassName("btn-downtravel")[0];
+  window.addEventListener("load",()=>{
     console.log(btnStatus.textContent);
-    if (btnStatus.textContent == 'Se canceló tu solicitud' || btnStatus.textContent == 'Rechazada') {
-      btnHidden.setAttribute("hidden", true)
+    if(btnStatus.textContent=='Se canceló tu solicitud' || btnStatus.textContent=='Rechazada' ){
+      btnHidden.setAttribute("hidden",true)
     };
   })
   </script>
@@ -202,7 +208,7 @@
   socket.on('message', data => {
       location.reload()
   });
-
+  
   function showHideAlerts(e) {
     const alertSection = document.getElementById("alerts");
     if (alertSection.hasAttribute("hidden")) {

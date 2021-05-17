@@ -723,6 +723,13 @@ a.passenger {
   margin-left: 62%;
   margin-top: -5%;
 }
+.modal-footer>:not(:first-child){
+  margin-left:0px;
+}
+.passenger{
+  margin-top: 10px;
+  margin-left:0px;
+}
 .rech{
   margin-left: 20%;
   color: red;

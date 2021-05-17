@@ -214,6 +214,17 @@ def delete_post(id_viaje):
     flash('Su viaje se elimino correctamente!', 'success')
     return redirect(url_for('profile'))
 
+@app.route("/update_travels_status", methods=['GET', 'POST'])
+@login_required
+def update_travels_status():
+    travels = Travel.query.filter(Travel.status.in_(("completo","disponible"))).all()
+    for travel in travels:
+        if travel.travel_date == datetime.now().date() and travel.travel_hour <= datetime.now().time():
+            travel.status="en_transito"
+            socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id} actualizado"}, broadcast=True)
+    db.session.commit()
+    return {"message":"Se han actualizado los viajes"}, 200
+
 @app.route("/usertravelcreate/<id_travel>/fin", methods=['GET', 'POST'])
 @login_required
 def fin_travel(id_travel):
@@ -325,6 +336,7 @@ def new_post(id_passenger,travel_id):
 def search_travels():
     # you can search for travels here
     form = TravelSearchForm()
+    last_created_travels = Travel.query.filter(Travel.travel_date>=datetime.now().date())
     if form.validate_on_submit() and request.method == 'POST':
         origin = geocoder.arcgis(form.origin.data + ', argentina')
         dest = geocoder.arcgis(form.destination.data + ', argentina')
@@ -362,7 +374,8 @@ def search_travels():
 
         return render_template('travel_search.html', form=form, error=error, travels=travels_json,
                                origin=new_origin, dest=new_dest)
-    return render_template('travel_search.html', form=form, travels=[])
+    lastest_travels = json.dumps({'travels': [travel.to_json() for travel in last_created_travels]})
+    return render_template('travel_search.html', form=form, travels=lastest_travels)
 
 ################################### CREAR VIAJE #######################################################
 
@@ -454,9 +467,8 @@ def create_alert():
     travel_time = data["travel_time"]
     alert = Alert(origin, dest, travel_date, travel_time, current_user)
     alert.save()
-    # return {"error savig": str(e)}, 500
-    return "Se ha generado una nueva alerta", 200
-
+    flash('Se ha creado una nueva alerta!', 'success')
+    return {"mensaje": "Se ha creado una alerta"}, 200
 
 @app.route('/account/alert/<int:id>/update', methods=['GET', 'POST'])
 @login_required

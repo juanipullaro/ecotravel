@@ -1,0 +1,82 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Ecotravel</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    {% if current_user.is_authenticated %}
+    <div class="collapse navbar-collapse" id="navbarNavDropdown" style="flex-direction: row-reverse;">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('profile') }}"> <i class="fa fa-home"aria-hidden="true"></i><span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('userprofile') }}">{{ current_user.name|title }} {{
+            current_user.surname|title }}</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Mis Viajes
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{{ url_for('usertravelcreate') }}">Mis viajes</a>
+            <a class="dropdown-item" href="{{ url_for('userrequesttravel') }}">Mis solicitudes a viajes</a>
+            <a class="dropdown-item" href="{{ url_for('usertravelfin') }}">Viajes a los que me subi</a>
+          </div>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link dropdown-toggle" onclick="notificationsDropdown()" style="background: center;border:none;"><i id="bell" class="fas fa-bell" style="color:white; font-size: medium;"></i></button>
+            <div id="notificationsDropdown" class="dropdown-content">
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i>
+            </a>
+        </li>
+      </ul>
+    </div>
+    {% endif %}
+  </nav>
+  <script>
+        /*Cuando se hace click en el botón, muestra el submenu*/
+  const dropdown = $("#notificationsDropdown");
+  let notifications = [];
+  window.addEventListener("load",event =>{
+    addNotifications()
+  })
+  function addNotifications() {
+    //Añade una clase al elemento que tenga el id myDropdown
+    fetch("/notificaciones")
+      .then(response => { return response.json() })
+      .then(jsonData => {
+        notifications = jsonData.notificaciones;
+        notifications.map(notification => {
+          console.log(notification);
+          dropdown.prepend(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`)
+        })
+      })
+  }
+
+  function notificationsDropdown() {
+    dropdown.toggle("display")
+    $("#bell").removeClass("new-not")
+  }
+
+  const updateNotifications = () =>{
+    fetch("/notificaciones")
+      .then(response => { return response.json() })
+      .then(jsonData => {
+        jsonData.notificaciones.map(notification => {
+          if (notifications.filter(not =>{return not["id"]===notification["id"]}).length === 0){
+            $("#bell").addClass("new-not");
+            notifications.append(notification)
+            dropdown.prepend(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`);
+          }
+        })
+        
+      })
+      setTimeout(updateNotifications,10000);
+  };
+
+  setTimeout(updateNotifications,10000)
+
+  </script>
