@@ -9,6 +9,7 @@
   text-align: center;
 
 }
+
 .dropdown-menu {
   font-size: 1rem;
   color: #fff;
@@ -54,7 +55,7 @@
           margin-bottom: 1.5rem !important;
           color:  #486a6a;
 }
-        
+
  
 .signin-box-form {
   width: 34%;
@@ -76,6 +77,9 @@ font-size: 14px;
 line-height: 1.5;
 border-radius: .3rem;
 }
+        form{
+          border-top: none;
+        }
 
         form{
           border-top: none;
@@ -108,11 +112,9 @@ a:hover {
   text-decoration: underline;}
 
 .misviajes ul {list-style:none;}
-
-
-
   a { color: #51B2D6;
 }
+
 .navbar-nav .btn-group{
   position: relative;
   display: inline-block;

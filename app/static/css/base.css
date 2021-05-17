@@ -3,41 +3,6 @@ body{
     margin: 0px;
 }
 
-.nav-bar{
-    display:flex;
-    justify-content: space-between;
-    background-color:#204051;;
-    align-items: center;
-    height: 40px;
-    padding-bottom: 8px;
-    padding-top: 8px;
-    padding-right: 16px;
-    padding-left: 16px;
-
-
-    
-}
-.home-link{
-    font-size: 1.25rem;
-
-}
-.nav-bar ul{
-    list-style: none;
-    display: flex;
-}
-
-.nav-bar ul li{
-    margin-right: 10px;
-}
-
-
-.nav-bar a{
-    text-decoration: none;
-    color: white;
-}
-
-
-
 
 .content{
     height: 100%;
@@ -51,6 +16,10 @@ footer{
     align-items: center;
     justify-content: center;
 }
+footer p{
+    padding: 20px;
+    text-align: center;
+}
 
 .search-travel-page{
     display: flex;
@@ -61,13 +30,13 @@ footer{
 
 .search-travel-aside{
     background-color: #02c39a;
-    height: 700px;
+    height: 750px;
     width:450px;
     border-radius: 20px;
     color: white;
 }
 
-.search-travel-aside h1{
+.search-travel-aside h3{
     margin-left: 20px;
 }
 
@@ -115,9 +84,12 @@ footer{
     margin: 20px;
 }
 
-
-
-
+#map { 
+    height: 750px;
+    width: 600px;
+    border-radius: 20px;
+    box-shadow: 10px 6px 4px #ccc, 0em 0 0.4em;
+}
 
 .popup-map{
     display: flex;
@@ -147,8 +119,7 @@ footer{
 }
 
 .stars{
-    font-size: x-large;
-    color: yellow;
+    font-size: medium;
 }
 
 #tablist{

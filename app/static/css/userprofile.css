@@ -1,5 +1,4 @@
 body{
-    margin-top:20px;
     color: #1a202c;
     text-align: left;
     background-color: #e2e8f0;    
@@ -28,17 +27,7 @@ hr {
     width: 26%;
     margin-top: 8%;
 }
-ul.dropdown-menu {
-    font-size: 1rem;
-    color: #fff;
-    text-align: left;
-    list-style: none;
-    width: 30%;
-    border-radius: 22px;
-    padding: 7px 12%;
-    border-width: 2px;
-    border-color: #204051;
-  }
+
   .misviajes li {
     border-bottom: solid thin #CCC;
     padding: 10px;
@@ -542,3 +531,4 @@ scroll-page {
   
     }
   
+

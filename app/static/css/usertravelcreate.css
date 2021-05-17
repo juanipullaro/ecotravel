@@ -1,20 +1,3 @@
-.dropdown-menu {
-    font-size: 1rem;
-    color: #fff;
-    text-align: left;
-    list-style: none;
-    width: 30%;
-    border-radius: 22px;
-    padding: 7px 12%;
-    border-width: 2px;
-    border-color: #204051;
-}
-.misviajes li {
-    border-bottom: solid thin #CCC;
-    padding: 10px;
-    white-space: nowrap;
-}
-
 .JwPp0e {
     display: -webkit-inline-box;
     -webkit-flex-wrap: wrap;
@@ -242,8 +225,6 @@ dl, ol, ul {
   border-color: transparent;
 }
 #banner1 {
-
-  padding: 8em 0 6em 0;
   align-items: center;
   display: -webkit-box;
   justify-content: space-around;
@@ -254,7 +235,6 @@ dl, ol, ul {
   border-top: 0;
   position: relative;
   overflow: hidden;
-  margin-top: -1%;
 
 }
       
@@ -557,10 +537,12 @@ dl, ol, ul {
      
      fill: #cb2431;
    }
+
    a:hover {
     color: none;
     text-decoration: none;
 }
+
 
    .octicon.octicon-trash.user{
      margin-left: -42%;
@@ -720,6 +702,13 @@ a.passenger {
   color: #204051;
   margin-left: 62%;
   margin-top: -5%;
+}
+.modal-footer>:not(:first-child){
+  margin-left:0px;
+}
+.passenger{
+  margin-top: 10px;
+  margin-left:0px;
 }
 .rech{
   margin-left: 20%;

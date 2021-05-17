@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block body %}
-{% include "navbar.html" %}>
+{% include "navbar_v2.html" %}
 <link rel="stylesheet" href="./static/css/usertravelfin.css">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-<section id="banner1" class="bg-img" data-bg="banner.jpg"  style="background-image: url('static/images/banner10.jpg');">
+<section id="banner1" class="bg-img" data-bg="banner.jpg"  style="background:#b0afad;">
 {% if travel_reqs|length == 0 %}
 <p class="text-travelnull">Sin solicitudes finalizadas</p>
 {%else%}

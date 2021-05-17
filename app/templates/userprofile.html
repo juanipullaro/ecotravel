@@ -1,9 +1,24 @@
 {% extends "base.html" %}
 {% block body %}
-{% include "navbar.html" %}
+{% include "navbar_v2.html" %}
 <link rel="stylesheet" href="./static/css/userprofile.css">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-<section id="banner" class="bg-img" data-bg="banner.jpg" style="background-image: url('static/images/banner10.jpg');">
+<section id="banner" class="bg-img" data-bg="banner.jpg" style="background:#b0afad; height:100%;display: flex;
+  padding-top: 60px;
+  flex-direction: column;">
+  
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="alert alert-primary">
+      <ul class="success" style="text-decoration: none;list-style: none;">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  
+{% endwith %}
 <div class="container">
     <div class="main-body">
           <div class="row gutters-sm">
@@ -31,7 +46,7 @@
                           </li>
                         </ul>
                       </div>
-                      <button class="btn btn-primary">Alertas</button>
+                      <button class="btn btn-primary" onclick=showHideAlerts(event)>Alertas</button>
                     </div>
                   </div>
                 </div>
@@ -147,6 +162,9 @@
               </section>
               </scroll-container>
             </div>
+            <div id="alerts" class="card col-md-11" style="margin: auto; height:30%" hidden>
+              {% include "alerts.html" %}
+            </div>
         </div>
     </div> 
 </div>  
@@ -190,6 +208,16 @@
   socket.on('message', data => {
       location.reload()
   });
+  
+  function showHideAlerts(e) {
+    const alertSection = document.getElementById("alerts");
+    if (alertSection.hasAttribute("hidden")) {
+      alertSection.removeAttribute("hidden");
+    }
+    else {
+      alertSection.setAttribute("hidden", "true");
+    }
+  }
 </script>
 
 

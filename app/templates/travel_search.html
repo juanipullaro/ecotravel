@@ -13,7 +13,7 @@ Buscar Viajes
 
         </section> -->
         <section id="search-travel-panel">
-            <h1> Busca tu proximo viaje</h1>
+            <h3> Busca tu proximo viaje</h1>
             {%if error %}
             <p class="error">{{ error }}</p>
             {% endif %}
@@ -61,15 +61,10 @@ Buscar Viajes
                 // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify(travel) // body data type must match "Content-Type" header
-        }).then((response) => {
-            debugger;
-            if (response.status == 200) {
-                document.getElementsByClassName("error")[0].attributes("hidden", "true");
-                document.getElementsByClassName("alert-msg")[0].attributes("hidden", "false");
-            }
-            else {
-                alert("No se ha podido crear la alerta")
-            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            location.replace("/userprofile")
         });
 
     }
@@ -97,23 +92,23 @@ Buscar Viajes
             })
     };
     //travels 
-    const { travels } = '{{ travels| safe}}';
+    const { travels } = {{ travels| safe}};
     console.log(travels)
-    var myIcon = L.icon({
+    /*var myIcon = L.icon({
         iconUrl: "static/slider/coche.png",
-        iconSize: [20, 60],
-        iconAnchor: [22, 94],
+        iconSize: [20, 40],
+        iconAnchor: [0, ],
         popupAnchor: [-3, -76],
         shadowSize: [68, 95],
         shadowAnchor: [22, 94]
-    });
-    if (travels) {
+    });*/
+    if (travels !== []) {
         travels.map(travel => {
-            const origin = L.marker([travel.origen.lat, travel.origen.lon], { icon: myIcon }).addTo(map);
+            const origin = L.marker([travel.origen.lat, travel.origen.lon]).addTo(map);
             origin.on('mouseover', function (ev) { ev.target.openPopup(); });
             const popup = '<div class="popup-map">' +
                 '<div class="driver"><img src="' + travel.foto_conductor + '"></img><h3>' + travel.conductor + '</h3></div>' +
-                '<p class="stars">' + "★".repeat(travel.rating) + "☆".repeat(5 - travel.rating) + '</p>' +
+                '<p class="stars"><i class="fa fa-thumbs-up" style="color:green"></i>'+travel.score_bueno + " "+'<i class="fa fa-thumbs-down" style="color:red"></i>' + travel.score_malo + '</p>' +
                 '<b>Origen:</b>' + travel.origen.nombre +
                 '<br /><b>Destino:</b>' + travel.destino.nombre +
                 '<br /><b>Fecha:</b>' + travel.fecha +

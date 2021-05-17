@@ -5,14 +5,15 @@ Buscar Viajes
 {% block content %}
 <div class="search-travel-page">
     <aside class="search-travel-aside">
-        <section id=tab-container class="tabs">
+        <!--<section id=tab-container class="tabs">
             <div id="tablist" role="tablist">
                 <button type="button" class="tablink" ><a href="{{url_for('search_travels')}}">Buscar Viajes</a></button>
                 <button type="button" class="tablink" disabled="true"> Crear Viajes</button>
             </div>
-        </section>
+        </section>!-->
            
         <section id="search-travel-panel">
+            <h3> Creá tu proximo viaje</h1>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <ul class=flashes>

@@ -1,10 +1,12 @@
-{% extends "base.html" %}
-{% block body %}
-{% include "navbar.html" %}>
 <style>
     .content {
-        padding: 100px;
+        padding: 5%;
         font-family: 'Rubik', Arial, sans-serif, inherit;
+    }
+
+    #my-alerts {
+        height: 400px;
+        overflow-y: scroll;
     }
 
     .alert {
@@ -94,55 +96,109 @@
     .slider.round:before {
         border-radius: 50%;
     }
+
+
+
+    .alerts-header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .no-alerts {
+        margin-top: 20px;
+    }
 </style>
-<div class="content">
-    <section id="my-alerts">
-        <h1>Mis Alertas</h1>
-        {% for alert in alerts %}
-        <div class="alert">
-            <div class="alert-opt">
-                <a href="/account/alert/{{alert.id}}/delete"><i class="fa fa-edit" style="font-size:24px"></i></a>
-                <a href="/account/alert/{{alert.id}}/edit"><i class="fa fa-times" style="font-size:24px"></i></a>
+<section id="my-alerts">
+    <div class="alerts-header">
+        <h3>Mis Alertas</h1>
+    </div>
+    <div id="newTravelsNot" class="new-travels">
+    </div>
+    {%if current_user.get_alerts()|length == 0 %}
+    <div class="no-alerts">
+        <p>No has guardado ninguna alerta</p>
+    </div>
+    {%endif%}
+    {% for alert in current_user.get_alerts() %}
+    <div class="alert">
+        <div class="alert-opt" id="alert-{{alert.id}}">
+            <button id={{alert.id}} onclick="removeAlert(this.id)"><i class="fa fa-times"
+                    style="font-size:24px"></i></a>
+        </div>
+        <div class="alert-descr">
+            <div class="alert-element">
+                <h5>Origen</h5>
+                <p>{{alert.origin.location}}</p>
             </div>
-            <div class="alert-descr">
-                <div class="alert-element">
-                    <h5>Origen</h5>
-                    <p>{{alert.origin.location}}</p>
-                </div>
-                <div class="alert-element">
-                    <h5>Destino</h5>
-                    <p>{{alert.dest.location}}</p>
-                </div>
-                <div class="alert-element">
-                    <h5>Fecha</h5>
-                    <p>{{alert.travel_date}}</p>
-                </div>
-                <div class="alert-element">
-                    <h5>Hora</h5>
-                    <p>{{alert.travel_time}}</p>
-                </div>
-                <div class="alert-element">
-                    ​<label class="switch">
-                        <input type="checkbox" class="alert-status" id="{{alert.id}}" {%if alert.status=="Activo" %}
-                            checked {%endif%}>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
+            <div class="alert-element">
+                <h5>Destino</h5>
+                <p>{{alert.dest.location}}</p>
+            </div>
+            <div class="alert-element">
+                <h5>Fecha</h5>
+                <p>{{alert.travel_date}}</p>
+            </div>
+            <div class="alert-element">
+                <h5>Hora</h5>
+                <p>{{alert.travel_time}}</p>
+            </div>
+            <div class="alert-element">
+                ​<label class="switch">
+                    <input type="checkbox" class="alert-status" id="{{alert.id}}" {%if alert.status=="ACTIVA" %} checked
+                        {%endif%}>
+                    <span class="slider round"></span>
+                </label>
             </div>
         </div>
-        {% endfor %}
-    </section>
-</div>
+    </div>
+    {% endfor %}
+</section>
 <script>
-    const btnStatus = document.getElementsByClassName("alert-status")
-    const btnStatusArr = [...btnStatus]
+    const btnAlertStatus = document.getElementsByClassName("alert-status")
+    const btnStatusArr = [...btnAlertStatus]
     btnStatusArr.map(btn => {
         btn.addEventListener("click", e => {
-            conlose.log("activar o desactivar")
-
+            let status = "0";
+            if (btn.hasAttribute("checked")) {
+                btn.removeAttribute("checked");
+                status = "1";
+            }
+            else {
+                btn.setAttribute("checked", "checked");
+            }
+            fetch(`account/alert/${btn.id}/update?status=${status}`);
         })
     });
+    const removeAlert = id => {
+        const id_alert = id.replace("alert-", "");
+        fetch(`account/alert/${id_alert}/update?status=2`)
+            .then(response => {
+                document.getElementById("alert-"+id).parentElement.setAttribute("hidden", "true");
+            })
+    };
+
+
+    /*const checkNewTravels = () => {
+
+        fetch("/account/alert/travels")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            }
+            );
+
+        setTimeout(checkNewTravels, 5000);
+    }
+
+    checkNewTravels();*/
 </script>
-
-
-{% endblock %}
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    socket.on('message', data => {
+        console.log(data)
+        newTravels.appendChild(`<h1>Nuevo viaje ${data}</h1>`)
+    });
+</script>!-->
