@@ -8,7 +8,6 @@
 <p class="text-travelnull">No tenés solicitudes vigentes</p>
 {%else%}
     {% for travel_req in travel_reqs %}
-    {%if travel_req.dni_user==current_user.dni and travel_req.state != "finalizada" %}
     <ol class="JwPp0e" >
       <li class="gHz6xd Aopndd rZXyy">
           <div class="Tc9hUd DShyMc-MzA5MDg5NDcxMDM4">
@@ -20,7 +19,7 @@
                   <div class="R4EiSb">
                       <h2 class="prWPdf">
                           <a class="onkcGd kj3hr YVvGBb" target="_self" href="{{ url_for('passenger_profile',dni=travel_req.travel.driver.dni) }}" >
-                          <div class="YVvGBb csjh4b">{{ travel_req.travel.driver.name|capitalize}} {{ travel_req.travel.driver.surname|capitalize}} 
+                          <div class="YVvGBb csjh4b">{{ travel_req.travel.driver.name|title}} {{ travel_req.travel.driver.surname|title}} 
                           </div></a>
                       </h2>
                       
@@ -42,7 +41,7 @@
               <div class="lziZub sdDCme" style="text-align: left;">
                     <div id={{travel_req.travel.id}}>
                       <form class="traveldata">
-                        <div  class="oriaccount"><p>Origen:</p> {{travel_req.travel.origin.location | capitalize}}</div>
+                        <div  class="oriaccount"><p>Origen:</p> {{travel_req.travel.origin.location | title}}</div>
                         <div  class="desaccount"><p>Destino:</p> {{travel_req.travel.dest.location}}</div>
                         <div  class="fecaccount"><p>Fecha:</p> <script>
                                       var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -63,7 +62,6 @@
           </div>
       </li>
   </ol>
-{%endif%}
 {% endfor %} 
 {%endif%}
 </section>

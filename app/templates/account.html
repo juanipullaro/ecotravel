@@ -16,7 +16,7 @@
           <img class="rounded-circle article-img1" src="{{ image_file }}">
           <div class="media-body1">
               <div class="article-metadata1">
-                  <a class="mr1-2" href="#">{{ current_user.name|capitalize}} {{ current_user.surname|capitalize}} </a>
+                  <a class="mr1-2" href="#">{{ current_user.name|title}} {{ current_user.surname|title}} </a>
                   <button type="button" class="btn-editprofile" onclick="openCity(event, 'Editar')">Editar perfil</button>
               </div>
               <div class="data">
@@ -94,7 +94,7 @@
           <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
           <div class="media-body">
               <div class="article-metadata">
-                <a class="mr-2" href="#">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} </a>
+                <a class="mr-2" href="#">{{ travel.driver.name|title}} {{ travel.driver.surname|title}} </a>
                     <a href="{{ url_for('delete_post', id_viaje=travel.id) }}">
                       <svg class="octicon octicon-trash" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
                         <path fill-rule="evenodd" d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z"></path>
@@ -111,7 +111,7 @@
                         <button type="button" class="btn-cantrequests" data-toggle="dropdown">Solicitudes a tu viaje: {{travel.getpending_request()|length}} <span class="caret"></span></button>
                       <ul class="dropdown-menu" role="menu">
                         <li><a href="{{ url_for('account')}}">  {% for request in travel.getpending_request() %}
-                          <div class="passagers">{{request.passenger.name|capitalize}} {{request.passenger.surname|capitalize}}</div>
+                          <div class="passagers">{{request.passenger.name|title}} {{request.passenger.surname|title}}</div>
                           <a class="btn-requestacept" href="{{ url_for('add_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}" >Aceptar</a>
                           <a class="btn-requestreject" href="{{ url_for('reject_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}" >Rechazar</a>
                           {% endfor %}</a></li>
@@ -136,7 +136,7 @@
                   <!--<button type="button" class="btn-passenger" data-toggle="dropdown">{{travel.getaccept_request()|length}}  Pasajeros subidos <span class="caret"></span></button>-->
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="{{ url_for('account')}}">  {% for travel_request in travel.getaccept_request() %}
-                      <div class="passagers">{{travel_request.passenger.name|capitalize}} {{travel_request.passenger.surname|capitalize}}</div>
+                      <div class="passagers">{{travel_request.passenger.name|title}} {{travel_request.passenger.surname|title}}</div>
                       <a class="btn-requestdown" href="{{ url_for('down_request', id_passenger=travel_request.passenger.dni,id_travel=travel_request.travel.id ) }}" >Bajar del viaje</a>
                       {% endfor %}</a></li>
                   </ul>
@@ -172,7 +172,7 @@
     <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel_req.travel.driver.image_file}}">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="#">{{ travel_req.travel.driver.name|capitalize}} {{ travel_req.travel.driver.surname|capitalize}} </a>
+        <a class="mr-2" href="#">{{ travel_req.travel.driver.name|title}} {{ travel_req.travel.driver.surname|title}} </a>
         <a class="btn-downtravel" href="{{ url_for('down_request', id_passenger=travel_req.passenger.dni,id_travel=travel_req.travel.id ) }}" >Bajarme del viaje</a>    
             {% if travel_req.state == "activa" %}
              <div id="status" class="statusRequestPend">Pendiente</div>
@@ -209,7 +209,7 @@
           <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} </a>
+              <a class="mr-2" href="#">{{ travel.driver.name|title}} {{ travel.driver.surname|title}} </a>
                   <button type="button" class="btn-hiddentravel" >Eliminar</button>   
             </div>
             <div class="data">
@@ -246,7 +246,7 @@
     <img class="rounded-circle article-img" src="{{'/static/profile_pics/' + travel_req.travel.driver.image_file}}">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="#">{{ travel_req.travel.driver.name|capitalize}} {{ travel_req.travel.driver.surname|capitalize}} </a>    
+        <a class="mr-2" href="#">{{ travel_req.travel.driver.name|title}} {{ travel_req.travel.driver.surname|title}} </a>    
             {% if travel_req.state == "finalizada" %}
              <div id="status" class="statusRequestCanc">Finalizada</div>
              {%endif%}

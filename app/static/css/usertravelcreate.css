@@ -21,7 +21,7 @@
   position: relative;
   text-align: left;
   width: 29.75rem;
-  margin-top: -20%;
+  margin-top: -13%;
 }
 
 
@@ -166,6 +166,15 @@
     color:  #204051;
     font-size: 12px;
     height: 80px;
+}
+.horaestimada{
+  margin-top: -29%;
+  margin-bottom: -3px;
+  text-transform: uppercase;
+  color:  #204051;
+  font-size: 12px;
+  height: 80px;
+  margin-left: 58%;
 }
 .seatsccount {
     margin-top: -34%;

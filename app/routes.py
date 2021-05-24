@@ -3,7 +3,7 @@ import secrets
 import sqlalchemy
 import geocoder
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from . import app, db, bcrypt, socketio
@@ -13,6 +13,22 @@ from .data import ALERT_STATUS
 from flask_login import login_user, current_user, logout_user, login_required
 import time
 from sqlalchemy import desc
+
+
+@app.before_request
+def tasks_travels():
+    travels = Travel.query.filter(~Travel.status.in_(["cancelado","finalizado"])).all()
+    for travel in travels: 
+        if travel.travel_date == datetime.now().date() and travel.travel_hour <= datetime.now().time():
+            if travel.status in ["completo", "disponible"]:
+                travel.status="en_transito"
+                socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id} actualizado"}, broadcast=True)
+            elif travel.travel_hour_f <= datetime.now().time():
+                travel.status="finalizado"
+                socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id} actualizado"}, broadcast=True)
+    db.session.commit()
+    #socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id} actualizado"}, broadcast=True)
+
 
 
 ################################### INICIO_PANTALLA PRINCIPAL #####################################
@@ -29,7 +45,7 @@ def home():
 @app.route("/profile")
 @login_required
 def profile():
-    travels = Travel.query.all()
+    travels = Travel.query.filter(Travel.created_at>=datetime.now()-timedelta(days=7)).order_by(Travel.created_at.desc()).all()
     travels = [
         travel for travel in travels if travel.travel_driver_id != current_user.dni
         and travel.status == 'disponible']
@@ -214,17 +230,6 @@ def delete_post(id_viaje):
     flash('Su viaje se elimino correctamente!', 'success')
     return redirect(url_for('profile'))
 
-@app.route("/update_travels_status", methods=['GET', 'POST'])
-@login_required
-def update_travels_status():
-    travels = Travel.query.filter(Travel.status.in_(("completo","disponible"))).all()
-    for travel in travels:
-        if travel.travel_date == datetime.now().date() and travel.travel_hour <= datetime.now().time():
-            travel.status="en_transito"
-            socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id} actualizado"}, broadcast=True)
-    db.session.commit()
-    return {"message":"Se han actualizado los viajes"}, 200
-
 @app.route("/usertravelcreate/<id_travel>/fin", methods=['GET', 'POST'])
 @login_required
 def fin_travel(id_travel):
@@ -285,7 +290,7 @@ def userrequesttravel():
     travel_reqs = Travel_request.query.order_by(
         Travel_request.state.asc(), Travel_request.date_posted.desc()).all()
     travel_reqs = [
-        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni]
+        travel_req for travel_req in travel_reqs if travel_req.dni_user == current_user.dni and travel_req.state != "finalizada"]
     return render_template('userrequesttravel.html',
                            travel_reqs=travel_reqs)
 
@@ -408,7 +413,7 @@ def create_travel():
         driver = User.query.filter_by(username=current_user.username).first()
 
         try:
-            new_travel = Travel(travel_date=form.travel_date.data, travel_hour=form.travel_time.data, driver=driver,
+            new_travel = Travel(travel_date=form.travel_date.data, travel_hour=form.travel_time.data,travel_hour_f=form.travel_time_f.data,driver=driver,
                                 origin=new_origin, dest=new_dest, seats=form.seats.data, seatsdec=form.seats.data)
 
             print(new_travel)
@@ -420,7 +425,7 @@ def create_travel():
                 travel_alert.alert.id for travel_alert in new_travel.travels_alerts]
             flash('Se ha registrado un nuevo viaje')
             socketio.emit('message', {"id": 1, "mensaje": "Se ha creado un nuevo viaje"}, broadcast=True)
-            return redirect(url_for('create_travel'))
+            return redirect(url_for('usertravelcreate'))
 
         except sqlalchemy.exc.IntegrityError:
             error = "Ya se tienes un viaje creado para esa fecha y es hora"
@@ -440,7 +445,7 @@ def create_travel():
 ################################### UNIRSE AL VIAJE #######################################################
 
 
-@app.route('/unirme/<id_viaje>', methods=['GET', 'POST'])
+@app.route('/profile/<id_viaje>/unirme', methods=['GET', 'POST'])
 @login_required
 def join_travel(id_viaje):
     try:
@@ -450,11 +455,13 @@ def join_travel(id_viaje):
         travel_request = Travel_request(travel, passanger)
         db.session.add(travel_request)
         db.session.commit()
-        socketio.emit('message', {"id": 1, "mensaje": "Tenes una nueva solicitud de viaje"}, broadcast=True)
         print("se ha agregado el viaje")
-    except Exception as e:
-        print(e)
-    return "Viaje {}".format(travel)
+        flash("Success",category="success")
+    except sqlalchemy.exc.IntegrityError:
+        flash("Error",category="danger")
+        return redirect(url_for('profile',_anchor="banner1"))
+    return redirect(url_for('profile',_anchor="banner1"))
+
 
 
 @app.route('/account/alert/create', methods=['GET', 'POST'])
@@ -495,10 +502,16 @@ def get_travel_alerts():
 
 @app.route("/notificaciones", methods=["GET"])
 def get_notifications():
-    notifications = current_user.notifications
+    notifications = current_user.get_notifications()
     data = []
     for notification in notifications:
         data.append({"id":notification.id,
         "type": type(notification).__name__,
         "message": notification.message})
     return {"notificaciones": data}, 200
+
+@app.route("/setvisible/<int:val>", methods=["GET","POST"])
+def set_visible(val):
+    current_user.phone_visible = val
+    db.session.commit()
+    return "Se ha actulizado la visibilidad del telefono", 200

@@ -33,6 +33,7 @@ Buscar Viajes
                 {{ form.destination.label }} {{ form.destination() }}
                 {{ form.travel_date.label }} {{ form.travel_date(type="date") }}
                 {{ form.travel_time.label }} {{ form.travel_time(type="time") }}
+                {{ form.travel_time_f.label }} {{ form.travel_time_f(type="time") }}
                 {{ form.seats.label }} {{ form.seats }}
                 {{ form.submit(class="btn") }}
             </form>
@@ -87,7 +88,8 @@ Buscar Viajes
                 '<b>Origen:</b>'+ travel.origen.nombre +
                 '<br /><b>Destino:</b>'+ travel.destino.nombre +
                 '<br /><b>Fecha:</b>'+travel.fecha+
-                '<br /><b>Hora:</b>'+travel.hora+
+                '<br /><b>Hora salida:</b>'+travel.hora+
+                '<br /><b>Hora llegada:</b>'+travel.horafin+
                 ' <button className="btn-grad btn-travel">Viajar</button></div>'
             origin.bindPopup(popup).openPopup();
         })

@@ -31,6 +31,7 @@ class User(db.Model, UserMixin):
     rating = Column(Integer)
     content = db.Column(db.String(200))
     phone = db.Column(db.BigInteger)
+    phone_visible = Column(Integer , default=0)
 
     def __init__(self, name, surname, email, dni, username, password):
         self.name = name
@@ -48,8 +49,18 @@ class User(db.Model, UserMixin):
 
     def get_alerts(self):
         try:
-            active_alerts = [alert for alert in self.alerts if alert.status!="ELIMINADA"]
-            return active_alerts
+            active_alerts = []
+            for alert in self.alerts:
+                if alert.status!="ELIMINADA" and alert.travel_date >= datetime.now().date():
+                    active_alerts.append(alert)
+            return active_alerts[::-1]
+        except Exception as e:
+            print(e)
+            return []
+    
+    def get_notifications(self):
+        try:
+            return self.notifications
         except Exception as e:
             return []
 
@@ -115,6 +126,7 @@ class Travel(db.Model):
     id = Column(Integer, primary_key=True)
     travel_date = Column(Date)
     travel_hour = Column(Time)
+    travel_hour_f = Column(Time)
     travel_driver_id = Column(Integer, ForeignKey('users.dni'))
     origin_id = Column(Integer, ForeignKey('locations.id'))
     dest_id = Column(Integer, ForeignKey('locations.id'))
@@ -136,7 +148,8 @@ class Travel(db.Model):
                   "origen": {"nombre": self.origin.location, "lat": self.origin.latitude, "lon": self.origin.longitude},
                   "destino": {"nombre": self.dest.location, "lat": self.dest.latitude, "lon": self.dest.longitude},
                   "fecha": str(self.travel_date),
-                  "hora": str(self.travel_hour),
+                  "hora salida": str(self.travel_hour),
+                  "hora llegada": str(self.travel_hour_f),
                   "conductor": self.driver.name+' '+self.driver.surname,
                   "foto_conductor": '/static/profile_pics/'+self.driver.image_file,
                   "score_bueno": 0,

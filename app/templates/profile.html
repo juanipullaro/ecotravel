@@ -16,10 +16,26 @@
                         </div>    
 
     </div>
-    <a href="#banner1" class="more " style="margin-bottom: -4px;"></a>
+    <a href="#banner1" class="more " style="margin-bottom: 32px;"></a>
 </section>
 <section id="banner1" class="bg-img" data-bg="banner.jpg" style="background-image: url('static/images/banner11.jpg');">
-    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {%for category, message in messages%}
+        {% if category == "success" %}
+        <div id="modal-join-success"  class="myAlert-top alert alert-success" style="display: flex; z-index: 1;">
+            <strong>Estas en Camino!</strong> Te has unido satisfactoriamente al viaje. 
+            <a href="/userrequesttravel" class="alert-link"> Ir a mis solicitudes</a>
+        </div>
+        {% else%}
+        <div id="modal-join-error"  class="myAlert-top alert alert-danger" style="display: flex;z-index: 1;">
+            <strong>Ups!</strong> Ya te has unido a este viaje.
+            <a href="/userrequesttravel" class="alert-link">Ir a mis solicitudes</a>
+        </div>
+        {% endif%}
+    {% endfor %}
+    {% endif %}
+    {%endwith%}
         {% for travel in travels %}
         <ol class="JwPp0e" style="padding-top: 4.5rem;">
           <li class="gHz6xd Aopndd rZXyy">
@@ -31,17 +47,22 @@
                       <div class="R4EiSb">
                           <h2 class="prWPdf">
                               <a class="onkcGd kj3hr YVvGBb" target="_self" href="{{ url_for('passenger_profile',dni=travel.driver.dni) }}" >
-                              <div class="YVvGBb csjh4b">{{ travel.driver.name|capitalize}} {{ travel.driver.surname|capitalize}} 
+                              <div class="YVvGBb csjh4b">{{ travel.driver.name|title}} {{ travel.driver.surname|title}} 
                               </div></a>
                           </h2>
                       </div>
+              </div>
+              <div id="overlay-{{travel.id}}" class="overlay">
+                <div class="w-100 d-flex justify-content-center align-items-center">
+                  <div class="spinner"></div>
+                </div>
               </div>
               <div class="TQYOZc">
                   <img class="rounded-circle article-imgcal" src="{{'/static/profile_pics/' + travel.driver.image_file}}">
                   <div class="lziZub sdDCme" style="text-align: left;">
                         <div id={{travel.id}}>
                           <form class="traveldata">
-                            <div  class="oriaccount"><p>Origen:</p> {{travel.origin.location | capitalize}}</div>
+                            <div  class="oriaccount"><p>Origen:</p> {{travel.origin.location | title}}</div>
                             <div  class="desaccount"><p>Destino:</p> {{travel.dest.location}}</div>
                             <div  class="fecaccount"><p>Fecha:</p> <script>
                                           var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -51,7 +72,8 @@
                                       </script></div>
                             <div  class="horaccount"><p>Hora:</p>{{ travel.travel_hour}}</div>
                             <div  class="seatsccount"><p>Asientos disponibles</p><div class="seatssize">{{travel.seats}}</div></div> 
-                            <button class="btn-uptravel" onclick="jointravel('{{travel.id}}')">Unirme al viaje</button>
+                            <a class="btn-uptravel" onclick="jointravel('{{travel.id}}')" href="{{ url_for('join_travel', id_viaje=travel.id ) }}">Unirme al viaje</a>
+                            
                           </form>
                         
                          <!--<a class="btn-uptravel" href="{{ url_for('join_travel', id_viaje=travel.id ) }}">Unirme al viaje</a>-->
@@ -69,24 +91,23 @@
 
 <script >
     const jointravel = (id) => {
-        fetch('/unirme/' + id)
-            .then(() => {
-                console.log("se ha unido satisfactoriamente")
-            })
-    };
-</script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-    crossorigin="anonymous">
-</script>
-
-<script type="text/javascript" charset="utf-8">
-    var socket = io();
-    socket.on('message', data => {
-        location.reload()
-    });
+        document.getElementById("overlay-"+ id).style.display = "flex";
+        /*debugger;
+        fetch('/profile/' + id+'/unirme')
+        .then((response) => {
+            if (response.ok){
+                $("#modal-join-success").show();
+            }else{
+                $("#modal-join-error").show();
+            }
+            document.getElementById("overlay-" + id).style.display = "none";
+            //
+        })*/
+    }; 
+    setTimeout(function(){$(".myAlert-top").hide();}, 6000);
+    window("load",()=>{
+        document.getElementById("overlay-" + id).style.display = "none";
+    })
 </script>
 
 
