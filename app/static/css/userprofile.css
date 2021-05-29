@@ -8,6 +8,25 @@ body{
     margin-left: 0%;
     margin-top: -11%;
 }
+.myAlert-top {
+    position: fixed;
+    top: 61px;
+    left: 41%;
+    width: 21%;
+}
+
+
+
+div.fullscreen {
+  position: absolute;
+  width:100%; 
+  height:960px; 
+  top: 0; 
+  left: 0; 
+  background-color: lightblue;
+}
+
+
 hr {
     margin-top: 9%;
     margin-bottom: 22px;

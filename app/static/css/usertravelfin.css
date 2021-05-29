@@ -166,6 +166,12 @@ margin-left: -3%;
   font-size: 12px;
   height: 80px;
 }
+.myAlert-top {
+  position: fixed;
+  top: 26px;
+  left: 38%;
+  width: 21%;
+}
 .seatsccount {
 margin-top: -27%;
 margin-bottom: -3px;

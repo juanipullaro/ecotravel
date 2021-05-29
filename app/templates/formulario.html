@@ -1,8 +1,20 @@
 {% extends "base.html" %}
 {% block body %}
-{% include "navbar_v2.html" %}>
+{% include "navbar_v2.html" %}
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/form.css') }}">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{%for category, message in messages%}
+    {% if category == "success" %}
+    <div id="modal-join-success"  class="myAlert-top alert1 alert-success" style="display: flex;z-index: 1;height: 43px;border-radius: 12px;padding: 9px;width: 34%;margin-top: 6%;margin-bottom: -3%;margin-left: 29%;">
+        <strong style="margin-right: 1%; display: flex;"></strong> ¡Su viaje fue actualizado correctamente! 
+        <a href="/usertravelcreate" class="alert-link" style=" margin-left: 1%;"> Volver a mis viajes</a>
+    </div>
+    {% endif%}
+{% endfor %}
+{% endif %}
+{%endwith%}
 <div id="signin-box-form" class="signin-box-form">
     <div class="signin-area-form">
         <a class="btn-back" href="{{ url_for('usertravelcreate') }}" style="font-size: 14px;color: #204051;margin-left: 85%;"> <i class="fas fa-backward" style="margin-right: 2%;
@@ -64,6 +76,19 @@
                         {% endif %}
                     </div>
                     <div class="form-group">
+                        {{ form.travel_time_f.label(class="form-control-label") }}
+                        {% if form.travel_time_f.errors %}
+                            {{ form.travel_time_f(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.travel_time_f.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.travel_time_f(class="form-control form-control-lg",type="time") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
                         {{ form.seats.label(class="form-control-label") }}
                         {% if form.seats.errors %}
                             {{ form.seats(class="form-control form-control-lg is-invalid") }}
@@ -83,5 +108,10 @@
             </form>
     </div>
 </div>
+
+<script>
+    setTimeout(function(){$(".myAlert-top").hide();}, 6000);
+</script>
+
 {% endblock body %}
 

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
-{% include "navbar_v2.html" %}>
+{% include "navbar_v2.html" %}
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/form.css') }}">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <div id="signin-box-form" class="signin-box-form">
@@ -61,6 +61,15 @@
                             </div>
                         {% else %}
                             {{ form.content(class="form-control form-control-lg", style="background-color: white;") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.picture.label() }}
+                        {{ form.picture(class="form-control-file") }}
+                        {% if form.picture.errors %}
+                            {% for error in form.picture.errors %}
+                                <span class="text-danger">{{ error }}</span></br>
+                            {% endfor %}
                         {% endif %}
                     </div>
                 </fieldset>

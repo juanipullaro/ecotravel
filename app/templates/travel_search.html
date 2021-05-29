@@ -3,6 +3,22 @@
 Buscar Viajes
 {%endblock%}
 {% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{%for category, message in messages%}
+{% if category == "success" %}
+<div id="modal-join-success"  class="myAlert-top alert1 alert-success"style="display: flex;z-index: 1;height: 43px;border-radius: 12px;padding: 9px;width: 29%;margin-top: 1%;margin-bottom: -3%;margin-left: 33%;">
+    <strong style="margin-right: 1%; display: flex;"></strong> ¡Alerta creada correctamente! 
+    <a href="/userprofile" class="alert-link" style=" margin-left: 1%;"> Ir a mis alertas</a>
+</div>
+{%else%}
+<div id="modal-join-error"  class="myAlert-top alert1 alert-danger" style="display: flex;z-index: 1;height: 43px;border-radius: 12px;padding: 9px;width: 35%;margin-top: 1%;margin-bottom: -3%;margin-left: 33%;">
+    <strong style="margin-right: 1%; display: flex;">Error: </strong> {{message}}
+    </div> 
+{% endif%}
+{% endfor %}
+{% endif %}
+{%endwith%} 
 <div class="search-travel-page">
     <div class="search-travel-aside">
         <!--<section id=tab-container class="tabs">
@@ -14,16 +30,63 @@ Buscar Viajes
         </section> -->
         <section id="search-travel-panel">
             <h3> Busca tu proximo viaje</h1>
-            {%if error %}
-            <p class="error">{{ error }}</p>
-            {% endif %}
             <p class="alert-msg" hidden>Se ha creado una alerta con éxito</p>
             <form method="POST" class="search-travel-form">
                 {{ form.csrf_token }}
-                {{ form.origin.label }} {{ form.origin(placeholder="Ingresa tu origen") }}
-                {{ form.destination.label }} {{ form.destination(placeholder="Ingresa tu destino") }}
-                {{ form.travel_date.label }} {{ form.travel_date(type="date") }}
-                {{ form.travel_time.label }} {{ form.travel_time(type="time") }}
+                <form method="POST" class="search-travel-form">
+                    {{ form.csrf_token }}
+                    <div class="form-group">
+                        {{ form.origin.label(class="form-control-label") }} 
+                        {% if form.origin.errors %}
+                            {{ form.origin(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.origin.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.origin(class="form-control form-control-lg")}}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.destination.label(class="form-control-label") }}
+                        {% if form.destination.errors %}
+                            {{ form.destination(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.destination.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.destination(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.travel_date.label(class="form-control-label") }}
+                        {% if form.travel_date.errors %}
+                            {{ form.travel_date(class="form-control form-control-lg is-invalid", type="date") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.travel_date.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.travel_date(class="form-control form-control-lg",type="date") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.travel_time.label(class="form-control-label") }}
+                        {% if form.travel_time.errors %}
+                            {{ form.travel_time(class="form-control form-control-lg is-invalid", type="time") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.travel_time.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.travel_time(class="form-control form-control-lg",type="time") }}
+                        {% endif %}
+                    </div>
                 {% if error %}
                 {{ form.radius.label}} {{ form.radius(type="range", min=5, max=20, step=5, value=10, list="kms")}}
                 <datalist id="kms">
@@ -86,13 +149,13 @@ Buscar Viajes
     map.addLayer(layer);
 
     const jointravel = (id) => {
-        fetch('/unirme/' + id)
+        fetch('/profile/' + id + '/unirme') 
             .then(() => {
                 console.log("se ha unido satisfactoriamente")
             })
     };
     //travels 
-    const { travels } = {{ travels| safe}};
+    const { travels } = {{ travels|safe}};
     console.log(travels)
     /*var myIcon = L.icon({
         iconUrl: "static/slider/coche.png",
@@ -104,26 +167,24 @@ Buscar Viajes
     });*/
     if (travels !== []) {
         travels.map(travel => {
+            debugger;
             const origin = L.marker([travel.origen.lat, travel.origen.lon]).addTo(map);
             origin.on('mouseover', function (ev) { ev.target.openPopup(); });
             const popup = '<div class="popup-map">' +
-                '<div class="driver"><img src="' + travel.foto_conductor + '"></img><h3>' + travel.conductor + '</h3></div>' +
-                '<p class="stars"><i class="fa fa-thumbs-up" style="color:green"></i>'+travel.score_bueno + " "+'<i class="fa fa-thumbs-down" style="color:red"></i>' + travel.score_malo + '</p>' +
+                '<div class="driver"><img src="' + travel.foto_conductor + '"></img><a href="'+travel.url_profile+'" style="font-size: 13px;margin-top: 18px;">' + travel.conductor.toUpperCase() + '</h3></div>' +
+                '<div class="cantscores" style="display: flex;margin-left: 26%;font-size: 12px;margin-top: 4%;"><a class="cantscoresgood"  style="color: #8fbf8b;font-size: 14px;margin-top: -5%;margin-left: 24%;"  href="#scores" ><i class="fas fa-thumbs-up" style="margin-left: 4%;"></i>'+travel.score_bueno + '</a>' +
+                '<a class="cantscoresbad"  href="#scores" style="color: #ca5656;font-size: 14px;margin-top: -5%;margin-left: 4%;"  ><i class="fas fa-thumbs-down" style="margin-left: 4%;"></i>' + travel.score_malo + '</a></div>' +
                 '<b>Origen:</b>' + travel.origen.nombre +
                 '<br /><b>Destino:</b>' + travel.destino.nombre +
                 '<br /><b>Fecha:</b>' + travel.fecha +
-                '<br /><b>Hora:</b>' + travel.hora +
+                '<br /><b>Hora Salida:</b>' + travel.hora_salida +'<b>  Hora Llegada:</b>' + travel.hora_llegada +
                 '<br /><b>Asientos disponibles:</b>' + travel.asientos_disp +
-                `<button class="btn-join-travel" onclick="jointravel(${travel.id})">Unirme al viaje</button></div>`
-            origin.bindPopup(popup).openPopup();
+                `<button class="btn-join-travel" onclick=jointravel("${travel.id}")>Unirme al viaje</button></div>`
+            origin.bindPopup(popup);
         })
     }
 
-
-
-
-
-
+    setTimeout(function(){$(".myAlert-top").hide();}, 6000);
 
 
 

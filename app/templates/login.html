@@ -54,7 +54,7 @@
                             {{ form.submit(class="btn1 btn-outline-info") }}
                         </div>
                         <small class="text-muted ml-2">
-                            <a href="#">Olvidaste tu contraseña?</a>
+                            <a  href="{{ url_for('reset_request') }}">Olvidaste tu contraseña?</a>
                         </small>
                     </form>
                 </div>
@@ -83,4 +83,3 @@
 {% block scripts %}
 <script src="../static/js/scripts.js"></script>
 {% endblock %}
-m

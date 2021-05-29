@@ -9,6 +9,12 @@
   text-align: center;
 
 }
+.myAlert-top{
+  position: fixed;
+  top: 5px; 
+  left:2%;
+  width: 96%;
+}
 
       
 
@@ -44,14 +50,15 @@
   width: 34%;
   margin-top: 20%;
   border-radius: 30px;
-  margin-left: 37%;
+  margin-left: 31%;
   box-shadow: 0px 1px 10px #4a4a4a;
   text-shadow: 0px 1px 1px #e1e1e1;
+  margin-bottom: 3%;
 
 }
 .signin-area-form {
   padding: 7%;
-  margin-top: -62%;
+  margin-top: -57%;
   font-size: 12px;
 }
 .form-control-lg{

@@ -88,7 +88,7 @@ a.article-title:hover {
 
 /*Botón*/
 .drop-button {
-  background-color: #8DEBF7;
+  background-color: #5c7a7b;
   color: #fff;
   padding: 15px;
   border-radius: 5px;
@@ -124,7 +124,7 @@ drop-buttton:hover {
 }
 
 .dropdown-content a {
-  color: #207878;
+  color:#5c7a7b;
   padding: 12px 16px;
   display: block;
 }

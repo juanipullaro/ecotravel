@@ -1,8 +1,10 @@
 from geoalchemy2 import Geometry
 from sqlalchemy.orm import relationship
+from flask import url_for
 from flask_login import UserMixin
 from datetime import datetime
-from . import db, login_manager
+from . import db, login_manager,app
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from sqlalchemy import Column, BigInteger, Text, Sequence, Boolean, Float
 from sqlalchemy import String, Date, Integer, ForeignKey, DateTime, Time, UniqueConstraint
 
@@ -63,7 +65,26 @@ class User(db.Model, UserMixin):
             return self.notifications
         except Exception as e:
             return []
+    def get_notifications_driver(self):
+        try:
+            return self.notifications_driver
+        except Exception as e:
+            return []
 
+    def get_passenger(self):
+        return self.name.title()+' '+self.surname.title()  
+    def get_reset_token(self, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.dni}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
 ################################### USUARIO #######################################################
 
 class Travel_request(db.Model):
@@ -116,13 +137,14 @@ class Travel_request(db.Model):
             self.state = 'finalizada'
             db.session.commit()
 
+ 
 
 ################################### VIAJE #######################################################
 
 class Travel(db.Model):
     __tablename__ = "travels"
     __table_args__ = {'extend_existing': True}
-   
+    __table_args__ = (db.UniqueConstraint('travel_date', 'travel_hour','travel_driver_id'), )
     id = Column(Integer, primary_key=True)
     travel_date = Column(Date)
     travel_hour = Column(Time)
@@ -144,16 +166,16 @@ class Travel(db.Model):
 
     def to_json(self):
         travel = {"id": self.id,
-
                   "origen": {"nombre": self.origin.location, "lat": self.origin.latitude, "lon": self.origin.longitude},
                   "destino": {"nombre": self.dest.location, "lat": self.dest.latitude, "lon": self.dest.longitude},
-                  "fecha": str(self.travel_date),
-                  "hora salida": str(self.travel_hour),
-                  "hora llegada": str(self.travel_hour_f),
+                  "fecha": self.travel_date.strftime("%d-%m-%Y"),
+                  "hora_salida": str(self.travel_hour),
+                  "hora_llegada": str(self.travel_hour_f),
                   "conductor": self.driver.name+' '+self.driver.surname,
                   "foto_conductor": '/static/profile_pics/'+self.driver.image_file,
-                  "score_bueno": 0,
-                  "score_malo": 0,
+                  "url_profile": url_for('passenger_profile',dni=self.driver.dni),
+                  "score_bueno": len([score for score in self.driver.scores_as_passenger if score.point==1]),
+                  "score_malo": len([score for score in self.driver.scores_as_passenger if score.point==0]),
                   "asientos_disp": self.seats}
         return travel
 
@@ -190,7 +212,9 @@ class Travel(db.Model):
 
     def get_destino(self):
         return self.dest.location.split(",")[0]
-
+    def get_driver(self):
+        return self.driver.name.title()+' '+self.driver.surname.title()
+      
 
 ################################### LOCALIZACION #######################################################
 
@@ -277,8 +301,7 @@ class TravelAlerts(db.Model):
             if travel.match_alert(alert):
                 travel_alert = TravelAlerts(travel, alert)
                 user = alert.passenger
-                notification = NewTravelNotification(travel, user)
-                print(notification)
+                notification = NewTravelNotification(travel, user, type="New")
                 db.session.add(travel_alert)
                 db.session.add(notification)
         try:
@@ -344,7 +367,9 @@ class NewTravelNotification(db.Model):
     __tablename__ = "travel_notifications"
     id = Column(Integer, autoincrement=True, primary_key=True)
     message = Column(String(120),  nullable=False)
+    travel_driver_id=Column(Integer, ForeignKey('users.dni'))
     passenger_id = Column(Integer, ForeignKey('users.dni'))
+    driver= relationship('User', foreign_keys=[travel_driver_id],backref='notifications_driver' )
     passenger = relationship(
         "User", backref="notifications", foreign_keys=[passenger_id])
     created_at = Column(
@@ -355,8 +380,71 @@ class NewTravelNotification(db.Model):
         'travels.id'), primary_key=True)
     travel = relationship("Travel", foreign_keys=[
         travel_id])
+    type =Column(String(120),nullable=False)
+    url =Column(String(120))
 
-    def __init__(self, travel, user):
-        self.message = f"Nuevo viaje creado con destino a {travel.get_destino()}"
-        self.passenger_id = user.dni
+
+    def __init__(self, travel, user, type):
+        self.passenger_id=user.dni
+        if type == "Accept":
+            self.accept_travel_notification(travel)
+        if type == "NewPassengerUp":
+            self.newpassengerup_travel_notification(travel,user)   
+        if type == "Reject":
+            self.reject_travel_notification(travel)
+        if type == "Downpassenger":
+            self.downpassenger_travel_notification(travel)
+        if type == "Downme":
+            self.downme_travel_notification(travel,user)     
+        if type == "Delete":
+            self.delete_travel_notification(travel)
+        if type == "Fin":
+            self.fin_travel_notification(travel)
+        if type == "Finauto":
+            self.finauto_travel_notification(travel)
+        if type == "Update":
+            self.update_travel_notification(travel)
+        if type == "Scoresend":
+            self.scoresend_travel_notification(travel,user) 
+        if type == "New":
+            self.new_travel_notification(travel)
         self.travel_id = travel.id
+        self.type=type
+    
+    def accept_travel_notification(self, travel):
+        self.message = f"Solicitud Aceptada para el viaje con destino a {travel.get_destino()}"
+        self.url ='/userrequesttravel'
+    def scoresend_travel_notification(self, travel,user):
+        self.message = f"Tenes una nueva calificacion de {user.get_passenger()}"
+        self.passenger_id = travel.driver.dni
+        self.url ='/userprofile'
+    def newpassengerup_travel_notification(self, travel,user):
+        self.message = f"{user.get_passenger()} quiere unirse al viaje con destino a {travel.get_destino()}"
+        self.passenger_id = travel.driver.dni
+        self.url ='/usertravelcreate'
+    def reject_travel_notification(self, travel):
+        self.message = f"Solicitud Rechazada para el viaje con destino a {travel.get_destino()}"
+        self.url ='/userrequesttravel'
+    def downpassenger_travel_notification(self, travel):
+        self.message = f"{travel.get_driver()} te bajó de su viaje con destino a {travel.get_destino()}"
+        self.url ='/userrequesttravel'
+    def downme_travel_notification(self, travel,user):
+        self.message = f"{user.get_passenger()} se bajó de tu viaje con destino a {travel.get_destino()}"
+        self.passenger_id = travel.driver.dni
+        self.url ='/usertravelcreate'    
+    def delete_travel_notification(self, travel):
+        self.message = f"{travel.get_driver()} eliminó de su viaje con destino a {travel.get_destino()}"
+        self.url ='/userrequesttravel'
+    def fin_travel_notification(self, travel):
+        self.message = f"Tu viaje con destino a {travel.get_destino()} finalizó.¡Ya podes calificarlo!"
+        self.url ='/usertravelfin'
+    def finauto_travel_notification(self, travel):
+        self.message = f"Tu viaje con destino a {travel.get_destino()} finalizó.¡Ya podes calificarlo!"
+        self.url ='/usertravelfin'
+    def update_travel_notification(self, travel):
+        self.message = f"Se ha actualizado el viaje con destino a {travel.get_destino()}"
+        self.url ='/userrequesttravel'
+    def new_travel_notification(self, travel):
+        self.message = f"Nuevo viaje creado con destino a {travel.get_destino()}"
+        self.url ='/profile#travels'
+

@@ -6,11 +6,12 @@ import json
 from datetime import datetime, timedelta
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, jsonify
-from . import app, db, bcrypt, socketio
-from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm, ScoreForm, ScoreForm
-from .models import User, Travel_request, Location, Travel, Alert, Scores, TravelAlerts
+from . import app, db, bcrypt, socketio, mail
+from .forms import RegistrationForm, LoginForm, UpdateAccountForm, TravelSearchForm, CreateTravelForm, ScoreForm, ScoreForm,RequestResetForm,ResetPasswordForm
+from .models import User, Travel_request, Location, Travel, Alert, Scores, TravelAlerts, NewTravelNotification
 from .data import ALERT_STATUS
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
 import time
 from sqlalchemy import desc
 
@@ -25,9 +26,14 @@ def tasks_travels():
                 socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id} actualizado"}, broadcast=True)
             elif travel.travel_hour_f <= datetime.now().time():
                 travel.status="finalizado"
-                socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id} actualizado"}, broadcast=True)
+                for request in travel.travel_requests:
+                    if request.state=="aceptada":
+                        request.state="finalizada"
+                        for request_travel in travel.travel_requests:
+                            notification = NewTravelNotification(travel=travel,user=request_travel.passenger,type="Finauto")
+                            db.session.add(notification)
     db.session.commit()
-    #socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id} actualizado"}, broadcast=True)
+    
 
 
 
@@ -54,7 +60,7 @@ def profile():
 
 @app.route("/generic")
 def generic():
-    return render_template('test.html')
+    return render_template('generic.html')
 
   ################################### GUARDAR IMAGEN DE USUARIO #####################################
 
@@ -178,7 +184,6 @@ def logout():
 
 ################################### SESSION VIAJES CREADOS ###############################################
 
-
 @app.route("/usertravelcreate", methods=['GET', 'POST'])
 @login_required
 def usertravelcreate():
@@ -205,19 +210,25 @@ def update_travels(travel_id):
         travel.dest.location = form.destination.data
         travel.travel_date = form.travel_date.data
         travel.travel_hour = form.travel_time.data
+        travel.travel_hour_f = form.travel_time_f.data
         travel.seats = form.seats.data
         travel.seatsdec = form.seats.data
+        for request_travel in travel.travel_requests:
+            if request_travel.state in ("aceptada", "pendiente"):
+                notification = NewTravelNotification(travel=travel,user=request_travel.passenger,type="Update")
+                db.session.add(notification)
         db.session.commit()
         flash('Se actualizó su viaje!', 'success')
-        return redirect(url_for('usertravelcreate', travel_id=travel_id))
     elif request.method == 'GET':
         form.origin.data = travel.origin.location
         form.destination.data = travel.dest.location
         form.travel_date.data = travel.travel_date
         form.travel_time.data = travel.travel_hour
+        form.travel_time_f.data = travel.travel_hour_f
         form.seats.data = travel.seatsdec
     return render_template('formulario.html', title='Update Travel',
                            form=form, legend='Update Travel', travel=travel)
+
 
 
 @app.route("/usertravelcreate/<id_viaje>/delete", methods=['GET', 'POST'])
@@ -225,58 +236,68 @@ def update_travels(travel_id):
 def delete_post(id_viaje):
     travel = Travel.query.get_or_404(id_viaje)
     travel.status = "cancelado"
+    for request_travel in travel.travel_requests:
+            notification = NewTravelNotification(travel=travel,user=request_travel.passenger,type="Delete")
+            db.session.add(notification)
     db.session.commit()
-    socketio.emit('message', {"id": 1, "mensaje": "viaje eliminado"}, broadcast=True)
     flash('Su viaje se elimino correctamente!', 'success')
-    return redirect(url_for('profile'))
+    return redirect(url_for('usertravelcreate'))
 
 @app.route("/usertravelcreate/<id_travel>/fin", methods=['GET', 'POST'])
 @login_required
 def fin_travel(id_travel):
     travel = Travel.query.get_or_404(id_travel)
-    travel_request = Travel_request.query.filter_by(travel_id=id_travel)
-    for i in travel_request:
-        i.state='finalizada'
     travel.status = "finalizado"
+    for request_travel in travel.travel_requests:
+            if request_travel.state=="aceptada":
+                request_travel.state="finalizada"
+                notification = NewTravelNotification(travel=travel,user=request_travel.passenger,type="Fin")
+                db.session.add(notification)
     db.session.commit()
-    socketio.emit('message', {"id": 1, "mensaje": "viaje Finalizado"}, broadcast=True)
-    flash('Su viaje finalizo correctamente!', 'success')
     return redirect(url_for('usertravelcreate'))
 
 
 @app.route("/usertravelcreate/<id_passenger>/<id_travel>/add", methods=['GET', 'POST'])
 def add_request(id_passenger, id_travel):
-    travel_request = Travel_request.query.filter_by(
-        dni_user=id_passenger, travel_id=id_travel).first()
+    travel = Travel.query.get_or_404(id_travel)
+    travel_request = Travel_request.query.filter_by(dni_user=id_passenger, travel_id=id_travel).first()
+    notification = NewTravelNotification(travel=travel,user=travel_request.passenger,type="Accept")
+    db.session.add(notification)
     travel_request.acept()
-    socketio.emit('message', {"id": 1, "mensaje": "pasajero aceptado"}, broadcast=True)
+    #socketio.emit('message', {"id": 1, "mensaje": "pasajero aceptado"}, broadcast=True)
     return redirect(url_for('usertravelcreate'))
 
 
 @app.route("/usertravelcreate/<id_passenger>/<id_travel>/reject", methods=['GET', 'POST'])
 def reject_request(id_passenger, id_travel):
+    travel = Travel.query.get_or_404(id_travel)
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
+    notification = NewTravelNotification(travel=travel,user=travel_request.passenger,type="Reject")
+    db.session.add(notification)
     travel_request.reject()
-    socketio.emit('message', {"id": 1, "mensaje": "pasajero rechazado"}, broadcast=True)
     return redirect(url_for('usertravelcreate'))
 
 
 @app.route("/usertravelcreate/<id_passenger>/<id_travel>/downpassenger", methods=['GET', 'POST'])
 def down_request_driver(id_passenger, id_travel):
+    travel = Travel.query.get_or_404(id_travel)
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
+    notification = NewTravelNotification(travel=travel,user=travel_request.passenger,type="Downpassenger")
+    db.session.add(notification)
     travel_request.down()
-    socketio.emit('message', {"id": 1, "mensaje": "pasajero bajado de mi viaje"}, broadcast=True)
     return redirect(url_for('usertravelcreate'))
 
 
 @app.route("/usertravelcreate/<id_passenger>/<id_travel>/downme", methods=['GET', 'POST'])
 def down_request_passenger(id_passenger, id_travel):
+    travel = Travel.query.get_or_404(id_travel)
     travel_request = Travel_request.query.filter_by(
         dni_user=id_passenger, travel_id=id_travel).first()
+    notification = NewTravelNotification(travel=travel,user=travel_request.passenger,type="Downme")
+    db.session.add(notification)    
     travel_request.down()
-    socketio.emit('message', {"id": 1, "mensaje": "me bajo del viaje"}, broadcast=True)
     return redirect(url_for('userrequesttravel'))
 
 ################################### FIN SESSION VIAJES CREADOS ###############################################
@@ -325,11 +346,12 @@ def new_post(id_passenger,travel_id):
     db.session.add(score)
     s=Scores.query.filter_by(passenger_id=id_passenger, travel_id=travel_id).first()
     travel_request.score_id=s.id
+    notification = NewTravelNotification(travel=travel,user=travel_request.passenger,type="Scoresend")
+    db.session.add(notification)
     db.session.add(travel_request)
     db.session.commit()
-    socketio.emit('message', {"id": 1, "mensaje": "nueva calificacion"}, broadcast=True)
     flash('Calificacion enviada!', 'success')
-    return redirect(url_for('userprofile'))
+    return redirect(url_for('usertravelfin'))
 
 ################################### FIN SESSION VIAJES CREADOS ###############################################
 
@@ -341,7 +363,7 @@ def new_post(id_passenger,travel_id):
 def search_travels():
     # you can search for travels here
     form = TravelSearchForm()
-    last_created_travels = Travel.query.filter(Travel.travel_date>=datetime.now().date())
+    last_created_travels = Travel.query.filter(Travel.travel_date>=datetime.now().date(),Travel.status=="disponible")
     if form.validate_on_submit() and request.method == 'POST':
         origin = geocoder.arcgis(form.origin.data + ', argentina')
         dest = geocoder.arcgis(form.destination.data + ', argentina')
@@ -360,8 +382,14 @@ def search_travels():
             new_dest = Location.get_location(location=dest.address,
                                              latitude=dest.lat, longitude=dest.lng)
             form.destination.data = new_dest.location
-        travels = Travel.query.filter_by(
-            travel_date=form.travel_date.data)
+        print("time=",form.travel_time.data, type(form.travel_time.data))
+        if form.travel_time.data == "":
+            travels = Travel.query.filter_by(
+                travel_date=form.travel_date.data,status="disponible")
+        else:
+            travels = Travel.query.filter_by(
+                travel_date=form.travel_date.data,travel_hour=form.travel_time.data,status="disponible")
+
         travels_matched = []
 
         for travel in travels:
@@ -370,7 +398,8 @@ def search_travels():
                 travels_matched.append(travel.to_json())
 
         if len(travels_matched) == 0:
-            error = "No se han encontrado viajes"
+            flash('No se encontraron viajes', 'danger')
+            error= 'No se encontraron viajes'
         else:
             error = None
 
@@ -423,14 +452,13 @@ def create_travel():
             travels = [new_travel.to_json()]
             travel_alerts = [
                 travel_alert.alert.id for travel_alert in new_travel.travels_alerts]
-            flash('Se ha registrado un nuevo viaje')
+            flash('Se ha registrado un nuevo viaje', 'success')
             socketio.emit('message', {"id": 1, "mensaje": "Se ha creado un nuevo viaje"}, broadcast=True)
-            return redirect(url_for('usertravelcreate'))
+            return redirect(url_for('create_travel'))
 
         except sqlalchemy.exc.IntegrityError:
-            error = "Ya se tienes un viaje creado para esa fecha y es hora"
+            flash("Ya se tienes un viaje creado para esa fecha y esa hora","danger") 
             travels = {}
-            print(error)
             db.session.rollback()
         except Exception as e:
             error = "Se ha producido un error al agregar viaje"
@@ -453,6 +481,8 @@ def join_travel(id_viaje):
         passanger = User.query.filter_by(
             username=current_user.username).first()
         travel_request = Travel_request(travel, passanger)
+        notification = NewTravelNotification(travel=travel, user=current_user,type="NewPassengerUp")
+        db.session.add(notification)
         db.session.add(travel_request)
         db.session.commit()
         print("se ha agregado el viaje")
@@ -474,7 +504,7 @@ def create_alert():
     travel_time = data["travel_time"]
     alert = Alert(origin, dest, travel_date, travel_time, current_user)
     alert.save()
-    flash('Se ha creado una nueva alerta!', 'success')
+    flash("Success",category="success")
     return {"mensaje": "Se ha creado una alerta"}, 200
 
 @app.route('/account/alert/<int:id>/update', methods=['GET', 'POST'])
@@ -507,11 +537,63 @@ def get_notifications():
     for notification in notifications:
         data.append({"id":notification.id,
         "type": type(notification).__name__,
-        "message": notification.message})
+        "message": notification.message,
+        "tipo":notification.type,
+        "viewed_at":notification.viewed_at,
+        "url":notification.url})
     return {"notificaciones": data}, 200
+
+@app.route("/viewnotificaciones/<id>", methods=["GET","POST"])
+def view_notifications(id):
+    notification= NewTravelNotification.query.filter_by(id=id).first()
+    notification.viewed_at=datetime.now()
+    db.session.commit()
+    return "", 200
 
 @app.route("/setvisible/<int:val>", methods=["GET","POST"])
 def set_visible(val):
     current_user.phone_visible = val
     db.session.commit()
     return "Se ha actulizado la visibilidad del telefono", 200
+
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Solicitud de cambio de contraseña',
+                  sender='info.ecotravel.utn@gmail.com',
+                  recipients=[user.email])
+    msg.body = f'''Para cambiar su contraseña, por favor visite el siguiente link:
+{url_for('reset_token', token=token, _external=True)}
+
+Si no realizó esta solicitud, simplemente ignore este correo electrónico y no se realizarán cambios.
+'''
+    mail.send(msg)
+
+
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('Se ha enviado un correo electrónico con instrucciones para restablecer su contraseña.', 'info')
+    return render_template('reset_request.html', title='Restablecer contraseña', form=form)
+
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('Token inválido o caducado', 'warning')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash('¡Tu contraseña ha sido actualizada! Ahora podes iniciar sesión.', 'success')
+    return render_template('reset_token.html', title='Restablecer contraseña', form=form)

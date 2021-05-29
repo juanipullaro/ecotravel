@@ -49,12 +49,18 @@
       .then(response => { return response.json() })
       .then(jsonData => {
         notifications = jsonData.notificaciones;
+        if (notifications.length == 0){
+          dropdown.prepend("<p>No tienes nuevas notificaciones</p>")
+        }
         notifications.map(notification => {
-          console.log(notification);
-          dropdown.prepend(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`)
-        })
+          if(notification.viewed_at == null){
+            dropdown.prepend(`<a class="drop-button" href="${notification.url}" onclick=viewnotifications(${notification.id}) style=" background-color: #5c7a7b; font-size:small;">${notification.message}</a>` )
+          } else {dropdown.prepend(`<a class="drop-button" href="${notification.url}" style=" background-color: #9d9d9d;  font-size:small;" onclick=viewnotifications(${notification.id})>${notification.message}</a>` )}
+
+      })
       })
   }
+
 
   function notificationsDropdown() {
     dropdown.toggle("display")
@@ -65,18 +71,26 @@
     fetch("/notificaciones")
       .then(response => { return response.json() })
       .then(jsonData => {
+        if (notifications.length == 0){
+             dropdown.empty()}
         jsonData.notificaciones.map(notification => {
           if (notifications.filter(not =>{return not["id"]===notification["id"]}).length === 0){
             $("#bell").addClass("new-not");
-            notifications.append(notification)
-            dropdown.prepend(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`);
+            notifications = [notification,...notifications];
+            dropdown.prepend(`<a class="drop-button" href="${notification.url}" onclick=viewnotifications("${notification.id}") style=" background-color: #5c7a7b; font-size:small;">${notification.message}</a>` )
           }
         })
         
       })
       setTimeout(updateNotifications,10000);
   };
-
   setTimeout(updateNotifications,10000)
+ 
+   function viewnotifications(id){
 
+     fetch("/viewnotificaciones/"+ id) 
+    
+   }
+  
+  
   </script>

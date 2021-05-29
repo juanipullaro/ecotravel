@@ -21,7 +21,7 @@
   position: relative;
   text-align: left;
   width: 29.75rem;
-  margin-top: -13%;
+  margin-top: -18%;
 }
 
 
@@ -176,6 +176,13 @@
   height: 80px;
   margin-left: 58%;
 }
+.myAlert-top{
+  position: fixed;
+  top: 5px; 
+  left:2%;
+  width: 96%;
+}
+
 .seatsccount {
     margin-top: -34%;
     margin-bottom: -3px;
@@ -467,7 +474,7 @@ dl, ol, ul {
   margin-left: -134%;
   margin-bottom: 106px;
   color: #3941418a;
-  z-index: 100;
+
 }
 .prueba .statustravel1.fin {
   position: relative;
@@ -477,7 +484,7 @@ dl, ol, ul {
   margin-left: -134%;
   margin-bottom: 429%;
   color: #3941418a;
-  z-index: 100;
+  
 }
 
 .prueba .statustravel1 span:last-child {

@@ -59,45 +59,70 @@
 </header>
 <script>
   /*Cuando se hace click en el botón, muestra el submenu*/
-  const dropdown = $("#notificationsDropdown");
-  let notifications = [];
-  window.addEventListener("load",event =>{
-    addNotifications()
+const dropdown = $("#notificationsDropdown");
+let notifications = [];
+window.addEventListener("load",event =>{
+addNotifications()
+})
+function addNotifications() {
+//Añade una clase al elemento que tenga el id myDropdown
+fetch("/notificaciones")
+.then(response => { return response.json() })
+.then(jsonData => {
+  notifications = jsonData.notificaciones;
+  if (notifications.length == 0){
+    dropdown.prepend("<p>No tienes nuevas notificaciones</p>")
+  }
+  notifications.map(notification => {
+    if(notification.tipo=="Accept" || notification.tipo=="Reject" || notification.tipo=="Downpassenger" || notification.tipo=="Delete" || notification.tipo=="Update"){
+      console.log(notification);
+      dropdown.prepend(`<a class="drop-button" href="/userrequesttravel" style=" background-color: #5c7a7b;">${notification.message}</a>` )} 
+    else if (notification.tipo=="Fin" || notification.tipo=="Finauto"){ 
+      console.log(notification);
+      dropdown.prepend(`<a class="drop-button" href="/usertravelfin" style=" background-color: #5c7a7b;">${notification.message}</a>` )}
+    else if (notification.tipo=="New"){ 
+      console.log(notification);
+      dropdown.prepend(`<a class="drop-button" href="/profile#travels" style=" background-color: #5c7a7b;">${notification.message}</a>` )}
+    else if (notification.tipo=="NewPassengerUp"){ 
+      console.log(notification);
+      dropdown.prepend(`<a class="drop-button" href="/usertravelcreate" style=" background-color: #5c7a7b;">${notification.message}</a>` )} 
+})
+})
+}
+
+
+function notificationsDropdown() {
+dropdown.toggle("display")
+$("#bell").removeClass("new-not")
+}
+
+const updateNotifications = () =>{
+fetch("/notificaciones")
+.then(response => { return response.json() })
+.then(jsonData => {
+  jsonData.notificaciones.map(notification => {
+    if (notifications.filter(not =>{return not["id"]===notification["id"]}).length === 0){
+      $("#bell").addClass("new-not");
+      notifications = [notification,...notifications];
+      if(notification.tipo=="Accept" || notification.tipo=="Reject" || notification.tipo=="Downpassenger" || notification.tipo=="Delete" || notification.tipo=="Update"){
+      console.log(notification);
+      dropdown.prepend(`<a class="drop-button" href="/userrequesttravel" style=" background-color: #5c7a7b;">${notification.message}</a>` )} 
+    else if (notification.tipo=="Fin" || notification.tipo=="Finauto"){ 
+      console.log(notification);
+      dropdown.prepend(`<a class="drop-button" href="/usertravelfin" style=" background-color: #5c7a7b;">${notification.message}</a>` )}
+    else if (notification.tipo=="New"){ 
+      console.log(notification);
+      dropdown.prepend(`<a class="drop-button" href="/profile#travels" style=" background-color: #5c7a7b;">${notification.message}</a>` )}
+    else if (notification.tipo=="NewPassengerUp"){ 
+      console.log(notification);
+      dropdown.prepend(`<a class="drop-button" href="/usertravelcreate" style=" background-color: #5c7a7b;">${notification.message}</a>` )} 
+    }
   })
-  function addNotifications() {
-    //Añade una clase al elemento que tenga el id myDropdown
-    fetch("/notificaciones")
-      .then(response => { return response.json() })
-      .then(jsonData => {
-        notifications = jsonData.notificaciones;
-        notifications.map(notification => {
-          console.log(notification);
-          dropdown.prepend(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`)
-        })
-      })
-  }
+  
+})
+setTimeout(updateNotifications,10000);
+};
+setTimeout(updateNotifications,10000)
 
-  function notificationsDropdown() {
-    dropdown.toggle("display")
-    $("#bell").removeClass("new-not")
-  }
-
-  const updateNotifications = () =>{
-    fetch("/notificaciones")
-      .then(response => { return response.json() })
-      .then(jsonData => {
-        jsonData.notificaciones.map(notification => {
-          if (notifications.filter(not =>{return not["id"]===notification["id"]}).length === 0){
-            $("#bell").addClass("new-not");
-            notifications.append(notification)
-            dropdown.prepend(`<a class="drop-button" href="/profile#travels">${notification.message}</p>`);
-          }
-        })
-        
-      })
-      setTimeout(updateNotifications,10000);
-  };
-
-  setTimeout(updateNotifications,10000)
 
 </script>

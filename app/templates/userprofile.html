@@ -6,16 +6,22 @@
 <section id="banner" class="bg-img" data-bg="banner.jpg" style="background:#b0afad; height:100%;display: flex;
   padding-top: 19px;
   flex-direction: column;">
-  
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div id="modal-join-success"  class="myAlert-top alert alert-success">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <strong>messages[0]</strong>
-    </div>
-  {% endif %}
-  
-{% endwith %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {%for category, message in messages%}
+        {% if category == "success" %}
+        <div id="modal-join-success"  class="myAlert-top alert1 alert-success" style="display: flex;z-index: 1;height: 43px;border-radius: 12px; padding: 9px;">
+            <strong style="margin-right: 1%; display: flex;"></strong> ¡Tu perfil se actualizó correctamente!
+        </div>
+        {% else%}
+        <div id="modal-join-error"  class="myAlert-top alert1 alert-danger" style="display: flex;z-index: 1;">
+          <strong style="margin-right: 1%; display: flex;"></strong> ¡Error al actualizar tu perfil!
+        </div>
+        {% endif%}
+    {% endfor %}
+    {% endif %}
+    {%endwith%}
 <div class="container">
     <div class="main-body">
           <div class="row gutters-sm">
@@ -177,19 +183,7 @@
 </section>
 
 <script>
-  function openCity(evt, cityName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-  }
+
   
   // Get the element with id="defaultOpen" and click on it
   document.getElementById("defaultOpen").click();
@@ -231,7 +225,7 @@
     }
     fetch("/setvisible/"+visible);
   }
-
+  setTimeout(function(){$(".myAlert-top").hide();}, 6000);
 </script>
 
 

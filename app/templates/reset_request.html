@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar_v2.html" %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+  {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" style="width: 50%;border-radius: 12px;margin-top: 1%;margin-bottom: -4%;text-align: center;margin-left: 28%;">
+      {{ message }}
+      <a href="/home1" class="alert-link" style=" margin-left: 1%;">Volver</a>
+    </div>
+  {% endfor %}
+{% endif %}
+{% endwith %}
+    <div class="content-section reset" >
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Restablecer contraseña</legend>
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+
+  <script>
+      setTimeout(function(){$(".alert").hide();}, 6000);
+  </script>  
+{% endblock %}

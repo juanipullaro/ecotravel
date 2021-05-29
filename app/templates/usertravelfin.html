@@ -4,6 +4,21 @@
 <link rel="stylesheet" href="./static/css/usertravelfin.css">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <section id="banner1" class="bg-img" data-bg="banner.jpg"  style="background:#b0afad;">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {%for category, message in messages%}
+      {% if category == "success" %}
+      <div id="modal-join-success"  class="myAlert-top alert1 alert-success" style="display: flex;z-index: 1;height: 43px;border-radius: 12px; padding: 9px;">
+          <strong style="margin-right: 1%; display: flex;"></strong> ¡Calificación enviada correctamente!
+      </div>
+      {% else%}
+      <div id="modal-join-error"  class="myAlert-top alert1 alert-danger" style="display: flex;z-index: 1;">
+        <strong style="margin-right: 1%; display: flex;"></strong> ¡Error al aenviar la calificacion!
+      </div>
+      {% endif%}
+  {% endfor %}
+  {% endif %}
+  {%endwith%}
 {% if travel_reqs|length == 0 %}
 <p class="text-travelnull">Sin solicitudes finalizadas</p>
 {%else%}
@@ -138,16 +153,10 @@
 {%endif%}
 </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-    crossorigin="anonymous">
-  </script>
+ 
   
-  <script type="text/javascript" charset="utf-8">
-    var socket = io();
-    socket.on('message', data => {
-        location.reload()
-    });
+  <script></script>
+    setTimeout(function(){$(".myAlert-top").hide();}, 6000);
   </script>   
-{% endblock body %}-->
+{% endblock body %}
 

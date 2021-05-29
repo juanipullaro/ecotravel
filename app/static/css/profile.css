@@ -10,6 +10,7 @@
     
 }
 
+
 .gHz6xd {
   background-clip: padding-box;
   display: flex;
@@ -169,8 +170,17 @@
     font-size: 12px;
     height: 80px;
 }
+.horaestimada{
+  margin-top: -5%;
+  margin-bottom: -3px;
+  text-transform: uppercase;
+  color:  #204051;
+  font-size: 12px;
+  height: 80px;
+ 
+}
 .seatsccount {
-  margin-top: -27%;
+  margin-top: -39%;
   margin-bottom: -3px;
   text-transform: uppercase;
   color:  #204051;

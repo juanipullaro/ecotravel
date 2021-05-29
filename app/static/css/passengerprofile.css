@@ -192,11 +192,14 @@ ul.dropdown-menu {
     display: flex !important;
 }
 
-img {
-    border-style: none;
-    width: 50%;
+
+    img {
+        border-style: none;
+        width: 40%;
+        height: 28%;
+    }
     
-}
+
 .btn.btn-primary{
     margin-top: 13%;
 }

@@ -3,7 +3,7 @@
 {% include "navbar_v2.html" %}
 <link rel="stylesheet" href="./static/css/userrequesttravel.css">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-<section id="banner1" class="bg-img" data-bg="banner.jpg"  style="background:#b0afad;">
+<section id="banner1" class="bg-img" data-bg="banner.jpg"  style="linear-gradient(#e66465, #9198e5)">
 {% if travel_reqs|length == 0 %}
 <p class="text-travelnull">No tenés solicitudes vigentes</p>
 {%else%}
@@ -14,7 +14,7 @@
               <div class="O7utsb bFjUmb-Tvm9db"></div>
               <div class="OjOEXb Gf8MK" {% if travel_req.state == 'activa'%} style="background-color:rgb(219, 105, 12);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
               <div class="OjOEXb Gf8MK" {% if travel_req.state == 'aceptada'  %} style="background-color:rgba(5, 51, 53, 0.65);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
-              <div class="OjOEXb Gf8MK" {% if travel_req.state == 'cancelada'  %} style="background-color:rgba(206, 60, 60, 0.5);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
+              <div class="OjOEXb Gf8MK" {% if travel_req.state == 'cancelada' or travel_req.state == 'rechazada'  %} style="background-color:rgba(206, 60, 60, 0.5);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
               <div class="OjOEXb Gf8MK" {% if travel_req.state == 'finalizada' %} style="background-color:rgba(206, 60, 60, 0.5);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
                   <div class="R4EiSb">
                       <h2 class="prWPdf">
@@ -66,16 +66,6 @@
 {%endif%}
 </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-    crossorigin="anonymous">
-  </script>
-  
-  <script type="text/javascript" charset="utf-8">
-    var socket = io();
-    socket.on('message', data => {
-        location.reload()
-    });
-  </script>   
+ 
 {% endblock body %}-->
 

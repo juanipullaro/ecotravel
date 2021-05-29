@@ -24,13 +24,13 @@
     {%for category, message in messages%}
         {% if category == "success" %}
         <div id="modal-join-success"  class="myAlert-top alert alert-success" style="display: flex; z-index: 1;">
-            <strong>Estas en Camino!</strong> Te has unido satisfactoriamente al viaje. 
-            <a href="/userrequesttravel" class="alert-link"> Ir a mis solicitudes</a>
+            <strong style="margin-right: 1%; display: flex;">Estas en Camino! </strong> Te has unido satisfactoriamente al viaje. 
+             <a href="/userrequesttravel" class="alert-link" style=" margin-left: 1%;"> Ir a mis solicitudes</a>
         </div>
         {% else%}
         <div id="modal-join-error"  class="myAlert-top alert alert-danger" style="display: flex;z-index: 1;">
-            <strong>Ups!</strong> Ya te has unido a este viaje.
-            <a href="/userrequesttravel" class="alert-link">Ir a mis solicitudes</a>
+            <strong style="margin-right: 1%; display: flex;">Ups! </strong> Ya te has unido a este viaje.
+            <a href="/userrequesttravel" class="alert-link" style=" margin-left: 1%;"> Ir a mis solicitudes</a>
         </div>
         {% endif%}
     {% endfor %}
@@ -70,7 +70,8 @@
                                           var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
                                           document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                       </script></div>
-                            <div  class="horaccount"><p>Hora:</p>{{ travel.travel_hour}}</div>
+                            <div  class="horaccount"><p>Hora de salida:</p>{{ travel.travel_hour}}</div>
+                            <div  class="horaestimada"><p>Hora de llegada:</p>{{ travel.travel_hour_f}}</div>
                             <div  class="seatsccount"><p>Asientos disponibles</p><div class="seatssize">{{travel.seats}}</div></div> 
                             <a class="btn-uptravel" onclick="jointravel('{{travel.id}}')" href="{{ url_for('join_travel', id_viaje=travel.id ) }}">Unirme al viaje</a>
                             
@@ -88,7 +89,17 @@
  
 
 </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+crossorigin="anonymous">
+</script>
 
+<script type="text/javascript" charset="utf-8">
+var socket = io();
+socket.on('message', data => {
+    location.reload()
+});
+</script>   
 <script >
     const jointravel = (id) => {
         document.getElementById("overlay-"+ id).style.display = "flex";
@@ -109,6 +120,7 @@
         document.getElementById("overlay-" + id).style.display = "none";
     })
 </script>
+
 
 
 
