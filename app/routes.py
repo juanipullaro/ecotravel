@@ -23,15 +23,17 @@ def tasks_travels():
         if travel.travel_date == datetime.now().date() and travel.travel_hour <= datetime.now().time():
             if travel.status in ["completo", "disponible"]:
                 travel.status="en_transito"
-                socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id} actualizado"}, broadcast=True)
+                for request in travel.travel_requests:
+                    if request.state=="aceptada":
+                        request.state="en_transito"
+                socketio.emit('message', {"id": 2, "mensaje": f"viaje {travel.id}en transito"}, broadcast=True)
             elif travel.travel_hour_f <= datetime.now().time():
                 travel.status="finalizado"
                 for request in travel.travel_requests:
-                    if request.state=="aceptada":
+                    if request.state=="en_transito":
                         request.state="finalizada"
-                        for request_travel in travel.travel_requests:
-                            notification = NewTravelNotification(travel=travel,user=request_travel.passenger,type="Finauto")
-                            db.session.add(notification)
+                        notification = NewTravelNotification(travel=travel,user=request.passenger,type="Finauto")
+                        db.session.add(notification)
     db.session.commit()
     
 
@@ -62,6 +64,9 @@ def profile():
 def generic():
     return render_template('generic.html')
 
+@app.route("/frequent_questions")
+def frequent_questions():
+    return render_template('frequent_questions.html')
   ################################### GUARDAR IMAGEN DE USUARIO #####################################
 
 
@@ -86,16 +91,24 @@ def save_picture(form_picture):
 def userprofile():
     users = User.query.all()
     scores = Scores.query.order_by(Scores.date_posted.desc()).all()
-    scores = [score for score in scores if score.travel_driver_id ==
-              current_user.dni]
-    scores1 = [score for score in scores if score.travel_driver_id ==
-               current_user.dni and score.point == 1]
-    scores2 = [score for score in scores if score.travel_driver_id ==
-               current_user.dni and score.point == 0]
+    scores_passenger = [score for score in scores if score.travel_driver_id ==
+              current_user.dni and score.band==1]
+    scores_driver= [score for score in scores if score.passenger_id ==
+              current_user.dni and score.band==0]
+    scores_driver_good = [score for score in scores if score.travel_driver_id ==
+               current_user.dni  and score.point == 1 and score.band==1 ]
+    scores_driver_bad = [score for score in scores if score.travel_driver_id ==
+               current_user.dni  and score.point == 0 and score.band==1 ]           
+    scores_passenger_good = [score for score in scores if score.passenger_id ==
+               current_user.dni  and score.point == 1 and score.band==0 ]
+    scores_passenger_bad = [score for score in scores if score.passenger_id ==
+               current_user.dni  and score.point == 0 and score.band==0 ]
+    scoresgood= len(scores_driver_good) + len(scores_passenger_good)  
+    scoresbad = len(scores_driver_bad) + len(scores_passenger_bad)          
     image_file = url_for(
         'static', filename='profile_pics/' + current_user.image_file)
     return render_template('userprofile.html', title='UserProfile',
-                           image_file=image_file, scores=scores, scores1=scores1, users=users, scores2=scores2)
+                           image_file=image_file, scores_passenger=scores_passenger,scores_driver=scores_driver, users=users,scoresgood=scoresgood,scoresbad=scoresbad)
 
 
 
@@ -103,14 +116,26 @@ def userprofile():
 @login_required
 def passenger_profile(dni):
     user = User.query.get_or_404(dni)
+    users = User.query.all()
     scores = Scores.query.order_by(Scores.date_posted.desc()).all()
-    scores  = [score for score in scores if score.travel_driver_id == user.dni]
-    scores1 = [score for score in scores if score.travel_driver_id == user.dni and score.point==1]
-    scores2 = [score for score in scores if score.travel_driver_id== user.dni and score.point==0]
+    scores_passenger = [score for score in scores if score.travel_driver_id ==
+              user.dni and score.band==1]
+    scores_driver= [score for score in scores if score.passenger_id ==
+              user.dni and score.band==0]
+    scores_driver_good = [score for score in scores if score.travel_driver_id ==
+               user.dni  and score.point == 1 and score.band==1 ]
+    scores_driver_bad = [score for score in scores if score.travel_driver_id ==
+               user.dni  and score.point == 0 and score.band==1 ]           
+    scores_passenger_good = [score for score in scores if score.passenger_id ==
+               user.dni  and score.point == 1 and score.band==0 ]
+    scores_passenger_bad = [score for score in scores if score.passenger_id ==
+               user.dni  and score.point == 0 and score.band==0 ]
+    scoresgood= len(scores_driver_good) + len(scores_passenger_good)  
+    scoresbad = len(scores_driver_bad) + len(scores_passenger_bad)        
     image_file = url_for(
         'static', filename='profile_pics/' + user.image_file)
     return render_template('passengerprofile.html', title='passengerProfile',
-                           image_file=image_file,scores=scores,scores1=scores1,user=user,scores2=scores2)
+                           image_file=image_file,scores=scores,scores_passenger=scores_passenger,scores_driver=scores_driver,users=users, scoresgood= scoresgood,user=user,scoresbad=scoresbad)
 
 
 @app.route("/userprofile/<dni>/updateprofile", methods=['GET', 'POST'])
@@ -187,7 +212,7 @@ def logout():
 @app.route("/usertravelcreate", methods=['GET', 'POST'])
 @login_required
 def usertravelcreate():
-
+    form = CreateTravelForm()
     scores = Scores.query.all() 
     scores = [score for score in scores if score.passenger_id == current_user.dni]
     form = ScoreForm()
@@ -213,6 +238,8 @@ def update_travels(travel_id):
         travel.travel_hour_f = form.travel_time_f.data
         travel.seats = form.seats.data
         travel.seatsdec = form.seats.data
+        travel.amount=form.amount.data
+        travel.commentary=form.commentary.data
         for request_travel in travel.travel_requests:
             if request_travel.state in ("aceptada", "pendiente"):
                 notification = NewTravelNotification(travel=travel,user=request_travel.passenger,type="Update")
@@ -226,6 +253,8 @@ def update_travels(travel_id):
         form.travel_time.data = travel.travel_hour
         form.travel_time_f.data = travel.travel_hour_f
         form.seats.data = travel.seatsdec
+        form.amount.data= travel.amount
+        form.commentary.data=travel.commentary
     return render_template('formulario.html', title='Update Travel',
                            form=form, legend='Update Travel', travel=travel)
 
@@ -236,11 +265,16 @@ def update_travels(travel_id):
 def delete_post(id_viaje):
     travel = Travel.query.get_or_404(id_viaje)
     travel.status = "cancelado"
-    for request_travel in travel.travel_requests:
-            notification = NewTravelNotification(travel=travel,user=request_travel.passenger,type="Delete")
-            db.session.add(notification)
+    form = CreateTravelForm()
+    travel.commentary=form.commentary.data
+    for request in travel.travel_requests:
+        if request.state in ("aceptada", "activa"):
+            request.state="cancelada"
+            for request_travel in travel.travel_requests:
+             notification = NewTravelNotification(travel=travel,user=request_travel.passenger,type="Delete")
+             db.session.add(notification)
     db.session.commit()
-    flash('Su viaje se elimino correctamente!', 'success')
+    flash('Su viaje se elimino correctamente!', 'success')  
     return redirect(url_for('usertravelcreate'))
 
 @app.route("/usertravelcreate/<id_travel>/fin", methods=['GET', 'POST'])
@@ -300,6 +334,25 @@ def down_request_passenger(id_passenger, id_travel):
     travel_request.down()
     return redirect(url_for('userrequesttravel'))
 
+@app.route("/usertravelcreate/<id_passenger>/<travel_id>", methods=['GET', 'POST'])
+def new_post_driver(id_passenger,travel_id):
+    form = ScoreForm()
+    travel_request = Travel_request.query.filter_by(dni_user=id_passenger, travel_id=travel_id).first()
+    travel = Travel.query.get_or_404(travel_id)
+    score = Scores(travel_id=travel.id, passenger_id=id_passenger,
+                   travel_driver_id=current_user.dni, comment=form.comment.data, point=form.point.data,band=0)
+    db.session.add(score)
+    s=Scores.query.filter_by(passenger_id=id_passenger, travel_id=travel_id).first()
+    travel.commentary=form.commentary.data
+    travel_request.score_id_driver=s.id
+    notification = NewTravelNotification(travel=travel,user=travel_request.passenger,type="Score_driver_send")
+    db.session.add(notification)
+    db.session.add(travel_request)
+    db.session.add(travel)
+    db.session.commit()
+    flash('Calificacion enviada!', 'success')
+    return redirect(url_for('usertravelfin'))
+
 ################################### FIN SESSION VIAJES CREADOS ###############################################
 
 
@@ -342,7 +395,7 @@ def new_post(id_passenger,travel_id):
     travel_request = Travel_request.query.filter_by(dni_user=id_passenger, travel_id=travel_id).first()
     travel = Travel.query.get_or_404(travel_id)
     score = Scores(travel_id=travel.id, passenger_id=current_user.dni,
-                   travel_driver_id=travel.travel_driver_id, comment=form.comment.data, point=form.point.data)
+                   travel_driver_id=travel.travel_driver_id, comment=form.comment.data, point=form.point.data,band=1)
     db.session.add(score)
     s=Scores.query.filter_by(passenger_id=id_passenger, travel_id=travel_id).first()
     travel_request.score_id=s.id
@@ -363,51 +416,62 @@ def new_post(id_passenger,travel_id):
 def search_travels():
     # you can search for travels here
     form = TravelSearchForm()
-    last_created_travels = Travel.query.filter(Travel.travel_date>=datetime.now().date(),Travel.status=="disponible")
+    last_created_travels = Travel.query.filter(Travel.travel_date>=datetime.now().date(),Travel.status=="disponible"
+    ,Travel.driver != current_user)
     if form.validate_on_submit() and request.method == 'POST':
-        origin = geocoder.arcgis(form.origin.data + ', argentina')
-        dest = geocoder.arcgis(form.destination.data + ', argentina')
-        radius = form.radius.data * 1000
-        print(origin.address, origin.lat, origin.lng)
-        print(dest.address, dest.lat, dest.lng, radius)
-        if origin.address == None:
-            error = "No se ha encontrado origen"
+        if request.form.get("alert"):
+            origin = Location.get_location_by_name(form.origin.data)
+            dest = Location.get_location_by_name(form.destination.data)
+            travel_date = form.travel_date.data
+            travel_time = form.travel_time.data
+            alert = Alert(origin, dest, travel_date, travel_time, current_user)
+            alert.save()
+            flash("¡Alerta creada correctamente!",category="success")
         else:
-            new_origin = Location.get_location(origin.address,
-                                               origin.lat, origin.lng)
-            form.origin.data = new_origin.location
-        if dest.address == None:
-            error = "No se ha encontrado destino"
-        else:
-            new_dest = Location.get_location(location=dest.address,
-                                             latitude=dest.lat, longitude=dest.lng)
-            form.destination.data = new_dest.location
-        print("time=",form.travel_time.data, type(form.travel_time.data))
-        if form.travel_time.data == "":
-            travels = Travel.query.filter_by(
-                travel_date=form.travel_date.data,status="disponible")
-        else:
-            travels = Travel.query.filter_by(
-                travel_date=form.travel_date.data,travel_hour=form.travel_time.data,status="disponible")
+            origin = geocoder.arcgis(form.origin.data + ', argentina')
+            dest = geocoder.arcgis(form.destination.data + ', argentina')
+            radius = form.radius.data * 1000
+            print(origin.address, origin.lat, origin.lng)
+            print(dest.address, dest.lat, dest.lng, radius)
+            if origin.address == None:
+                error = "No se ha encontrado origen"
+            else:
+                new_origin = Location.get_location(origin.address,
+                                                origin.lat, origin.lng)
+                form.origin.data = new_origin.location
+            if dest.address == None:
+                error = "No se ha encontrado destino"
+            else:
+                new_dest = Location.get_location(location=dest.address,
+                                                latitude=dest.lat, longitude=dest.lng)
+                form.destination.data = new_dest.location
+            if form.travel_time.data is None:
+                travels = Travel.query.filter_by(
+                    travel_date=form.travel_date.data,status="disponible")
+                print(form.travel_time.data)
+            else:
+                travels = Travel.query.filter_by(
+                    travel_date=form.travel_date.data,travel_hour=form.travel_time.data,status="disponible")
 
-        travels_matched = []
+            travels_matched = []
 
-        for travel in travels:
-            if (travel.origin.is_in_radius(new_origin, 5000) and travel.dest.is_in_radius(new_dest, 5000)):
-                print(travel)
-                travels_matched.append(travel.to_json())
+            for travel in travels:
+                if (travel.origin.is_in_radius(new_origin, radius) and travel.dest.is_in_radius(new_dest, radius)):
+                    print(travel)
+                    if travel.driver.dni!= current_user.dni:
+                        travels_matched.append(travel.to_json())
 
-        if len(travels_matched) == 0:
-            flash('No se encontraron viajes', 'danger')
-            error= 'No se encontraron viajes'
-        else:
-            error = None
+            if len(travels_matched) == 0:
+                flash('No se encontraron viajes', 'danger')
+                error= 'No se encontraron viajes'
+            else:
+                error = None
 
-        travels_json = json.dumps({'travels': travels_matched})
-        print(travels_json)
+            travels_json = json.dumps({'travels': travels_matched})
+            print(travels_json)
 
-        return render_template('travel_search.html', form=form, error=error, travels=travels_json,
-                               origin=new_origin, dest=new_dest)
+            return render_template('travel_search.html', form=form, error=error, travels=travels_json,
+                                origin=new_origin, dest=new_dest)
     lastest_travels = json.dumps({'travels': [travel.to_json() for travel in last_created_travels]})
     return render_template('travel_search.html', form=form, travels=lastest_travels)
 
@@ -443,7 +507,7 @@ def create_travel():
 
         try:
             new_travel = Travel(travel_date=form.travel_date.data, travel_hour=form.travel_time.data,travel_hour_f=form.travel_time_f.data,driver=driver,
-                                origin=new_origin, dest=new_dest, seats=form.seats.data, seatsdec=form.seats.data)
+                                origin=new_origin, dest=new_dest, seats=form.seats.data, seatsdec=form.seats.data,amount=form.amount.data,commentary=form.commentary.data)
 
             print(new_travel)
             db.session.add(new_travel)
@@ -454,10 +518,10 @@ def create_travel():
                 travel_alert.alert.id for travel_alert in new_travel.travels_alerts]
             flash('Se ha registrado un nuevo viaje', 'success')
             socketio.emit('message', {"id": 1, "mensaje": "Se ha creado un nuevo viaje"}, broadcast=True)
-            return redirect(url_for('create_travel'))
+            
 
         except sqlalchemy.exc.IntegrityError:
-            flash("Ya se tienes un viaje creado para esa fecha y esa hora","danger") 
+            flash("Ya tenés un viaje creado para esa fecha y esa hora","danger") 
             travels = {}
             db.session.rollback()
         except Exception as e:
@@ -504,7 +568,6 @@ def create_alert():
     travel_time = data["travel_time"]
     alert = Alert(origin, dest, travel_date, travel_time, current_user)
     alert.save()
-    flash("Success",category="success")
     return {"mensaje": "Se ha creado una alerta"}, 200
 
 @app.route('/account/alert/<int:id>/update', methods=['GET', 'POST'])

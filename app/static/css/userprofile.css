@@ -226,8 +226,8 @@ img {
     max-width: 25%;
 }
 a:hover {
-    color: #0056b3;
-    text-decoration: none;
+    color: white;
+    text-decoration: underline;
 }
 .cantscores{
     display: flex;
@@ -253,6 +253,15 @@ a:hover {
 .text-scorenull{  
     text-align: center;
     color: #ca5656;
+    border-top: 2px solid rgba(32, 64, 81, 0.35);
+    padding: 5%;
+    margin-top: 13%;
+
+}
+.text-scorenull1{  
+    text-align: center;
+    color: #ca5656;
+    
 
 }
 
@@ -551,3 +560,6 @@ scroll-page {
     }
   
 
+.alert-element > p{
+    color:gray;
+}

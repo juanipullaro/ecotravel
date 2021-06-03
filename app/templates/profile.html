@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar_v2.html" %}
+{% include "help.html" %}
 <link rel="stylesheet" href="./static/css/profile.css">
 <!--<link rel="stylesheet" href="{{ url_for('static', filename = 'css/profile.css') }}">-->
-<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <section id="banner" class="bg-img" data-bg="banner.jpg" style="background-image: url('static/images/banner13.jpg');">
     <div class="inner">
         <header>
@@ -16,7 +16,8 @@
                         </div>    
 
     </div>
-    <a href="#banner1" class="more " style="margin-bottom: 32px;"></a>
+    <div class="n10" style="position: absolute;margin-top: 33%;">Viajes creados por otros usuarios
+    <a href="#banner1" class="more " style="margin-bottom: -12px;"></a></div>
 </section>
 <section id="banner1" class="bg-img" data-bg="banner.jpg" style="background-image: url('static/images/banner11.jpg');">
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -37,20 +38,24 @@
     {% endif %}
     {%endwith%}
         {% for travel in travels %}
-        <ol class="JwPp0e" style="padding-top: 4.5rem;">
+        <ol class="JwPp0e" style="padding-top: 7.5rem;">
           <li class="gHz6xd Aopndd rZXyy">
               <div class="Tc9hUd DShyMc-MzA5MDg5NDcxMDM4">
                   <div class="O7utsb bFjUmb-Tvm9db"></div>
                   <div class="OjOEXb Gf8MK" {% if travel.seats == 4 or travel.seats == 3 %} style="background-color:#54804bc7;box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
                   <div class="OjOEXb Gf8MK" {% if travel.seats == 2 %} style="background-color:rgb(187, 120, 33);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
                   <div class="OjOEXb Gf8MK" {% if travel.seats == 1 %} style="background-color:rgb(157, 66, 66);box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
-                      <div class="R4EiSb">
-                          <h2 class="prWPdf">
-                              <a class="onkcGd kj3hr YVvGBb" target="_self" href="{{ url_for('passenger_profile',dni=travel.driver.dni) }}" >
-                              <div class="YVvGBb csjh4b">{{ travel.driver.name|title}} {{ travel.driver.surname|title}} 
-                              </div></a>
-                          </h2>
-                      </div>
+                  <div class="R4EiSb" >
+                    <h2 class="prWPdf"style="display: flex;height: 55px;justify-content: end;align-items: center;">
+                        <a class="onkcGd kj3hr YVvGBb" style="color: #fff;" target="_self" href="{{ url_for('passenger_profile',dni=travel.driver.dni) }}" >{{ travel.driver.name|title}} {{ travel.driver.surname|title}} 
+                        </a>
+                        <a href="https://wa.me/+54{{travel.driver.phone}}" style=" margin-left: 26%;margin-right: 3%;">
+                          <svg xmlns="http://www.w3.org/2000/svg"  width="30" height="30" viewBox="0 0 24 24" fill="white" style="margin-top: 60%;" ><path d="m11.7 9.6c-0.2-0.1-1.2-0.6-1.4-0.6-0.2-0.1-0.3-0.2-0.4 0-0.2 0.2-0.6 0.7-0.7 0.8s-0.2 0.2-0.4 0.1-0.8-0.3-1.6-1c-0.6-0.5-1-1.2-1.1-1.4s0-0.3 0.1-0.4 0.2-0.2 0.3-0.4c0.1-0.1 0.1-0.2 0.2-0.3s0-0.3 0-0.3c-0.1-0.1-0.5-1.1-0.7-1.5-0.1-0.4-0.3-0.4-0.4-0.4h-0.4s-0.3 0-0.5 0.2c-0.2 0.3-0.7 0.8-0.7 1.7s0.7 1.9 0.8 2 1.4 2.1 3.4 3c0.5 0.2 0.8 0.3 1.1 0.4 0.5 0.2 0.9 0.1 1.3 0.1 0.4-0.1 1.2-0.5 1.3-1 0.2-0.5 0.2-0.9 0.1-0.9 0 0-0.1-0.1-0.3-0.1m-3.7 4.9c-1.2 0-2.4-0.3-3.4-0.9l-0.2-0.1-2.5 0.7 0.7-2.4-0.2-0.3c-0.7-1.1-1-2.3-1-3.5 0-3.6 3-6.6 6.6-6.6 1.8 0 3.4 0.7 4.7 1.9s1.9 2.9 1.9 4.7c0.1 3.5-2.9 6.5-6.6 6.5m5.7-12.2c-1.5-1.5-3.5-2.3-5.7-2.3-4.4 0-8 3.6-8 7.9 0 1.4 0.4 2.8 1.1 4l-1.1 4.1 4.2-1.1c1.2 0.6 2.5 1 3.8 1 4.4 0 8-3.6 8-7.9 0-2.2-0.8-4.2-2.3-5.7"/> </svg>
+                       </a> 
+                    </h2>
+                    
+                    
+                </div>
               </div>
               <div id="overlay-{{travel.id}}" class="overlay">
                 <div class="w-100 d-flex justify-content-center align-items-center">
@@ -72,6 +77,18 @@
                                       </script></div>
                             <div  class="horaccount"><p>Hora de salida:</p>{{ travel.travel_hour}}</div>
                             <div  class="horaestimada"><p>Hora de llegada:</p>{{ travel.travel_hour_f}}</div>
+                            <div  class="costoestimado"><p>Costo de viaje:</p>
+                                {%if travel.amount is none %}
+                                    Costo sin establecer
+                                {%else%}
+                                <div class="cost">{{ travel.amount}}</div> 
+                                {%endif%}</div>
+                            <div  class="commentary"><p>Comentario:</p>
+                                {%if travel.commentary is none %}
+                                Sin comentario
+                                {%else%}
+                                {{ travel.commentary}}
+                            {%endif%}</div>
                             <div  class="seatsccount"><p>Asientos disponibles</p><div class="seatssize">{{travel.seats}}</div></div> 
                             <a class="btn-uptravel" onclick="jointravel('{{travel.id}}')" href="{{ url_for('join_travel', id_viaje=travel.id ) }}">Unirme al viaje</a>
                             
@@ -99,6 +116,11 @@ var socket = io();
 socket.on('message', data => {
     location.reload()
 });
+$('.cost').each(function(){
+  console.log($(this).text());
+  var number = parseFloat($(this).text());
+  $(this).text("$"+number.toLocaleString(['ban','id']));
+});
 </script>   
 <script >
     const jointravel = (id) => {
@@ -119,9 +141,6 @@ socket.on('message', data => {
     window("load",()=>{
         document.getElementById("overlay-" + id).style.display = "none";
     })
+
 </script>
-
-
-
-
 {% endblock body %}

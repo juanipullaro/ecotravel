@@ -3,25 +3,27 @@
 Buscar Viajes
 {%endblock%}
 {% block content %}
+{% include"help.html" %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
+
+<div class="search-travel-page">
+    <aside class="search-travel-aside">
+        {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
     {%for category, message in messages%}
         {% if category == "success" %}
-        <div id="modal-join-success"  class="myAlert-top alert1 alert-success"style="display: flex;z-index: 1;height: 43px;border-radius: 12px;padding: 9px;width: 29%;margin-top: 1%;margin-bottom: -3%;margin-left: 33%;">
+        <div id="modal-join-success"  class="myAlert-top alert1 alert-success"style="display: flex; z-index: 1; height: 43px; border-radius: 12px; padding: 9px; width: 54%; margin-top: 1%; margin-bottom: -3%; margin-left: 26%;">
             <strong style="margin-right: 1%; display: flex;"></strong> ¡Viaje creado correctamente! 
             <a href="/usertravelcreate" class="alert-link" style=" margin-left: 1%;"> Ir a mis viajes</a>
         </div>
         {%else%}
-        <div id="modal-join-error"  class="myAlert-top alert1 alert-danger" style="display: flex;z-index: 1;height: 43px;border-radius: 12px;padding: 9px;width: 35%;margin-top: 1%;margin-bottom: -3%;margin-left: 33%;">
-            <strong style="margin-right: 1%; display: flex;">Error</strong> {{message}}
+        <div id="modal-join-error"  class="myAlert-top alert1 alert-danger" style="display: flex;z-index: 1;height: 43px;border-radius: 12px;padding: 9px;width: 61%;margin-top: 1%;margin-bottom: -3%;margin-left: 21%;">
+            <strong style="margin-right: 1%; display: flex;">Error:</strong> {{message}}
             </div> 
         {% endif%}
     {% endfor %}
 {% endif %}
 {%endwith%} 
-<div class="search-travel-page">
-    <aside class="search-travel-aside">
         <!--<section id=tab-container class="tabs">
             <div id="tablist" role="tablist">
                 <button type="button" class="tablink" ><a href="{{url_for('search_travels')}}">Buscar Viajes</a></button>
@@ -44,84 +46,116 @@ Buscar Viajes
             {% endif %}-->
             <form method="POST" class="search-travel-form">
                 {{ form.csrf_token }}
-                <div class="form-group">
-                    {{ form.origin.label(class="form-control-label") }} 
-                    {% if form.origin.errors %}
-                        {{ form.origin(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.origin.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.origin(class="form-control form-control-lg")}}
-                    {% endif %}
+                <div class="p" style="display: flex;justify-content: space-around;">
+                    <div class="form-group"style="inline-size: 60%;margin-left: 3%;">
+                        {{ form.origin.label(class="form-control-label") }} 
+                        {% if form.origin.errors %}
+                            {{ form.origin(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.origin.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.origin(class="form-control form-control-lg")}}
+                        {% endif %}
+                    </div>
+                    <div class="form-group"style="inline-size: 60%;margin-left: 3%;">
+                        {{ form.destination.label(class="form-control-label") }}
+                        {% if form.destination.errors %}
+                            {{ form.destination(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.destination.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.destination(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="form-group">
-                    {{ form.destination.label(class="form-control-label") }}
-                    {% if form.destination.errors %}
-                        {{ form.destination(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.destination.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{form.destination(class="form-control form-control-lg") }}
-                    {% endif %}
+                <div class="p" style="display: flex;justify-content: space-around;">
+                    <div class="form-group"style="inline-size: 33%;margin-left: 3%;">
+                        {{ form.travel_date.label(class="form-control-label") }}
+                        {% if form.travel_date.errors %}
+                            {{ form.travel_date(class="form-control form-control-lg is-invalid", type="date") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.travel_date.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.travel_date(class="form-control form-control-lg",type="date") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group"style="inline-size: 33%;margin-left: 3%;">
+                        {{ form.travel_time.label(class="form-control-label") }}
+                        {% if form.travel_time.errors %}
+                            {{ form.travel_time(class="form-control form-control-lg is-invalid", type="time") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.travel_time.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.travel_time(class="form-control form-control-lg",type="time") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group"style="inline-size: 33%;margin-left: 3%;">
+                        {{ form.travel_time_f.label(class="form-control-label") }}
+                        {% if form.travel_time_f.errors %}
+                            {{ form.travel_time_f(class="form-control form-control-lg is-invalid", type="time") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.travel_time_f.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.travel_time_f(class="form-control form-control-lg",type="time") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group"style="inline-size: 33%;margin-left: 3%;">
+                        {{ form.seats.label(class="form-control-label") }}
+                        {% if form.seats.errors %}
+                            {{ form.seats(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.seats.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{form.seats(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="form-group">
-                    {{ form.travel_date.label(class="form-control-label") }}
-                    {% if form.travel_date.errors %}
-                        {{ form.travel_date(class="form-control form-control-lg is-invalid", type="date") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.travel_date.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{form.travel_date(class="form-control form-control-lg",type="date") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.travel_time.label(class="form-control-label") }}
-                    {% if form.travel_time.errors %}
-                        {{ form.travel_time(class="form-control form-control-lg is-invalid", type="time") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.travel_time.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{form.travel_time(class="form-control form-control-lg",type="time") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.travel_time_f.label(class="form-control-label") }}
-                    {% if form.travel_time_f.errors %}
-                        {{ form.travel_time_f(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.travel_time_f.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{form.travel_time_f(class="form-control form-control-lg",type="time") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.seats.label(class="form-control-label") }}
-                    {% if form.seats.errors %}
-                        {{ form.seats(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.seats.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{form.seats(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>    
+                <div class="p" style="display: flex;justify-content: space-around;">   
+                    <div class="form-group"style="inline-size: 23%;margin-left: 3%;">
+                        {{ form.amount.label(class="form-control-label") }} 
+                        {% if form.amount.errors %}
+                            {{ form.amount(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.amount.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.amount(class="form-control form-control-lg")}}
+                        {% endif %}
+                    </div>
+                    <div class="form-group"style="inline-size: 76%;margin-left: 3%;">
+                        {{ form.commentary.label(class="form-control-label") }} 
+                        {% if form.commentary.errors %}
+                            {{ form.commentary(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.commentary.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.commentary(class="form-control form-control-lg" ,style="height: 40%;")}}
+                        {% endif %}
+                    </div> 
+                </div>       
                 {{ form.submit(class="btn") }}
             </form>
         </section>
@@ -149,7 +183,7 @@ Buscar Viajes
 
     // The first parameter are the coordinates of the center of the map
     // The second parameter is the zoom level
-    var map = L.map('map').setView([-32.9478683, -60.7210182], 12);
+    var map = L.map('map').setView([-32.944123,-60.6689617], 12);
     // {s}, {z}, {x} and {y} are placeholders for map tiles
     // {x} and {y} are the x/y of where you are on the map
     // {z} is the zoom level
@@ -162,25 +196,23 @@ Buscar Viajes
     map.addLayer(layer);
 
     //travels
-    {%if travels:%}
-        const {travels} = {{ travels| safe}}
-
-        console.log(travels)
+    const {travels} = {{ travels| safe}};
+    if (travels !== []) {
         travels.map(travel => {
             const origin = L.marker([travel.origen.lat, travel.origen.lon]).addTo(map);
-            const dest = L.marker([travel.destino.lat, travel.destino.lon]).addTo(map);
-            const popup = '<div class="popup-map">'+
-                '<div class="driver"><img href="'+travel.foto_conductor+'"></img><h3>'+travel.conductor+'</h3></div>' +
-                '<p className="stars">'+"★".repeat(travel.rating)+"☆".repeat(5-travel.rating)+'</p>' +
-                '<b>Origen:</b>'+ travel.origen.nombre +
-                '<br /><b>Destino:</b>'+ travel.destino.nombre +
-                '<br /><b>Fecha:</b>'+travel.fecha+
-                '<br /><b>Hora salida:</b>'+travel.hora+
-                '<br /><b>Hora llegada:</b>'+travel.horafin+
-                ' <button className="btn-grad btn-travel">Viajar</button></div>'
-            origin.bindPopup(popup).openPopup();
+            origin.on('mouseover', function (ev) { ev.target.openPopup(); });
+            const popup = '<div class="popup-map">' +
+                '<div class="driver"><img src="' + travel.foto_conductor + '"></img><a href="'+travel.url_profile+'" style="font-size: 13px;margin-top: 18px;">' + travel.conductor.toUpperCase() + '</h3></div>' +
+                '<div class="cantscores" style="display: flex;margin-left: 26%;font-size: 12px;margin-top: 4%;"><a class="cantscoresgood"  style="color: #8fbf8b;font-size: 14px;margin-top: -5%;margin-left: 24%;"  href="#scores" ><i class="fas fa-thumbs-up" style="margin-left: 4%;"></i>'+travel.score_bueno + '</a>' +
+                '<a class="cantscoresbad"  href="#scores" style="color: #ca5656;font-size: 14px;margin-top: -5%;margin-left: 4%;"  ><i class="fas fa-thumbs-down" style="margin-left: 4%;"></i>' + travel.score_malo + '</a></div>' +
+                '<b>Origen:</b>' + travel.origen.nombre +
+                '<br /><b>Destino:</b>' + travel.destino.nombre +
+                '<br /><b>Fecha:</b>' + travel.fecha +
+                '<br /><b>Hora Salida:</b>' + travel.hora_salida +'<b>  Hora Llegada:</b>' + travel.hora_llegada +
+                '<br /><b>Asientos disponibles:</b>' + travel.asientos_disp + '</div>'
+            origin.bindPopup(popup);
         })
-    {% endif %}
+    }
 
     setTimeout(function(){$(".myAlert-top").hide();}, 6000);
 </script>

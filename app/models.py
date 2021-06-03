@@ -99,6 +99,8 @@ class Travel_request(db.Model):
     state = db.Column(db.String(60), default="activa")
     date_posted = Column(DateTime, nullable=False,
                          default=datetime.utcnow)
+    score_id_driver=Column(Integer, ForeignKey(
+        'scores.id'))                      
     travel = relationship("Travel", foreign_keys=[
         travel_id], backref='travel_requests')
     score = relationship('Scores', foreign_keys=[
@@ -162,9 +164,27 @@ class Travel(db.Model):
                            default=datetime.utcnow)
     status = db.Column(db.String(60), default="disponible")
     seatsdec = Column(Integer)
+    amount=Column(Float(14,2))
+    commentary=Column(String(240))
+
     # pasajeros
 
     def to_json(self):
+        scores = Scores.query.order_by(Scores.date_posted.desc()).all()
+        scores_passenger = [score for score in scores if score.travel_driver_id ==
+               self.driver.dni and score.band==1]
+        scores_driver= [score for score in scores if score.passenger_id ==
+               self.driver.dni and score.band==0]
+        scores_driver_good = [score for score in scores if score.travel_driver_id ==
+               self.driver.dni  and score.point == 1 and score.band==1 ]
+        scores_driver_bad = [score for score in scores if score.travel_driver_id ==
+               self.driver.dni  and score.point == 0 and score.band==1 ]           
+        scores_passenger_good = [score for score in scores if score.passenger_id ==
+               self.driver.dni  and score.point == 1 and score.band==0 ]
+        scores_passenger_bad = [score for score in scores if score.passenger_id ==
+               self.driver.dni  and score.point == 0 and score.band==0 ]
+        scoresgood= len(scores_driver_good) + len(scores_passenger_good)  
+        scoresbad = len(scores_driver_bad) + len(scores_passenger_bad)   
         travel = {"id": self.id,
                   "origen": {"nombre": self.origin.location, "lat": self.origin.latitude, "lon": self.origin.longitude},
                   "destino": {"nombre": self.dest.location, "lat": self.dest.latitude, "lon": self.dest.longitude},
@@ -174,8 +194,8 @@ class Travel(db.Model):
                   "conductor": self.driver.name+' '+self.driver.surname,
                   "foto_conductor": '/static/profile_pics/'+self.driver.image_file,
                   "url_profile": url_for('passenger_profile',dni=self.driver.dni),
-                  "score_bueno": len([score for score in self.driver.scores_as_passenger if score.point==1]),
-                  "score_malo": len([score for score in self.driver.scores_as_passenger if score.point==0]),
+                  "score_bueno": scoresgood,
+                  "score_malo":  scoresbad ,
                   "asientos_disp": self.seats}
         return travel
 
@@ -202,8 +222,11 @@ class Travel(db.Model):
         return self.origin.is_in_radius(new_origin, 5000) and self.dest.is_in_radius(new_dest, 5000)
 
     def match_alert(self, alert):
-        if self.travel_hour != alert.travel_time:
+        if alert.status != "ACTIVA":
             return False
+        if alert.travel_time is not None:
+            if self.travel_hour != alert.travel_time:
+                return False
         if self.travel_date != alert.travel_date:
             return False
         if not self.are_near(alert.origin, alert.dest):
@@ -334,7 +357,7 @@ class Alert(db.Model):
         self.travel_origin_id = origin.id
         self.travel_dest_id = dest.id
         self.travel_date = travel_date
-        self.travel_time = datetime.strptime(travel_time, "%H:%M").time()
+        self.travel_time = travel_time
         self.passenger_id = user.dni
 
     def save(self):
@@ -353,6 +376,8 @@ class Scores(db.Model):
                             default=datetime.utcnow)
     comment = Column(Text())
     point = Column(Integer)
+    band = Column(Integer)
+
 
     driver= relationship('User', foreign_keys=[ passenger_id],backref='scores_as_driver' )
     passenger= relationship('User', foreign_keys=[travel_driver_id],backref='scores_as_passenger' )
@@ -405,7 +430,9 @@ class NewTravelNotification(db.Model):
         if type == "Update":
             self.update_travel_notification(travel)
         if type == "Scoresend":
-            self.scoresend_travel_notification(travel,user) 
+            self.scoresend_travel_notification(travel,user)
+        if type == "Score_driver_send":
+            self.scoresenddriver_travel_notification(travel,user)
         if type == "New":
             self.new_travel_notification(travel)
         self.travel_id = travel.id
@@ -417,6 +444,10 @@ class NewTravelNotification(db.Model):
     def scoresend_travel_notification(self, travel,user):
         self.message = f"Tenes una nueva calificacion de {user.get_passenger()}"
         self.passenger_id = travel.driver.dni
+        self.url ='/userprofile'
+    def scoresenddriver_travel_notification(self, travel,user):
+        self.message = f"Tenes una nueva calificacion de {travel.get_driver()}"
+        self.passenger_id = user.dni
         self.url ='/userprofile'
     def newpassengerup_travel_notification(self, travel,user):
         self.message = f"{user.get_passenger()} quiere unirse al viaje con destino a {travel.get_destino()}"

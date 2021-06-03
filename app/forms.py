@@ -3,7 +3,9 @@ from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from datetime import datetime
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField, TextAreaField, TimeField,RadioField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
+from wtforms.fields.core import DecimalField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange, Optional
+from wtforms.widgets.core import TextArea
 from .models import User 
 
 
@@ -94,23 +96,21 @@ class ResetPasswordForm(FlaskForm):
 class TravelSearchForm(FlaskForm):
     origin = StringField('Origen', validators=[DataRequired()])
     destination = StringField('Destino', validators=[DataRequired()])
-    travel_date = DateField('Fecha', validators=[DataRequired()])
-    travel_time = TimeField('Hora')
+    travel_date = DateField('Fecha', validators=[DataRequired("Ingrese una fecha válida")])
+    travel_time = TimeField('Hora', validators=[Optional()])
     radius = IntegerField('Ampliar búsquda (Kms)', default=5)
     submit = SubmitField('Buscar')
 
     def validate_travel_date(self,travel_date):
         if self.travel_date.data<datetime.now().date():
             raise ValidationError(
-                'La fecha de viaje debe ser válida')
+                'No se permiten fechas anterior a la actual')
     
     def validate_travel_time(self,travel_time):
         if travel_time.data != None:
             if self.travel_date.data<=datetime.now().date() and self.travel_time.data<datetime.now().time():
                 raise ValidationError(
                     'Por favor ingrese una hora de viaje valida')
-        else:
-            print("ok")
         
 
 class CreateTravelForm(FlaskForm):
@@ -120,8 +120,11 @@ class CreateTravelForm(FlaskForm):
     travel_time = TimeField('Hora de Salida', validators=[DataRequired("Este campo es requerido")])
     travel_time_f = TimeField('Hora de Llegada', validators=[DataRequired("Este campo es requerido")])
     seats = IntegerField('Asientos', validators=[DataRequired("Este campo es requerido")])
+    amount=DecimalField('Costo de viaje',validators=[Optional()])
+    commentary=TextAreaField('Comentario del viaje')
     submit = SubmitField('Crear Viaje')
     submit1 = SubmitField('Actualizar Viaje')
+   
 
     def validate_travel_date(self,travel_date):
         if self.travel_date.data<datetime.now().date():
@@ -147,4 +150,6 @@ class CreateTravelForm(FlaskForm):
 class ScoreForm(FlaskForm):
     point=RadioField('Calificacion',choices=[(1,'good'),(0,'bad')])
     comment= TextAreaField('Comentario')
-    submit2 = SubmitField('Enviar Calificaión')  
+    commentary=TextAreaField('Motivo de la eliminación')
+    submit2 = SubmitField('Enviar Calificaión') 
+    submit3 = SubmitField('Eliminar Viaje') 

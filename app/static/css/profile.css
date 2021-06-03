@@ -1,3 +1,7 @@
+a:hover {
+  color: none;
+  text-decoration: underline;
+}
 .JwPp0e {
     display: -webkit-inline-box;
     -webkit-flex-wrap: wrap;
@@ -15,13 +19,13 @@
   background-clip: padding-box;
   display: flex;
   flex-direction: column;
-  height:32.375rem;
+  height: 39.375rem;
   margin-bottom: 1.5rem;
   margin-right: 1.5rem;
   overflow: hidden;
   position: relative;
   text-align: left;
-  width: 20.75rem;
+  width: 24.75rem;
   margin-top: -28%;
 
 }
@@ -113,7 +117,7 @@
   float: left;
   height: 3.688rem;
   position: relative;
-  margin-top: -21%;
+  margin-top: -18%;
   width: 3.688rem;
   margin-left: -3%;
 }
@@ -170,20 +174,41 @@
     font-size: 12px;
     height: 80px;
 }
-.horaestimada{
-  margin-top: -5%;
+.horaestimada {
+  margin-top: -22%;
   margin-bottom: -3px;
   text-transform: uppercase;
-  color:  #204051;
+  color: #204051;
   font-size: 12px;
   height: 80px;
- 
+  margin-left: 36%;
+}
+.costoestimado {
+  margin-top: -3%;
+  margin-bottom: 21px;
+  text-transform: uppercase;
+  color: #204051;
+  font-size: 12px;
+
+}
+.commentary{
+  text-transform: uppercase;
+  color: #204051;
+  font-size: 12px;
+  height: 80px;
+}
+.cost{
+
+  font-size: 20px;
+  margin-top: -5%;
+  margin-left: 3%;
+
 }
 .seatsccount {
-  margin-top: -39%;
+  margin-top: -42%;
   margin-bottom: -3px;
   text-transform: uppercase;
-  color:  #204051;
+  color: #204051;
   font-size: 12px;
   margin-left: 49%;
   text-align: center;
@@ -218,7 +243,7 @@ form.traveldata{
   color: #fff;
   display: inherit;
   text-align: center;
-  margin-top: 13%;
+  margin-top: 27%;
   width: 100%;
   border-color: transparent;
 }
@@ -363,7 +388,7 @@ form.traveldata{
       
     #banner1 {
 
-  padding: 8em 0 6em 0;
+
   align-items: center;
   display: -webkit-box;
   justify-content: space-around;
@@ -564,8 +589,7 @@ form.traveldata{
         
         .profiletitle{
           margin-top: 10%;}
-
-
+         
         .myAlert-top{
             position: fixed;
             top: 5px; 

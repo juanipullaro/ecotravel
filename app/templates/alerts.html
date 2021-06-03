@@ -122,8 +122,8 @@
     {% for alert in current_user.get_alerts() %}
     <div class="alert">
         <div class="alert-opt" id="alert-{{alert.id}}">
-            <button id={{alert.id}} onclick="removeAlert(this.id)"><i class="fa fa-times"
-                    style="font-size:24px"></i></a>
+            <button id={{alert.id}} onclick="removeAlert(this.id)" style="border: none;background-color: transparent;"><i class="fa fa-times"
+                    style="font-size:24px; color:indianred"></i></a>
         </div>
         <div class="alert-descr">
             <div class="alert-element">
@@ -140,7 +140,11 @@
             </div>
             <div class="alert-element">
                 <h5>Hora</h5>
+                {%if alert.travel_time is none%}
+                <p>Sin hora registrada</p>
+                {%else%}
                 <p>{{alert.travel_time}}</p>
+                {%endif%}
             </div>
             <div class="alert-element">
                 ​<label class="switch">

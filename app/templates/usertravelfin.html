@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar_v2.html" %}
+{% include"help.html" %}
 <link rel="stylesheet" href="./static/css/usertravelfin.css">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-<section id="banner1" class="bg-img" data-bg="banner.jpg"  style="background:#b0afad;">
+<section id="banner1" class="bg-img" data-bg="banner.jpg"  style="background-image: url('static/images/banner11.jpg');">
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
   {%for category, message in messages%}
@@ -20,7 +21,11 @@
   {% endif %}
   {%endwith%}
 {% if travel_reqs|length == 0 %}
-<p class="text-travelnull">Sin solicitudes finalizadas</p>
+<p class="text-travelnull">Sin solicitudes finalizadas </br>
+  <img src="./static/images/cuadrado-de-cara-de-emoticon-triste-sueno.svg" style="width: 10%;
+  margin-left: 45%;"></img>
+</p>
+
 {%else%}
     {% for travel_req in travel_reqs %}
     {%if travel_req.dni_user==current_user.dni and travel_req.state == "finalizada" %}
@@ -29,14 +34,15 @@
           <div class="Tc9hUd DShyMc-MzA5MDg5NDcxMDM4">
               <div class="O7utsb bFjUmb-Tvm9db"></div>
               <div class="OjOEXb Gf8MK" style="background-color: rgba(206, 60, 60, 0.87);box-shadow: 0px 1px 2px #fdf9f9;"></div>
-                  <div class="R4EiSb">
-                      <h2 class="prWPdf">
-                          <a class="onkcGd kj3hr YVvGBb" target="_self" href="{{ url_for('passenger_profile',dni=travel_req.travel.driver.dni) }}" >
-                          <div class="YVvGBb csjh4b">{{ travel_req.travel.driver.name|title}} {{ travel_req.travel.driver.surname|title}} 
-                          </div></a>
-                      </h2>
-                      
-                  </div>
+              <div class="R4EiSb" >
+                <h2 class="prWPdf"style="display: flex;height: 55px;justify-content: space-evenly;align-items: center;margin-left: -13%;">
+                    <a class="onkcGd kj3hr YVvGBb" style="color: #fff;" target="_self" href="{{ url_for('passenger_profile',dni=travel_req .travel.driver.dni) }}" >{{ travel_req.travel.driver.name|title}} {{ travel_req .travel.driver.surname|title}} 
+                    </a>
+                    
+                </h2>
+                
+                
+            </div>
                 </div>
           </div>
           <div class="prueba fin">
@@ -65,6 +71,18 @@
                                       document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                   </script></div>
                         <div  class="horaccount"><p>Hora:</p>{{ travel_req.travel.travel_hour}}</div>
+                        <div  class="costoestimado"><p>Costo de viaje:</p>
+                          {%if travel_req.travel.amount is none %}
+                              Costo sin establecer
+                          {%else%}
+                          <div class="cost">{{ travel_req.travel.amount}}</div> 
+                          {%endif%}</div>
+                      <div  class="commentary"><p>Comentario:</p>
+                          {%if travel_req.travel.commentary is none %}
+                          Sin comentario
+                          {%else%}
+                          {{ travel_req.travel.commentary}}
+                      {%endif%}</div>
                       </form>
                       {%if scores|length ==0 %}
               <a class="btn-scoretravel" data-toggle="modal" data-target="#sendModal" style="color: white;" >Calificar viaje</a>
@@ -155,8 +173,13 @@
 
  
   
-  <script></script>
+  <script>
     setTimeout(function(){$(".myAlert-top").hide();}, 6000);
+    $('.cost').each(function(){
+  console.log($(this).text());
+  var number = parseFloat($(this).text());
+  $(this).text("$"+number.toLocaleString(['ban','id']));
+});
   </script>   
 {% endblock body %}
 

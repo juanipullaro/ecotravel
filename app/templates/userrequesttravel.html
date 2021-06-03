@@ -1,11 +1,16 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar_v2.html" %}
+{% include"help.html" %}
 <link rel="stylesheet" href="./static/css/userrequesttravel.css">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-<section id="banner1" class="bg-img" data-bg="banner.jpg"  style="linear-gradient(#e66465, #9198e5)">
+<section id="banner1" class="bg-img" data-bg="banner.jpg" style="background-image: url('static/images/banner11.jpg');">
 {% if travel_reqs|length == 0 %}
-<p class="text-travelnull">No tenés solicitudes vigentes</p>
+<p class="text-travelnull">No tenés solicitudes vigentes </br>
+  <img src="./static/images/cuadrado-de-cara-de-emoticon-triste-sueno.svg" style="width: 10%;
+  margin-left: 45%;"></img>
+</p>
+
 {%else%}
     {% for travel_req in travel_reqs %}
     <ol class="JwPp0e" >
@@ -14,14 +19,20 @@
               <div class="O7utsb bFjUmb-Tvm9db"></div>
               <div class="OjOEXb Gf8MK" {% if travel_req.state == 'activa'%} style="background-color:rgb(219, 105, 12);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
               <div class="OjOEXb Gf8MK" {% if travel_req.state == 'aceptada'  %} style="background-color:rgba(5, 51, 53, 0.65);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
+              <div class="OjOEXb Gf8MK" {% if travel_req.state == 'en_transito'  %} style="background-color:rgb(187, 120, 33);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
               <div class="OjOEXb Gf8MK" {% if travel_req.state == 'cancelada' or travel_req.state == 'rechazada'  %} style="background-color:rgba(206, 60, 60, 0.5);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
               <div class="OjOEXb Gf8MK" {% if travel_req.state == 'finalizada' %} style="background-color:rgba(206, 60, 60, 0.5);box-shadow: 0px 1px 2px #fdf9f9;" {%endif%} ></div>
-                  <div class="R4EiSb">
-                      <h2 class="prWPdf">
-                          <a class="onkcGd kj3hr YVvGBb" target="_self" href="{{ url_for('passenger_profile',dni=travel_req.travel.driver.dni) }}" >
-                          <div class="YVvGBb csjh4b">{{ travel_req.travel.driver.name|title}} {{ travel_req.travel.driver.surname|title}} 
-                          </div></a>
+                  <div class="R4EiSb" >
+                      <h2 class="prWPdf"style="display: flex;height: 55px;justify-content:space-between;align-items: center;margin-left: 20%;">
+                          <a class="onkcGd kj3hr YVvGBb" target="_self" href="{{ url_for('passenger_profile',dni=travel_req.travel.driver.dni) }}" >{{ travel_req.travel.driver.name|title}} {{ travel_req.travel.driver.surname|title}} 
+                          </a>
+                          {%if travel_req.state != "rechazada" and travel_req.state != "cancelada"  and travel_req.state != "en_transito" %}
+                          <a  href="https://wa.me/+54{{travel_req.travel.driver.phone}}" style=" margin-left: 23%;margin-right: 3%;">
+                            <svg xmlns="http://www.w3.org/2000/svg"  width="30" height="30" viewBox="0 0 24 24" fill="white" style="margin-top: 60%;" ><path d="m11.7 9.6c-0.2-0.1-1.2-0.6-1.4-0.6-0.2-0.1-0.3-0.2-0.4 0-0.2 0.2-0.6 0.7-0.7 0.8s-0.2 0.2-0.4 0.1-0.8-0.3-1.6-1c-0.6-0.5-1-1.2-1.1-1.4s0-0.3 0.1-0.4 0.2-0.2 0.3-0.4c0.1-0.1 0.1-0.2 0.2-0.3s0-0.3 0-0.3c-0.1-0.1-0.5-1.1-0.7-1.5-0.1-0.4-0.3-0.4-0.4-0.4h-0.4s-0.3 0-0.5 0.2c-0.2 0.3-0.7 0.8-0.7 1.7s0.7 1.9 0.8 2 1.4 2.1 3.4 3c0.5 0.2 0.8 0.3 1.1 0.4 0.5 0.2 0.9 0.1 1.3 0.1 0.4-0.1 1.2-0.5 1.3-1 0.2-0.5 0.2-0.9 0.1-0.9 0 0-0.1-0.1-0.3-0.1m-3.7 4.9c-1.2 0-2.4-0.3-3.4-0.9l-0.2-0.1-2.5 0.7 0.7-2.4-0.2-0.3c-0.7-1.1-1-2.3-1-3.5 0-3.6 3-6.6 6.6-6.6 1.8 0 3.4 0.7 4.7 1.9s1.9 2.9 1.9 4.7c0.1 3.5-2.9 6.5-6.6 6.5m5.7-12.2c-1.5-1.5-3.5-2.3-5.7-2.3-4.4 0-8 3.6-8 7.9 0 1.4 0.4 2.8 1.1 4l-1.1 4.1 4.2-1.1c1.2 0.6 2.5 1 3.8 1 4.4 0 8-3.6 8-7.9 0-2.2-0.8-4.2-2.3-5.7"/> </svg>
+                         </a> 
+                         {%endif%}
                       </h2>
+                      
                       
                   </div>
                 </div>
@@ -29,7 +40,9 @@
                       {% if travel_req.state == "activa" %}
                       <div id="status" class="statusRequestPend">Pendiente de aprobación</div>
                       {%elif travel_req.state == "aceptada" %} 
-                      <div id="status" class="statusRequestAcep">Solicitud Aceptada</div>  
+                      <div id="status" class="statusRequestAcep">Solicitud Aceptada</div>
+                      {%elif travel_req.state == "en_transito" %} 
+                      <div id="status" class="statusRequestTra">Ecotraveler en viaje</div>    
                       {%elif travel_req.state == "rechazada" %} 
                       <div id="status" class="statusRequestRech">Solicitud Rechazada</div> 
                       {%elif travel_req.state == "cancelada" %} 
@@ -50,8 +63,20 @@
                                       document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                   </script></div>
                         <div  class="horaccount"><p>Hora:</p>{{ travel_req.travel.travel_hour}}</div>
+                        <div  class="costoestimado"><p>Costo de viaje:</p>
+                          {%if travel_req.travel.amount is none %}
+                              Costo sin establecer
+                          {%else%}
+                          <div class="cost">{{ travel_req.travel.amount}}</div> 
+                          {%endif%}</div>
+                      <div  class="commentary"><p>Comentario:</p>
+                          {%if travel_req.travel.commentary is none %}
+                          Sin comentario
+                          {%else%}
+                          {{ travel_req.travel.commentary}}
+                      {%endif%}</div>
                       </form>
-                      {%if travel_req.state != "rechazada" and travel_req.state != "cancelada" %}
+                      {%if travel_req.state != "rechazada" and travel_req.state != "cancelada"  and travel_req.state != "en_transito" %}
                       <a class="btn-downtravel" href="{{ url_for('down_request_passenger', id_passenger=travel_req.passenger.dni,id_travel=travel_req.travel.id ) }}" >Bajarme del viaje</a>    
                       {%endif%}
         
@@ -65,7 +90,13 @@
 {% endfor %} 
 {%endif%}
 </section>
-
+<script>
+        $('.cost').each(function(){
+  console.log($(this).text());
+  var number = parseFloat($(this).text());
+  $(this).text("$"+number.toLocaleString(['ban','id']));
+});
+</script>
  
 {% endblock body %}-->
 

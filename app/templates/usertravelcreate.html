@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar_v2.html" %}
+{% include"help.html" %}
 <link rel="stylesheet" href="./static/css/usertravelcreate.css">
 <!--<link rel="stylesheet" href="{{ url_for('static', filename = 'css/profile.css') }}">!-->
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
@@ -18,7 +19,10 @@
     {%endwith%}
     
     {% if travels|length == 0 %}
-    <p class="text-travelnull">No tenés viajes creados</p>
+    <p class="text-travelnull">No tenés viajes creados </br>
+        <img src="./static/images/cuadrado-de-cara-de-emoticon-triste-sueno.svg" style="width: 10%;
+        margin-left: 45%;"></img>
+    </p>
     {%else%} 
             {% for travel in travels %}
             <ol class="JwPp0e" style="padding-top: 6.5rem;">
@@ -59,11 +63,25 @@
                                     <div  class="fecaccount"><p>Fecha:</p> <script>
                                                 var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                                 var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
-                                                var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                                                var f = new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
                                                 document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                             </script></div>
                                     <div  class="horaccount"><p>Hora de salida:</p>{{ travel.travel_hour}}</div>
                                     <div  class="horaestimada"><p>Hora de llegada:</p>{{ travel.travel_hour_f}}</div>
+                                    
+                                    <div  class="costoestimado"><p>Costo de viaje:</p>
+                                        {%if travel.amount is none %}
+                                            Costo sin establecer
+                                        {%else%}
+                                            <div class="cost">{{ travel.amount}}</div>
+                                        {%endif%}</div>
+                                    <div  class="commentarycanc"><p>Motivo de la cancelación del viaje:</p>
+                                        {%if travel.commentary is none %}
+                                        Sin comentario
+                                        {%else%}
+                                        {{ travel.commentary}}
+                                    {%endif%}</div>
+                                           
                                 </form>
                                 </div>
                             </div>
@@ -90,11 +108,23 @@
                                     <div  class="fecaccount"><p>Fecha:</p> <script>
                                                 var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                                 var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
-                                                var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                                                var f = new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
                                                 document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                             </script></div>
                                     <div  class="horaccount"><p>Hora de salida:</p>{{ travel.travel_hour}}</div>
                                     <div  class="horaestimada"><p>Hora de llegada:</p>{{ travel.travel_hour_f}}</div>
+                                    <div  class="costoestimado"><p>Costo de viaje:</p>
+                                        {%if travel.amount is none %}
+                                            Costo sin establecer
+                                        {%else%}
+                                        <div class="cost">{{ travel.amount}}</div>
+                                        {%endif%}</div>
+                                    <div  class="commentary"><p>Comentario:</p>
+                                        {%if travel.commentary is none %}
+                                        Sin comentario
+                                        {%else%}
+                                        {{ travel.commentary}}
+                                    {%endif%}</div>
                                     <div  class="ecotravelsccount"><p>Ecotravelers subidos:</p></div>
                                 <div class="seatsdis">
                                 {% for travel_request in travel.getfin_request() %}
@@ -119,18 +149,58 @@
                             <div class="modal-footer">
                             {% for request in travel.getfin_request() %}
                                <div class="passenger"><a class="passenger" href="{{ url_for('passenger_profile',dni=request.passenger.dni) }}">{{request.passenger.name|title}} {{request.passenger.surname|title}}                                                              
-                                <div class="passagers" >
-                                    <a class="btn-scoretravel" data-toggle="modal" data-target="#sendModal" style="color: #fff;font-size:14px;margin-left: 27%;" >Calificar pasajero</a>
-                                </div></a>   </div>   
-                            {% endfor %}        
+                                    <div class="passagers" >
+                                        {%if request.score_id_driver is none  %}
+                                        <a class="btn-scoretravel" data-toggle="modal" data-target="#sendModal" style="color: #fff;font-size:14px;" >Calificar pasajero</a>
+                                        {%else%}
+                                        <a class="btn-uppassengertravel" style="color: #102028;font-size:14px;margin-left: 0%;" >Ecotraveler ya calificado</a>
+                                        {%endif%}
+                                    </div>  
+                                </div>    
+                            {% endfor %}       
                             </div>
                             </div>
                             </div>
-                            </div>                                                                                                                                                                                                   
+                            </div>
+                             {% for request in travel.getfin_request() %}
+                            <div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="sendModalLabel" aria-hidden="true" >
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="sendModalLabel">¿Cómo fue tu viaje?</h5>
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <form action="{{ url_for('new_post_driver', id_passenger=request.passenger.dni,travel_id=travel.id ) }}" method="POST" class="score">
+                                          <div class="scores_v1">     
+                                            <input id="point-0" name="point" type="radio" value="1"><i class="fas fa-thumbs-up"></i>
+                                            <input id="point-1" name="point" type="radio" value="0"><i class="fas fa-thumbs-down"></i>
+                                          </div>             
+                                          <div class="form-group">
+                                                {{ form.comment.label(class="form-control-label") }}
+                                                {% if form.comment.errors %}
+                                                    {{ form.comment(class="form-control form-control-lg is-invalid") }}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in form.comment.errors %}
+                                                            <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% else %}
+                                                    {{form.comment(class="form-control form-control-lg") }}
+                                                {% endif %}
+                                            </div>
+                                           {{ form.submit2(class="btn-scoretravel") }}
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div> 
+                              {% endfor %}                                                                                                                                                                                                   
                         {%endif%} 
                          
                     {%endif %}
-                        {%if travel.status =='en_transito' %} 
+                    {%if travel.status =='en_transito' %} 
                         <div class="prueba fin">
                             <div id ="disp" class="statustravel1 fin"   {% if travel.status =='en_transito'%}  style="color:#e6c203d6"   {%endif%}  >
                             {% if travel.status =='en_transito'%}  
@@ -151,11 +221,23 @@
                                     <div  class="fecaccount"><p>Fecha:</p> <script>
                                                 var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                                 var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
-                                                var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                                                var f = new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
                                                 document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                             </script></div>
                                     <div  class="horaccount"><p>Hora de salida:</p>{{ travel.travel_hour}}</div>
                                     <div  class="horaestimada"><p>Hora de llegada:</p>{{ travel.travel_hour_f}}</div>
+                                    <div  class="costoestimado"><p>Costo de viaje:</p>
+                                        {%if travel.amount is none %}
+                                            Costo sin establecer
+                                        {%else%}
+                                        <div class="cost">{{ travel.amount}}</div>
+                                        {%endif%}</div>
+                                    <div  class="commentary"><p>Comentario:</p>
+                                        {%if travel.commentary is none %}
+                                        Sin comentario
+                                        {%else%}
+                                        {{ travel.commentary}}
+                                    {%endif%}</div>
                                     <div  class="ecotravelsccount"><p>Ecotravelers subidos:</p></div>
                                 <div class="seatsdis">
                                 {% for travel_request in travel.getaccept_request() %}
@@ -191,23 +273,50 @@
                             </div>                                                                                                                                                                                                   
                         {%endif%} 
                          
-                        {%endif %}
+                    {%endif %}
     
     
                         {%if travel.status=='disponible' or travel.status=='completo'%}
-                            <h2 class="prWPdf">
-                                <div class="octbar">
-                                <a href="{{ url_for('delete_post', id_viaje=travel.id) }}">
-                                            <svg class="octicon octicon-trash" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true" >
-                                                <path fill-rule="evenodd" d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z"></path>
-                                            </svg>
-                                            </a>
+                            <h2 class="prWPdf" >
+                                <div class="octbar">           
                                 <a href="{{ url_for('update_travels', travel_id=travel.id) }}">
                                 <svg class="octicon octicon-pencil" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M11.013 1.427a1.75 1.75 0 012.474 0l1.086 1.086a1.75 1.75 0 010 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 01-.927-.928l.929-3.25a1.75 1.75 0 01.445-.758l8.61-8.61zm1.414 1.06a.25.25 0 00-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 000-.354l-1.086-1.086zM11.189 6.25L9.75 4.81l-6.286 6.287a.25.25 0 00-.064.108l-.558 1.953 1.953-.558a.249.249 0 00.108-.064l6.286-6.286z"></path>
                                 </svg>
                                 </a>
-                                </div>  
+                                </div> 
+                                <a class="btn-delete" data-toggle="modal" data-target="#sendModal{{travel.id}}-m">
+                                    <svg class="octicon octicon-trash" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true" >
+                                        <path fill-rule="evenodd" d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z"></path>
+                                    </svg>
+                                </a>
+                            <div class="modal fade" id="sendModal{{travel.id}}-m" tabindex="-1" role="dialog" aria-labelledby="sendModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-titledelete" id="sendModalLabel">¿Esta seguro que quiere eliminar su viaje?</h5>
+                            </div>
+                            <div class="modal-footer">
+                                <form action="{{ url_for('delete_post', id_viaje=travel.id) }}" method="POST" >         
+                                    <div class="form-group">
+                                        {{ form.commentary.label(class="form-control-label", style="color: #486a6a;font-size: 15px;") }} 
+                                        {% if form.commentary.errors %}
+                                            {{ form.commentary(class="form-control form-control-lg is-invalid") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.commentary.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.commentary(class="form-control form-control-lg")}}
+                                        {% endif %}
+                                    </div> 
+                                     {{ form.submit3(class="btn-scoretravel") }}
+                                </form>
+                            </div>
+                            </div>
+                            </div>
+                            </div> 
                             </h2>  
                         <div class="prueba">
                             <div id ="disp" class="statustravel1"   {% if travel.status =='disponible'%}  style="color:#1ebb1ed6 "   {%endif%}  >
@@ -237,11 +346,23 @@
                                     <div  class="fecaccount"><p>Fecha:</p> <script>
                                                     var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                                     var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
-                                                    var f=new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
-                                                    document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                                                    var f= new Date('{{ travel.travel_date.strftime("%Y-%m-%d") }}'  );
+                                                    document.write(diasSemana[f.getDay()] + ", " + (f.getDate()+1 ) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                                                 </script></div>
                                     <div  class="horaccount"><p>Hora de salida:</p>{{ travel.travel_hour}}</div>
                                     <div  class="horaestimada"><p>Hora de llegada:</p>{{ travel.travel_hour_f}}</div>
+                                    <div  class="costoestimado"><p>Costo de viaje:</p>
+                                        {%if travel.amount is none %}
+                                            Costo sin establecer
+                                        {%else%}
+                                        <div class="cost">{{ travel.amount}}</div>
+                                        {%endif%}</div>
+                                    <div  class="commentary"><p>Comentario:</p>
+                                        {%if travel.commentary is none %}
+                                        Sin comentario
+                                        {%else%}
+                                        {{ travel.commentary}}
+                                    {%endif%}</div>
                                     <div  class="ecotravelsccount"><p>Ecotravelers subidos:</p></div>
                                     <div class="seatsdis">
                                     {% for travel_request in travel.getaccept_request() %}
@@ -258,8 +379,8 @@
                             </div>
                             {% if travel.getpending_request()|length > 0 %}
                                 <div class="btn-cantrequests">{{travel.getpending_request()|length}}</div>
-                                <a class="btn-requestcant" data-toggle="modal" data-target="#sendModal"><i class="fas fa-user-plus"></i></a>
-                                <div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="sendModalLabel" aria-hidden="true">
+                                <a class="btn-requestcant" data-toggle="modal" data-target="#sendModal-p"><i class="fas fa-user-plus"></i></a>
+                                <div class="modal fade" id="sendModal-p" tabindex="-1" role="dialog" aria-labelledby="sendModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
@@ -269,8 +390,8 @@
                                 {% for request in travel.getpending_request() %}
                                    <div  class="passenger"><a href="{{ url_for('passenger_profile',dni=request.passenger.dni) }}">{{request.passenger.name|title}} {{request.passenger.surname|title}}                                                                
                                     <div class="passagers" >
-                                        <a class= "acep" href="{{ url_for('add_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}">Aceptar</a>
-                                        <a class= "rech" href="{{ url_for('reject_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}">Rechazar</a>
+                                        <a class= "acep" href="{{ url_for('add_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}"style="margin-left: -30%;">Aceptar</a>
+                                        <a class= "rech" href="{{ url_for('reject_request', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}" style="margin-left: 20%">Rechazar</a>
                                     </div></a> </div>      
                                 {% endfor %}        
                                 </div>
@@ -291,6 +412,10 @@
                                <div class="passenger"> <a href="{{ url_for('passenger_profile',dni=request.passenger.dni) }}">{{request.passenger.name|title}} {{request.passenger.surname|title}}                                                                
                                 <div class="passagers">
                                     <a class= "rech" href="{{ url_for('down_request_driver', id_passenger=request.passenger.dni,id_travel=request.travel.id ) }}">Bajar del viaje</a>
+                                    <a href="https://wa.me/+54{{request.passenger.phone}}"    style=" margin-left: 15%;">
+                                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg"  width="30" height="25" viewBox="0 0 24 24" fill="green" style="margin-bottom: -14px;margin-inline: 0%;"><path d="m11.7 9.6c-0.2-0.1-1.2-0.6-1.4-0.6-0.2-0.1-0.3-0.2-0.4 0-0.2 0.2-0.6 0.7-0.7 0.8s-0.2 0.2-0.4 0.1-0.8-0.3-1.6-1c-0.6-0.5-1-1.2-1.1-1.4s0-0.3 0.1-0.4 0.2-0.2 0.3-0.4c0.1-0.1 0.1-0.2 0.2-0.3s0-0.3 0-0.3c-0.1-0.1-0.5-1.1-0.7-1.5-0.1-0.4-0.3-0.4-0.4-0.4h-0.4s-0.3 0-0.5 0.2c-0.2 0.3-0.7 0.8-0.7 1.7s0.7 1.9 0.8 2 1.4 2.1 3.4 3c0.5 0.2 0.8 0.3 1.1 0.4 0.5 0.2 0.9 0.1 1.3 0.1 0.4-0.1 1.2-0.5 1.3-1 0.2-0.5 0.2-0.9 0.1-0.9 0 0-0.1-0.1-0.3-0.1m-3.7 4.9c-1.2 0-2.4-0.3-3.4-0.9l-0.2-0.1-2.5 0.7 0.7-2.4-0.2-0.3c-0.7-1.1-1-2.3-1-3.5 0-3.6 3-6.6 6.6-6.6 1.8 0 3.4 0.7 4.7 1.9s1.9 2.9 1.9 4.7c0.1 3.5-2.9 6.5-6.6 6.5m5.7-12.2c-1.5-1.5-3.5-2.3-5.7-2.3-4.4 0-8 3.6-8 7.9 0 1.4 0.4 2.8 1.1 4l-1.1 4.1 4.2-1.1c1.2 0.6 2.5 1 3.8 1 4.4 0 8-3.6 8-7.9 0-2.2-0.8-4.2-2.3-5.7"/> </svg></h6>
+                                    </a>
+                                 
                                 </div></a></div>      
                             {% endfor %}        
                             </div>
@@ -305,6 +430,17 @@
         {% endfor %}
     {%endif%}
     </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+crossorigin="anonymous">
+</script>
+
+<script type="text/javascript" charset="utf-8">
+var socket = io();
+socket.on('message', data => {
+    location.reload()
+});
+</script>
 
 <script >
     const jointravel = (id) => {
@@ -313,6 +449,13 @@
                 console.log("se ha unido satisfactoriamente")
             })
     };
+
+
+    $('.cost').each(function(){
+  console.log($(this).text());
+  var number = parseFloat($(this).text());
+  $(this).text("$"+number.toLocaleString(['ban','id']));
+});
 </script>
 
 

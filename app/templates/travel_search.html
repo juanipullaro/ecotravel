@@ -3,24 +3,30 @@
 Buscar Viajes
 {%endblock%}
 {% block content %}
+{% include "help.html" %}
+<div class="search-travel-page">
+    <div class="search-travel-aside-search">
+        <div id="unirme-success"  class="myAlert-top alert1 alert-success"style="display: none; text-align:center; z-index: 1;height: 43px;border-radius: 12px;padding: 9px;width: 66%;margin-top: 1%;margin-bottom: -3%;margin-left: 18%;">
+    <strong style="margin-right: 1%; display: flex;"></strong> Te has unido al viaje correctamente.  
+    <a href="/userrequesttravel" class="alert-link" style=" margin-left: 1%;"> Ir a mis solicitudes de viaje</a>
+</div>
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 {%for category, message in messages%}
 {% if category == "success" %}
-<div id="modal-join-success"  class="myAlert-top alert1 alert-success"style="display: flex;z-index: 1;height: 43px;border-radius: 12px;padding: 9px;width: 29%;margin-top: 1%;margin-bottom: -3%;margin-left: 33%;">
-    <strong style="margin-right: 1%; display: flex;"></strong> ¡Alerta creada correctamente! 
+<div id="modal-join-success"  class="myAlert-top alert1 alert-success"style="display: flex; text-align: center; z-index: 1; height: 43px; border-radius: 12px; padding: 9px; width: 51%; margin-top: 1%; margin-bottom: -3%; margin-left: 25%;">
+    <strong style="margin-right: 1%; display: flex;"></strong> {{message}} 
     <a href="/userprofile" class="alert-link" style=" margin-left: 1%;"> Ir a mis alertas</a>
 </div>
 {%else%}
-<div id="modal-join-error"  class="myAlert-top alert1 alert-danger" style="display: flex;z-index: 1;height: 43px;border-radius: 12px;padding: 9px;width: 35%;margin-top: 1%;margin-bottom: -3%;margin-left: 33%;">
+<div id="modal-join-error"  class="myAlert-top alert1 alert-danger"style="display: flex; text-align: center; z-index: 1; height: 43px; border-radius: 12px; padding: 9px; width: 38%; margin-top: 1%; margin-bottom: -3%; margin-left: 32%;">
     <strong style="margin-right: 1%; display: flex;">Error: </strong> {{message}}
     </div> 
 {% endif%}
 {% endfor %}
 {% endif %}
 {%endwith%} 
-<div class="search-travel-page">
-    <div class="search-travel-aside">
+        
         <!--<section id=tab-container class="tabs">
             <div id="tablist" role="tablist">
                 <button type="button" class="tablink" disabled="true">Buscar Viajes</button>
@@ -28,53 +34,62 @@ Buscar Viajes
             </div>
 
         </section> -->
-        <section id="search-travel-panel">
-            <h3> Busca tu proximo viaje</h1>
+        <section id="search-travel-panel" style="margin-top: 8%;" >
+            <h3 style="text-align: center;margin-bottom: 40px;font-size: 33px;"> Busca tu proximo viaje</h1>
             <p class="alert-msg" hidden>Se ha creado una alerta con éxito</p>
             <form method="POST" class="search-travel-form">
                 {{ form.csrf_token }}
                 <form method="POST" class="search-travel-form">
                     {{ form.csrf_token }}
-                    <div class="form-group">
-                        {{ form.origin.label(class="form-control-label") }} 
-                        {% if form.origin.errors %}
-                            {{ form.origin(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.origin.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            {{ form.origin(class="form-control form-control-lg")}}
-                        {% endif %}
+                    <div class="p" style="display: flex;justify-content: space-around;">
+                        <div class="form-group"style="inline-size: 60%;margin-left: 3%;">
+                            {{ form.origin.label(class="form-control-label") }} 
+                            {% if form.origin.errors %}
+                                {{ form.origin(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.origin.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.origin(class="form-control form-control-lg")}}
+                            {% endif %}
+                        </div>
+                        <div class="form-group"style="inline-size: 60%;margin-left: 3%;">
+                            {{ form.destination.label(class="form-control-label") }}
+                            {% if form.destination.errors %}
+                                {{ form.destination(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.destination.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{form.destination(class="form-control form-control-lg") }}
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="form-group">
-                        {{ form.destination.label(class="form-control-label") }}
-                        {% if form.destination.errors %}
-                            {{ form.destination(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.destination.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
+                    <div class="p" style="display: flex;justify-content: space-around;">
+                        <div class="form-group"style="inline-size: 47%;margin-left: -7%;">
+                            {{ form.travel_date.label(class="form-control-label") }}
+                            {% if form.travel_date.errors %}
+                                {{ form.travel_date(class="form-control form-control-lg is-invalid", type="date") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.travel_date.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{form.travel_date(class="form-control form-control-lg",type="date") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" style="height: 20px">
+                                <label class="form-check-label" for="flexSwitchCheckChecked">Buscar por hora</label>
                             </div>
-                        {% else %}
-                            {{form.destination(class="form-control form-control-lg") }}
-                        {% endif %}
-                    </div>
-                    <div class="form-group">
-                        {{ form.travel_date.label(class="form-control-label") }}
-                        {% if form.travel_date.errors %}
-                            {{ form.travel_date(class="form-control form-control-lg is-invalid", type="date") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.travel_date.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            {{form.travel_date(class="form-control form-control-lg",type="date") }}
-                        {% endif %}
-                    </div>
-                    <div class="form-group">
+                     </div>
+                     <div class="form-group" id="time" style=" display:none;inline-size: 31%; margin-left: -51%;">
                         {{ form.travel_time.label(class="form-control-label") }}
                         {% if form.travel_time.errors %}
                             {{ form.travel_time(class="form-control form-control-lg is-invalid", type="time") }}
@@ -86,20 +101,21 @@ Buscar Viajes
                         {% else %}
                             {{form.travel_time(class="form-control form-control-lg",type="time") }}
                         {% endif %}
+                     </div>
                     </div>
                 {% if error %}
-                {{ form.radius.label}} {{ form.radius(type="range", min=5, max=20, step=5, value=10, list="kms")}}
-                <datalist id="kms">
+                {{ form.radius.label(style="inline-size: 60%;margin-left: 3%;")}} {{ form.radius(type="range", min=5, max=20, step=5, list="kms")}}
+                <datalist id="kms" style="display: flex; margin-left:1%">
                     <option value=5 label="5 kms"></option>
                     <option value=10 label="10 kms"></option>
                     <option value=15 label="15 kms"></option>
                     <option value=20 label="20 kms"></option>
                 </datalist>
-                <div class="alert">
-                    <button class="btn-alert" onclick="createAlert()"> 🔔 Crear alerta</button>
+                <div class="alert-div">
+                    <input type="submit" id="btn-alert" name="alert" value="🔔 Crear alerta">
                 </div>
                 {% endif%}
-                {{ form.submit(class="btn") }}
+                {{ form.submit(class="btn1") }}
             </form>
         </section>
     </div>
@@ -125,18 +141,20 @@ Buscar Viajes
             },
             body: JSON.stringify(travel) // body data type must match "Content-Type" header
         })
-        .then(response => response.json())
-        .then(data => {
-            location.replace("/userprofile")
+        .then(response => {
+            $("#alert-msg").toggle("display");
         });
 
     }
+    $("#flexSwitchCheckChecked").change(()=>{
+        $("#time").toggle("display")
+    })
 </script>
 <script type="text/javascript">
 
     // The first parameter are the coordinates of the center of the map
     // The second parameter is the zoom level
-    var map = L.map('map').setView([-32.9478683, -60.7210182], 12);
+    var map = L.map('map').setView([-32.944123,-60.6689617], 12);
     // {s}, {z}, {x} and {y} are placeholders for map tiles
     // {x} and {y} are the x/y of where you are on the map
     // {z} is the zoom level
@@ -151,7 +169,8 @@ Buscar Viajes
     const jointravel = (id) => {
         fetch('/profile/' + id + '/unirme') 
             .then(() => {
-                console.log("se ha unido satisfactoriamente")
+                $("#unirme-success").toggle("display");
+                $(window).scrollTop(0);
             })
     };
     //travels 
@@ -167,7 +186,6 @@ Buscar Viajes
     });*/
     if (travels !== []) {
         travels.map(travel => {
-            debugger;
             const origin = L.marker([travel.origen.lat, travel.origen.lon]).addTo(map);
             origin.on('mouseover', function (ev) { ev.target.openPopup(); });
             const popup = '<div class="popup-map">' +
@@ -183,7 +201,7 @@ Buscar Viajes
             origin.bindPopup(popup);
         })
     }
-
+    setTimeout(function(){$("#unirme-success").hide();}, 6000);
     setTimeout(function(){$(".myAlert-top").hide();}, 6000);
 
 

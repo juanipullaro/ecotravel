@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar_v2.html" %}
+
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/passengerprofile.css') }}">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 <section id="banner" class="bg-img" data-bg="banner.jpg" style="background:#b0afad;">
@@ -13,8 +14,8 @@
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="{{ image_file }}" alt="Admin" class="rounded-circle" width="150">
                     <div class="cantscores ">         
-                      <a class="cantscoresgood" href="#scores" ><i class="fas fa-thumbs-up" style="margin-left: 4%;"></i>{{scores1|length}}</a>
-                      <a class="cantscoresbad" href="#scores"  ><i class="fas fa-thumbs-down" style="margin-left: 4%;"></i>{{scores2|length}}</a>
+                      <a class="cantscoresgood" href="#scores" ><i class="fas fa-thumbs-up" style="margin-left: 4%;"></i>{{scoresgood}}</a>
+                      <a class="cantscoresbad" href="#scores"  ><i class="fas fa-thumbs-down" style="margin-left: 4%;"></i>{{scoresbad}}</a>
                      </div>   
                     <div class="mt-3">
                       <h4>{{user.name|title}} {{user.surname|title}}</h4>
@@ -46,11 +47,13 @@
               <scroll-container>
                 <section id="scores">
                   <h2 class="text-score">Calificaciones</h2>
-                  {% if scores|length == 0 %}
-                    <p class="text-scorenull">Aún no recibiste calificaciones</p>
-                  {%else%}  
-                    {%for score in scores %}
-                        {%if score.travel_driver_id==user.dni %}
+                  {% if scores_passenger|length == 0 %}
+                    <p class="text-scorenull">Aún no recibiste calificaciones por parte de pasajeros</p>
+                  {%else%}
+                  <p class="text-scorenull" style=" color:rgb(52, 58, 64); font-size: 15px; text-decoration: underline;">Pasajeros que viajaron con vos</p> 
+                    {%for score in scores_passenger %}
+                    {%for user_re in users%}
+                    {%if score.passenger_id==user_re.dni %}
                             <ol jsname="bN97Pc" class="JwPp0e">
                                 <li class="gHz6xd Aopndd rZXyy">
                                     <div class="Tc9hUd DShyMc-MzA5MDg5NDcxMDM4">
@@ -60,7 +63,7 @@
                                             <div class="R4EiSb">
                                                 <h2 class="prWPdf">
                                                     <a class="onkcGd kj3hr YVvGBb" target="_self" href="#" >
-                                                    <div class="YVvGBb csjh4b">{{score.driver.name|title}} {{score.driver.surname|title}}
+                                                    <div class="YVvGBb csjh4b">{{user_re.name|title}} {{user_re.surname|title}}
                                                       <div class="kj3hr YVvGBb jJIbcc">
                                                         <script>
                                                           var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -70,9 +73,9 @@
                                                        </script>
                                                        </div>
                                                         {%if score.point == 1%}
-                                                        <i class="fas fa-thumbs-up" style="margin-left: 87%;margin-top: -14%;position: absolute;"></i>
+                                                        <i class="fas fa-thumbs-up" style="margin-left: 91%;margin-top: -5.5%;position: absolute;"></i>
                                                         {%else%}
-                                                        <i class="fas fa-thumbs-down"style="margin-left: 87%;margin-top: -12.5%;position: absolute;"></i>
+                                                        <i class="fas fa-thumbs-down"style="margin-left: 91%;margin-top: -5.5%;position: absolute;"></i>
                                                         {%endif%}
                                                     </div></a>
                                                 </h2>
@@ -86,10 +89,58 @@
                                     </div>
                                 </li>
                             </ol>
-                        {%endif%}
-                    
+                            {%endif%}
+                         {%endfor%} 
+                      {%endfor%}
+                      {%endif%}
+                     
+               {% if scores_driver|length == 0 %}
+                    <p class="text-scorenull">Aún no recibiste calificaciones de conductores</p>
+                  {%else%}
+                  
+                  <p class="text-scorenull" style=" color:rgb(52, 58, 64); font-size: 15px; text-decoration: underline;">Calificaciones de conductores</p>
+                    {%for score in scores_driver %}
+                    {%for user_re in users%}
+                        {%if score.travel_driver_id==user_re.dni %}
+                            <ol jsname="bN97Pc" class="JwPp0e">
+                                <li class="gHz6xd Aopndd rZXyy">
+                                    <div class="Tc9hUd DShyMc-MzA5MDg5NDcxMDM4">
+                                        <div class="O7utsb bFjUmb-Tvm9db"></div>
+                                            <div class="OjOEXb Gf8MK" {% if score.point == 1 %} style="background-color:#54804bc7;box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+                                            <div class="OjOEXb Gf8MK" {% if score.point == 0 %} style="background-color:rgba(206, 60, 60, 0.87);box-shadow: 0px 0px 3px #999;" {%endif%} ></div>
+                                            <div class="R4EiSb">
+                                                <h2 class="prWPdf">
+                                                    <a class="onkcGd kj3hr YVvGBb" target="_self" href="#" >
+                                                    <div class="YVvGBb csjh4b">{{user_re.name|title}} {{user_re.surname|title}}
+                                                      <div class="kj3hr YVvGBb jJIbcc">
+                                                        <script>
+                                                          var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                                                          var diasSemana = new Array("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo");
+                                                          var f=new Date('{{score.date_posted.strftime("%Y-%m-%d") }}'  );
+                                                          document.write((f.getDate()+1) + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                                                       </script>
+                                                       </div>
+                                                        {%if score.point == 1%}
+                                                        <i class="fas fa-thumbs-up" style="margin-left: 91%;margin-top: -5.5%;position: absolute;"></i>
+                                                        {%else%}
+                                                        <i class="fas fa-thumbs-down"style="margin-left: 91%;margin-top: -5.5%;position: absolute;"></i>
+                                                        {%endif%}
+                                                    </div></a>
+                                                </h2>
+                                            </div>
+                                    </div>
+                                    <div class="TQYOZc">
+                                        <img class="rounded-circle article-imgcal" src="{{'/static/profile_pics/' + user.image_file}}" style="height: 2.688rem;position: absolute;margin-top: -11%;width: 2.688rem; float: right;margin-left: 76%;">
+                                        <div class="lziZub sdDCme" style="text-align: left;margin-top: 3%;">
+                                            <span class="Y5vSD">{{score.comment}}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ol>
+                         {%endif%}
+                         {%endfor%}   
                 {%endfor%}
-               {%endif%} 
+               {%endif%}
               </section>
               </scroll-container>
             </div>

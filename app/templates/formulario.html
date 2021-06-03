@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar_v2.html" %}
+{% include"help.html" %}
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/form.css') }}">
 <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -100,7 +101,33 @@
                         {% else %}
                             {{form.seats(class="form-control form-control-lg") }}
                         {% endif %}
-                    </div>    
+                    </div> 
+                    <div class="form-group">
+                        {{ form.amount.label(class="form-control-label") }} 
+                        {% if form.amount.errors %}
+                            {{ form.amount(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.amount.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.amount(class="form-control form-control-lg" ,type="number")}}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.commentary.label(class="form-control-label") }} 
+                        {% if form.commentary.errors %}
+                            {{ form.commentary(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.commentary.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.commentary(class="form-control form-control-lg")}}
+                        {% endif %}
+                    </div>       
                 </fieldset>
                 <div class="form-group">
                     {{ form.submit1(class="btn btn-outline-info") }}

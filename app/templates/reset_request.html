@@ -2,12 +2,13 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar_v2.html" %}
+{% include"help.html" %}
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
   {% for category, message in messages %}
-    <div class="alert alert-{{ category }}" style="width: 50%;border-radius: 12px;margin-top: 1%;margin-bottom: -4%;text-align: center;margin-left: 28%;">
+    <div class="alert alert-{{ category }}" style="width: 56%;border-radius: 12px;margin-top: 1%;margin-bottom: -4%;text-align: center;margin-left: 25%;">
       {{ message }}
-      <a href="/home1" class="alert-link" style=" margin-left: 1%;">Volver</a>
+      <a href="/home" class="alert-link" style=" margin-left: 1%;">Volver</a>
     </div>
   {% endfor %}
 {% endif %}

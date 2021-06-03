@@ -1,8 +1,8 @@
 .JwPp0e {
     display: -webkit-inline-box;
     -webkit-flex-wrap: wrap;
-    padding-left: 1.5rem;
-    padding-top:  6.5rem;;
+   
+  
 }
 
 .Y5vSD{
@@ -14,14 +14,14 @@
   background-clip: padding-box;
   display: flex;
   flex-direction: column;
-  height: 33.375rem;
+  height: 38.375rem;
   margin-bottom: 1.5rem;
   margin-right: 1.5rem;
   overflow: hidden;
   position: relative;
   text-align: left;
-  width: 29.75rem;
-  margin-top: -18%;
+  width: 36.75rem;
+  margin-top: -15%;
 }
 
 
@@ -48,6 +48,7 @@
 }
 .prWPdf {
     position: relative;
+    margin-top: 2%;
 }
 .kj3hr.YVvGBb.jJIbcc {
   font-size: 11px;
@@ -67,9 +68,11 @@
 .YVvGBb.csjh4b {
   overflow: visible;
   white-space: nowrap;
-  margin-top: 6%;
-  margin-bottom: 20px;
+  margin-top: 2%;
+  margin-bottom: 19px;
   margin-left: 17%;
+  width: 20%;
+  font-size: 23px;
 }
 .onkcGd, .onkcGd:visited {
 
@@ -167,14 +170,46 @@
     font-size: 12px;
     height: 80px;
 }
-.horaestimada{
-  margin-top: -29%;
+.horaestimada {
+  margin-top: -18%;
   margin-bottom: -3px;
   text-transform: uppercase;
-  color:  #204051;
+  color: #204051;
   font-size: 12px;
   height: 80px;
-  margin-left: 58%;
+  margin-left: 30%;
+}
+
+.costoestimado{
+  margin-top: -18%;
+  margin-bottom: 21px;
+  text-transform: uppercase;
+  color: #204051;
+  font-size: 12px;
+  height: 76px;
+  margin-left: 66%;
+}
+.commentary{
+  margin-top: -6%;
+  text-transform: uppercase;
+  color: #204051;
+  font-size: 12px;
+  height: 80px;
+}
+.cost{
+
+    font-size: 20px;
+    margin-top: -5%;
+    margin-left: 9%;
+
+}
+
+.commentarycanc {
+  margin-top: 9%;
+  text-transform: uppercase;
+  color: #204051;
+  font-size: 12px;
+  height: 80px;
 }
 .myAlert-top{
   position: fixed;
@@ -211,7 +246,7 @@ p {
 
 form.traveldata{
     border-top: none;
-    width: 62%;
+    width: 80%;
 }
 .statusRequestRech {
   margin-left: 35%;
@@ -299,7 +334,7 @@ dl, ol, ul {
         100% {
           bottom: 2em;
         }
-      }
+  }
       
       @-ms-keyframes more {
         0% {
@@ -440,23 +475,25 @@ dl, ol, ul {
         .profiletitle{
           margin-top: 10%;}
 /*****************************************************BOTONES CIRCULOS*******************************************************************/
-.prueba {
-  display: table-row;
-  margin-bottom: -65%;
-  margin-top: 3%;
-  margin-left: 96%;
-  width: 19%;
+
+  .prueba {
+    display: table-row;
+    margin-bottom: -53%;
+    margin-top: 4%;
+    margin-left: 96%;
+    width: 19%;
 }
+
 .prueba.canc {
   display: table-row;
-  margin-bottom: -97%;
+  margin-bottom: -92%;
   margin-top: 7%;
   margin-left: 96%;
   width: 19%;
 }
 .prueba.fin {
   display: table-row;
-  margin-bottom: -93%;
+  margin-bottom: -88%;
   margin-top: 2.8%;
   margin-left: 96%;
   width: 19%;
@@ -554,9 +591,13 @@ dl, ol, ul {
      fill: #cb2431;
    }
 
-   a:hover {
+   body a:hover {
     color: none;
-    text-decoration: none;
+    text-decoration: underline;
+}
+body a {
+  color: none;
+ 
 }
 
 
@@ -567,7 +608,7 @@ dl, ol, ul {
      .fas.fa-user-plus {
       font-size: 18px;
       position: absolute;
-      margin-top: -106%;
+      margin-top: -99.7%;
       margin-left: 77%;
       color: white;
   }
@@ -661,6 +702,15 @@ margin-left: 22%;
 color: #486a6a;
 }
 
+h5.modal-titledelete {
+  margin-bottom: 0;
+  line-height: 1.5;
+  text-align: center;
+  color: #204051;
+  text-shadow: none;
+  margin-left: 11%;
+}
+
 #point ul{
 display: flex;
 }
@@ -710,24 +760,25 @@ a.passenger {
   font-size: 14px;
   color: #102029;
   text-shadow: none;
-  margin-bottom: 10%;
+  
 }
 .passagers {
   display: flex;
   font-size: 11px;
   color: #204051;
-  margin-left: 62%;
-  margin-top: -5%;
+  margin-bottom: 1%;
+ 
 }
 .modal-footer>:not(:first-child){
   margin-left:0px;
 }
 .passenger{
-  margin-top: 10px;
-  margin-left:0px;
+  display: flex;
+justify-content: space-between;
+align-items: center;
 }
 .rech{
-  margin-left: 20%;
+  margin-left: -20%;
   color: red;
   font-size: 15px;
   margin-top: 2%;
@@ -748,6 +799,9 @@ a.passenger {
   font-size: 25px;
  
 }
+.modal-footer > :not(:last-child) {
+  margin-right: 0px;
+}
 
 p.view{
   font-size: 12px;
@@ -758,10 +812,15 @@ p.view{
 }
 .btn-view {
   position: absolute;
-  margin-top: 88.4%;
-  margin-left: 39%;
-  font-size: 14px
-
+  margin-top: 84%;
+  margin-left: 33%;
+  font-size: 14px;
+}
+.btn-delete {
+  position: absolute;
+  margin-top: 9.5%;
+  margin-left: 94%;
+  font-size: 14px;
 }
 .fas.fa-eye{
   color: #204051;}
@@ -796,12 +855,14 @@ color: #8f9393;
 
 .text-travelnull {
     margin-top: 12%;
-    color: #ff1e1eeb;
-    text-shadow: 0px 0px 1px #111;
-    text-align: center;
-    margin-left: 41%;
+    color: #478080;
     margin-bottom: 100%;
-    font-size: 139%;
+    font-size: 67px;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }
 
 .btn-fintravel {

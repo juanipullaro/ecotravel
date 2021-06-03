@@ -1,9 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Ecotravel</a>
+  {% if current_user.is_authenticated %}
+    <a class="navbar-brand" href="/profile">Ecotravel</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    {% if current_user.is_authenticated %}
+    
     <div class="collapse navbar-collapse" id="navbarNavDropdown" style="flex-direction: row-reverse;">
       <ul class="navbar-nav">
         <li class="nav-item active">
@@ -34,6 +35,8 @@
         </li>
       </ul>
     </div>
+    {%else%}
+    <a class="navbar-brand" href="/home">Ecotravel</a>
     {% endif %}
   </nav>
   <script>
@@ -50,11 +53,11 @@
       .then(jsonData => {
         notifications = jsonData.notificaciones;
         if (notifications.length == 0){
-          dropdown.prepend("<p>No tienes nuevas notificaciones</p>")
+          dropdown.prepend("<p style='color:rgb(72 106 106);text-align:center; margin-top:10%'>No tienes nuevas notificaciones</p>")
         }
         notifications.map(notification => {
           if(notification.viewed_at == null){
-            dropdown.prepend(`<a class="drop-button" href="${notification.url}" onclick=viewnotifications(${notification.id}) style=" background-color: #5c7a7b; font-size:small;">${notification.message}</a>` )
+            dropdown.prepend(`<a class="drop-button" href="${notification.url}" onclick=viewnotifications(${notification.id}) style=" background-color: #5c7a7b; font-size:small; ">${notification.message}</a>` )
           } else {dropdown.prepend(`<a class="drop-button" href="${notification.url}" style=" background-color: #9d9d9d;  font-size:small;" onclick=viewnotifications(${notification.id})>${notification.message}</a>` )}
 
       })
